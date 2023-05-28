@@ -1,0 +1,44 @@
+logging:
+  level:
+    '[org.hibernate.stat]': debug
+
+spring:
+  #DEVTOOLS
+  devtools:
+    add-properties: true
+  # Database
+  datasource:
+    driver-class-name: org.h2.Driver
+    #url: jdbc:h2:file:./data/meuEgressoDBTest
+    url: jdbc:h2:mem:testdb
+    username: meuEgressoTest
+    password: meuEgressoTestPassword
+  h2:
+    console.enabled: true
+    console.path: /h2
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    database: h2
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      '[hibernate.format_sql]' : true
+      '[hibernate.generate_statistics]' : true
+      '[persistence.schema-generation.scripts.create-target]' : create.sql
+
+server:
+  port: 15000
+
+token:
+  domain: teste.com
+  expiresHours: 3
+  
+fotosDir: test/fotosTeste/

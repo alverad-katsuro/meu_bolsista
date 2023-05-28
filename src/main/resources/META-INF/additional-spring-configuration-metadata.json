@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "token.expires-hours",
+    "type": "java.lang.String",
+    "description": "Define o Tempo que o cookie é valido"
+  },
+  {
+    "name": "rsa.public-key",
+    "type": "java.lang.String",
+    "description": "Chave RSA publica usada para assinar o cookie"
+  },
+  {
+    "name": "rsa.private-key",
+    "type": "java.lang.String",
+    "description": "Chave RSA privada usada para validar o cookie"
+  },
+  {
+    "name": "cors.allowed-origin-patterns",
+    "type": "java.lang.String[]",
+    "description": "Lista com Ips permitido para definir cookie ex: 'http://0.0.0.0:*'"
+  },
+  {
+    "name": "fotosDir",
+    "type": "java.lang.String",
+    "description": "Caminho no qual as fotos vão ser armazenadas 'fotosDir'"
+  },
+  {
+    "name": "token.domain",
+    "type": "java.lang.String",
+    "description": "A description for 'token.domain'"
+  },
+  {
+    "name": "token.expires-hours",
+    "type": "java.lang.String",
+    "description": "A description for 'token.expires-hours'"
+  },
+  {
+    "name": "cors.allowedOrigins",
+    "type": "java.lang.String",
+    "description": "A description for 'cors.allowedOrigins'"
+  }
+]}

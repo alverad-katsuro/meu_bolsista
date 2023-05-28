@@ -1,0 +1,75 @@
+spring:
+  profiles:
+    default: homol
+  application:
+    name: Meu Bolsista API
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  #configuração do jackson
+  jackson:
+    default-property-inclusion: NON_NULL
+  jpa:
+    defer-datasource-initialization: true
+
+
+
+
+# Email configuration
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# Swagger
+springdoc:
+  swagger-ui:
+    use-root-path: true
+  show-login-endpoint: true
+
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  file:
+      name: /var/log/meuBolsistaApi.log
+      path: /var/log
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+  level:
+    web: debug
+    sql: info
+    root: error
+
+# keys
+rsa:
+  private-key:
+    classpath:certs/private.pem
+  public-key:
+    classpath:certs/public.pem
+
+# Server configuration
+server:
+  port: ${APP_PORT}
+  forward-headers-strategy: framework
+  compression:
+    enabled: true
+    min-response-size: 2048
+    mime-types:
+    - application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+
+token:
+  domain: ${DOMAIN_COOKIE}
+  expiresHours: ${TOKEN_EXPIRES_HOURS}
+
+cors:
+  allowedOrigins: ${ALLOWED_ORIGINS}
+
+fotosDir: ${PATHFOTOS}
