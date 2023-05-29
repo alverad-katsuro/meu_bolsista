@@ -27,13 +27,13 @@ public class SwaggerConfig {
 						.addSecuritySchemes("Bearer",
 								new SecurityScheme().type(SecurityScheme.Type.HTTP)
 										.scheme("bearer").bearerFormat("JWT")))
-				.info(new Info().title("Meu Egresso API")
-						.description("API de Egressos da Universidade Federal do Pará.")
+				.info(new Info().title("Meu Bolsista API")
+						.description("API  da Universidade Federal do Pará.")
 						.version("v0.0.1")
 						.license(new License().name("GNU GENERAL PUBLIC LICENSE V3")
-								.url("https://github.com/LabEsUFPA/meuEgresso/blob/main/LICENSE")))
+								.url("https://github.com/alverad-katsuro/meu_bolsista")))
 				.externalDocs(new ExternalDocumentation()
 						.description("Wiki do Projeto no Github")
-						.url("https://github.com/LabEsUFPA/meuEgresso/wiki"));
+						.url("https://github.com/alverad-katsuro/meu_bolsista"));
 	}
 }
