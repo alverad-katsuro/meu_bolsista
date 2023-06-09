@@ -1,10 +1,11 @@
 package alveradkatsuro.com.br.meu_bolsista.controller.auth;
 
+import java.net.URI;
 import java.time.Duration;
+import java.util.Set;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,13 +15,15 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.dto.auth.AuthRequest;
 import alveradkatsuro.com.br.meu_bolsista.dto.auth.AuthResponse;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
+import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
+import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ErrorType;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NameAlreadyExistsException;
@@ -128,17 +131,24 @@ public class AuthenticationController {
 	 * @since 26/03/2023
 	 */
 	@PostMapping(value = "/register")
-	@ResponseStatus(code = HttpStatus.CREATED)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public String cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO) throws NameAlreadyExistsException {
-		if (usuarioService.existsByUsername(usuarioDTO.getUsername())) {
+	public ResponseEntity<String> cadastrarUsuario(@RequestBody @Valid UsuarioDTO usuarioDTO)
+			throws NameAlreadyExistsException {
+		if (usuarioService.existsByUsername(usuarioDTO.getEmail())) {
 			throw new NameAlreadyExistsException(
-					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getUsername()),
+					String.format(ErrorType.USER_001.getMessage(), usuarioDTO.getEmail()),
 					ErrorType.USER_001.getInternalCode());
 		}
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-		usuarioService.save(usuarioModel);
-		return ResponseType.SUCESS_SAVE.getMessage();
+		usuarioModel.setAuthorities(Set.of(Authority.USER));
+		usuarioModel.setProvider(AuthProvider.LOCAL);
+		usuarioModel = usuarioService.save(usuarioModel);
+
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentContextPath().path("/usuario")
+				.buildAndExpand(usuarioModel.getId()).toUri();
+
+		return ResponseEntity.created(location).body(ResponseType.SUCESS_SAVE.getMessage());
 	}
 
 }

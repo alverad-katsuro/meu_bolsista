@@ -1,9 +1,5 @@
 package alveradkatsuro.com.br.meu_bolsista.dto.usuario;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -26,9 +22,6 @@ public class UsuarioDTO {
 
 	private Integer id;
 
-	@NotBlank(message = "Infome um usuário.")
-	private String username;
-
 	@NotBlank(message = "Infome uma senha.")
 	private String password;
 
@@ -38,8 +31,5 @@ public class UsuarioDTO {
 
 	@NotBlank(message = "Infome um nome.")
 	private String nome;
-
-	@Builder.Default
-	private Set<Authority> grupos = new HashSet<>();
 
 }

@@ -22,7 +22,7 @@ public enum ErrorType {
 
     DATABASE_002("Nenhuma mensagem de email do tipo %s cadastrada.", "DB-002"),
 
-    USER_001("Usuário %s não existe.", "US-001"),
+    USER_001("Usuário %s já existe.", "US-001"),
     USER_002("Usuario ou Senha inválida.", "US-002");
 
     private String message;
