@@ -3,7 +3,7 @@ package alveradkatsuro.com.br.meu_bolsista.dto.usuario;
 import java.util.HashSet;
 import java.util.Set;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Grupos;
+import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -40,6 +40,6 @@ public class UsuarioDTO {
 	private String nome;
 
 	@Builder.Default
-	private Set<Grupos> grupos = new HashSet<>();
+	private Set<Authority> grupos = new HashSet<>();
 
 }

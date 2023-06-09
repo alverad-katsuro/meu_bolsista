@@ -10,6 +10,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import alveradkatsuro.com.br.meu_bolsista.config.properties.CorsProperties;
+import alveradkatsuro.com.br.meu_bolsista.config.properties.OauthProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.RsaKeyProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
@@ -24,7 +25,8 @@ import lombok.RequiredArgsConstructor;
  */
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(value = { RsaKeyProperties.class, TokenProperties.class, CorsProperties.class })
+@EnableConfigurationProperties(value = { RsaKeyProperties.class, TokenProperties.class, CorsProperties.class,
+		OauthProperties.class })
 public class ApplicationConfig {
 
 	private final UsuarioService usuarioService;

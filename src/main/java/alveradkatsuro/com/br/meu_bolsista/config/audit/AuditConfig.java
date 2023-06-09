@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.JwtUtils;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario.UsuarioRepository;
+import alveradkatsuro.com.br.meu_bolsista.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
 /**

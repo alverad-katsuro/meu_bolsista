@@ -1,4 +1,4 @@
-package alveradkatsuro.com.br.meu_bolsista.enumeration;
+package alveradkatsuro.com.br.meu_bolsista.util;
 
 import lombok.Getter;
 
@@ -7,7 +7,6 @@ public enum JwtUtils {
     USER_ID("idUsuario"),
     NOME("nome"),
     SOBRENOME("sobrenome"),
-    EGRESSO("isEgresso"),
     SCOPE("scope");
 
     private String propriedade;

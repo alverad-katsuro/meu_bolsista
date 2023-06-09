@@ -16,10 +16,15 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.handle.OAuth2AuthenticationFailureHandler;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.handle.OAuth2AuthenticationSuccessHandler;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.service.CustomOAuth2UserService;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
 
@@ -38,28 +43,75 @@ public class SecurityConfig {
 
 	private final CorsProperties corsProperties;
 
+	private final CustomOAuth2UserService customOAuth2UserService;
+
+	private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+	private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
+	@Bean
+	public TokenAuthenticationFilter tokenAuthenticationFilter() {
+		return new TokenAuthenticationFilter();
+	}
+
+	/*
+	 * By default, Spring OAuth2 uses
+	 * HttpSessionOAuth2AuthorizationRequestRepository to save
+	 * the authorization request. But, since our service is stateless, we can't save
+	 * it in
+	 * the session. We'll save the request in a Base64 encoded cookie instead.
+	 */
+	@Bean
+	public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
+		return new HttpCookieOAuth2AuthorizationRequestRepository();
+	}
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
 		return httpSecurity.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.anonymous(AbstractHttpConfigurer::disable)
+				.formLogin(forms -> forms.disable())
+				.httpBasic(basic -> basic.disable())
+				.sessionManagement(session -> session
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(exeption -> exeption
+						.authenticationEntryPoint(
+								new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+				.oauth2Login(oauth -> oauth.authorizationEndpoint(endpoint -> endpoint.baseUri(
+						"/oauth2/authorize").authorizationRequestRepository(
+								cookieAuthorizationRequestRepository()))
+
+						.redirectionEndpoint(red -> red.baseUri("/oauth2/callback/*"))
+						.userInfoEndpoint(user -> user.userService(
+								customOAuth2UserService))
+						.successHandler(oAuth2AuthenticationSuccessHandler)
+						.failureHandler(oAuth2AuthenticationFailureHandler))
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(
 								"/auth/**",
 								"/v3/api-docs/**",
 								"/swagger-ui/**",
 								"/swagger-ui.html",
+								"/login",
+								"/error",
+								"/favicon.ico",
+								"/*/*.png",
+								"/*/*.gif",
+								"/*/*.svg",
+								"/*/*.jpg",
+								"/*/*.html",
+								"/*/*.css",
+								"/*/*.js",
+								"/auth/**",
+								"/oauth2/**",
 								"/")
 						.permitAll()
 						.anyRequest().authenticated())
-				.sessionManagement(session -> session
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.exceptionHandling(exeption -> exeption
-						.authenticationEntryPoint(
-								new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+				.addFilterBefore(tokenAuthenticationFilter(),
+						UsernamePasswordAuthenticationFilter.class)
 				.build();
-
 	}
 
 	@Bean
