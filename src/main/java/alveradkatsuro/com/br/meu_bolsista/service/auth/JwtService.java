@@ -12,8 +12,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
-import alveradkatsuro.com.br.meu_bolsista.enumeration.JwtUtils;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -31,7 +31,7 @@ public class JwtService {
     public String generateToken(UsuarioModel userModel, String scope) {
         Instant now = Instant.now();
         var jwtClaimsSet = JwtClaimsSet.builder()
-                .issuer("API Meu Egresso - UFPA")
+                .issuer("API Meu Bolsista - UFPA")
                 .subject(userModel.getUsername())
                 .issuedAt(now)
                 .expiresAt(now.plus(tokenProperties.getExpiresHours(), ChronoUnit.HOURS))

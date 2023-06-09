@@ -9,10 +9,10 @@ spring:
   # Database
   datasource:
     driver-class-name: org.h2.Driver
-    #url: jdbc:h2:file:./data/meuEgressoDBTest
+    #url: jdbc:h2:file:./data/meuBolsistaDBTest
     url: jdbc:h2:mem:testdb
-    username: meuEgressoTest
-    password: meuEgressoTestPassword
+    username: meuBolsistaTest
+    password: meuBolsistaTestPassword
   h2:
     console.enabled: true
     console.path: /h2
@@ -40,5 +40,5 @@ server:
 token:
   domain: teste.com
   expiresHours: 3
-  
+
 fotosDir: test/fotosTeste/

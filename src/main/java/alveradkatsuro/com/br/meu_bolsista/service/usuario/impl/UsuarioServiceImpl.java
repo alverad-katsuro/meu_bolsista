@@ -40,7 +40,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Override
 	public UsuarioModel loadUserByUsername(String login) throws UsernameNotFoundException {
 		try {
-			return usuarioRepository.findByUsernameIgnoreCase(login).orElseThrow();
+			return usuarioRepository.findByEmailIgnoreCase(login).orElseThrow();
 		} catch (NoSuchElementException e) {
 			throw new UsernameNotFoundException("User not found", e);
 		}
@@ -48,7 +48,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public boolean existsByUsername(String username) {
-		return usuarioRepository.existsByUsernameIgnoreCase(username);
+		return usuarioRepository.existsByEmailIgnoreCase(username);
 	}
 
 	@Override
