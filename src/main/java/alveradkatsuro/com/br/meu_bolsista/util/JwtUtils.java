@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum JwtUtils {
     USER_ID("idUsuario"),
     NOME("nome"),
-    SOBRENOME("sobrenome"),
+    IMAGEM_URL("imagemUrl"),
     SCOPE("scope");
 
     private String propriedade;

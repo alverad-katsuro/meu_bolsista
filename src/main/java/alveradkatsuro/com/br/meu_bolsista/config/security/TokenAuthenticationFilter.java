@@ -10,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.service.auth.JwtService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private TokenProvider tokenProvider;
+    private JwtService jwtService;
 
     @Autowired
     private UsuarioService customUserDetailsService;
@@ -30,8 +31,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                Integer userId = tokenProvider.getUserIdFromToken(jwt);
+            if (StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
+                Integer userId = jwtService.getUserIdFromToken(jwt);
 
                 UsuarioModel userDetails = customUserDetailsService.findById(userId);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

@@ -4,6 +4,7 @@ import static alveradkatsuro.com.br.meu_bolsista.config.oauth2.HttpCookieOAuth2A
 
 import java.io.IOException;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +15,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import alveradkatsuro.com.br.meu_bolsista.config.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.OauthProperties;
-import alveradkatsuro.com.br.meu_bolsista.config.security.TokenProvider;
+import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.BadRequestException;
+import alveradkatsuro.com.br.meu_bolsista.service.auth.JwtService;
 import alveradkatsuro.com.br.meu_bolsista.util.CookieUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -27,7 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private final TokenProvider tokenProvider;
+    private final JwtService jwtService;
+
+    private final TokenProperties tokenProperties;
 
     private final HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
@@ -44,6 +48,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request, response);
+        
+        CookieUtils.addCookie(response, "Token", jwtService.generateToken(authentication),
+                (int)Duration.ofHours(tokenProperties.getExpiresHours()).toSeconds());
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -60,7 +68,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
+        String token = jwtService.generateToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
