@@ -48,7 +48,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request, response);
-        
+
         CookieUtils.addCookie(response, "Token", jwtService.generateToken(authentication),
                 (int)Duration.ofHours(tokenProperties.getExpiresHours()).toSeconds());
 
