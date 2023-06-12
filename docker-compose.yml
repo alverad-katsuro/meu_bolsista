@@ -18,6 +18,19 @@ services:
       - ${POSTGRES_EXPOSE_PORT}:5432
     restart: unless-stopped
 
+  mongodb:
+    container_name: mongo-meu-bolsista
+    image: mongo:6
+    restart: always
+    ports:
+      - ${MONGO_PORT}:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - mongo_report:/data/db
+      - ./backup/:/backup/
+
   backend:
     container_name: meu-bolsista-api
     build:
@@ -31,3 +44,7 @@ services:
     restart: always
     depends_on:
       - postgres
+
+volumes:
+  mongo_report:
+    driver: local
