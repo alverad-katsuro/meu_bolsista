@@ -27,9 +27,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-    volumes:
-      - mongo_report:/data/db
-      - ./backup/:/backup/
+    # volumes:
+    #   - mongo_report:/data/db
+    #   - ./backup/:/backup/
 
   backend:
     container_name: meu-bolsista-api
@@ -43,6 +43,7 @@ services:
       - ${APP_PORT}:${APP_PORT}
     restart: always
     depends_on:
+      - mongodb
       - postgres
 
 volumes:
