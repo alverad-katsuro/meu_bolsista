@@ -1,4 +1,4 @@
-package alveradkatsuro.com.br.meu_bolsista.model.usuarioplanotrabalho;
+package alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

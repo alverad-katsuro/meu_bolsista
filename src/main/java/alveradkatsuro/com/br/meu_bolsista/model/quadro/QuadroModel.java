@@ -3,7 +3,7 @@ package alveradkatsuro.com.br.meu_bolsista.model.quadro;
 import org.hibernate.annotations.ColumnDefault;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
-import alveradkatsuro.com.br.meu_bolsista.model.planotrabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

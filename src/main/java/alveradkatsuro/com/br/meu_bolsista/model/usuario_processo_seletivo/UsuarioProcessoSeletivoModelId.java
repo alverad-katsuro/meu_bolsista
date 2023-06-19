@@ -1,4 +1,4 @@
-package alveradkatsuro.com.br.meu_bolsista.model.usuarioprocessoseletivo;
+package alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

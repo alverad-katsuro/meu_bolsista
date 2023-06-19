@@ -1,8 +1,8 @@
-package alveradkatsuro.com.br.meu_bolsista.model.usuarioprocessoseletivo;
+package alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo;
 
 import java.time.LocalDate;
 
-import alveradkatsuro.com.br.meu_bolsista.model.processoseletivo.ProcessoSeletivoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;

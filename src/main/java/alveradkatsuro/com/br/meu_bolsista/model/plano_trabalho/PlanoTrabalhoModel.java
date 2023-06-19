@@ -1,10 +1,10 @@
-package alveradkatsuro.com.br.meu_bolsista.model.planotrabalho;
+package alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho;
 
 import java.util.Set;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
-import alveradkatsuro.com.br.meu_bolsista.model.processoseletivo.ProcessoSeletivoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.recursosmateriais.RecursoMaterialModel;
+import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

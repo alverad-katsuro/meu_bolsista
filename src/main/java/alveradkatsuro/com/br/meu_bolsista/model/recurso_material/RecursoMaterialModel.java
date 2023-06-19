@@ -1,6 +1,6 @@
-package alveradkatsuro.com.br.meu_bolsista.model.recursosmateriais;
+package alveradkatsuro.com.br.meu_bolsista.model.recurso_material;
 
-import alveradkatsuro.com.br.meu_bolsista.model.planotrabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

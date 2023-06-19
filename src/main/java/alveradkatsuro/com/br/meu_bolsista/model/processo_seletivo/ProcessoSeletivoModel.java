@@ -1,10 +1,10 @@
-package alveradkatsuro.com.br.meu_bolsista.model.processoseletivo;
+package alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo;
 
 import java.time.LocalDate;
 import java.util.Set;
 
-import alveradkatsuro.com.br.meu_bolsista.model.planotrabalho.PlanoTrabalhoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.usuarioprocessoseletivo.UsuarioProcessoSeletivoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo.UsuarioProcessoSeletivoModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
