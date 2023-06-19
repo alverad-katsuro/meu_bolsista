@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.dto.auth.AuthRequest;
 import alveradkatsuro.com.br.meu_bolsista.dto.auth.AuthResponse;
@@ -98,10 +99,8 @@ public class AuthenticationController {
 
 	@PostMapping(value = "/atualizarCookie")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public ResponseEntity<AuthResponse> authenticationUser(JwtAuthenticationToken tokenAtual,
+	public ResponseEntity<AuthResponse> authenticationUser(@CurrentUser UsuarioModel usuario,
 			HttpServletRequest request) {
-
-		UsuarioModel usuario = usuarioService.findById(jwtService.getIdUsuario(tokenAtual));
 
 		String token = authService.authenticate(usuario);
 
