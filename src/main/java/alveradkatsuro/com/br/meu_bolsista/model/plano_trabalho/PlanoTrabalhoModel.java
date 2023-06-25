@@ -39,6 +39,9 @@ public class PlanoTrabalhoModel extends Auditable {
     @Column(name = "titulo_plano_trabalho", unique = true, nullable = false)
     private String titulo;
 
+    @Column(name = "area_trabalho_plano_trabalho", unique = true, nullable = false)
+    private String areaAtra;
+
     @Lob
     @Column(name = "descricao_plano_trabalho", unique = true, nullable = false)
     private String descricao;
@@ -47,9 +50,9 @@ public class PlanoTrabalhoModel extends Auditable {
     @JoinColumn(name = "lider", unique = false, nullable = false)
     private UsuarioModel lider;
 
-    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProcessoSeletivoModel> processoSeletivos;
 
-    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RecursoMaterialModel> recursoMateriais;
 }

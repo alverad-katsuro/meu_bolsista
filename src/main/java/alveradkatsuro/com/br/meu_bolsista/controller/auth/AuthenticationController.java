@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +30,6 @@ import alveradkatsuro.com.br.meu_bolsista.exceptions.NameAlreadyExistsException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.service.auth.AuthService;
-import alveradkatsuro.com.br.meu_bolsista.service.auth.JwtService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -60,8 +58,6 @@ public class AuthenticationController {
 	private final TokenProperties tokenProperties;
 
 	private final AuthenticationManager authenticationManager;
-
-	private final JwtService jwtService;
 
 	/**
 	 * Endpoint responsavel por autentica um determinado usuário.

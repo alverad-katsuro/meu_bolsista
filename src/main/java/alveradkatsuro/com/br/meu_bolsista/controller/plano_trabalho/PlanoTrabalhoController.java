@@ -21,6 +21,7 @@ import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class PlanoTrabalhoController {
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "20", required = false) Integer size,
             @RequestParam(defaultValue = "ASC", required = false) Direction direction) {
-         return planoTrabalhoService.findAll(page, size, direction).map(e -> mapper.map(e, PlanoTrabalhoDTO.class));
+        return planoTrabalhoService.findAll(page, size, direction).map(e -> mapper.map(e, PlanoTrabalhoDTO.class));
     }
 
     @GetMapping(value = "/{id}")
@@ -53,8 +54,11 @@ public class PlanoTrabalhoController {
             @CurrentUser UsuarioModel usuario) {
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
         planoTrabalho.setLider(usuario);
+        for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
+            recurso.setId(null);
+            recurso.setPlanoTrabalho(planoTrabalho);
+        }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
-
 
         return ResponseEntity.created(ServletUriComponentsBuilder
                 .fromCurrentContextPath()
