@@ -50,7 +50,16 @@ spring:
               scope:
                 - email
                 - public_profile
+            keycloak:
+              clientId: ${KEYCLOACK_CLIENT_ID}
+              clientSecret: ${KEYCLOACK_SECRET}
+              redirectUri: "{baseUrl}/oauth2/callback/{registrationId}"
+              scope: openid,profile,email,roles
+              authorization-grant-type: authorization_code
           provider:
+            keycloak:
+                issuer-uri: ${KEYCLOACK_URL}
+                user-name-attribute: preferred_username
             facebook:
               authorizationUri: https://www.facebook.com/v3.0/dialog/oauth
               tokenUri: https://graph.facebook.com/v3.0/oauth/access_token

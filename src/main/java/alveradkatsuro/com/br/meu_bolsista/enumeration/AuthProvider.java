@@ -9,6 +9,7 @@ public enum AuthProvider {
     LOCAL("local"),
     FACEBOOK("facebook"),
     GOOGLE("google"),
+    KEYCLOAK("keycloak"),
     GITHUB("github");
 
     private String providerName;
