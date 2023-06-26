@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user.OAuth2UserInfo;
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user.OAuth2UserInfoFactory;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user.OAuth2UserInfo;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user.OAuth2UserInfoFactory;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.OAuth2AuthenticationProcessingException;

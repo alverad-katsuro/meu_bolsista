@@ -23,8 +23,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user_keycloak.OidcUserInfo;
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user_keycloak.OidcUserInfoFactory;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfo;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfoFactory;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.OAuth2AuthenticationProcessingException;

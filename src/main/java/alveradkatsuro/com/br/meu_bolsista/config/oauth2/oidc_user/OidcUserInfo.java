@@ -1,11 +1,11 @@
-package alveradkatsuro.com.br.meu_bolsista.config.oauth2.user;
+package alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user;
 
 import java.util.Map;
 
-public abstract sealed class OAuth2UserInfo permits GoogleOAuth2UserInfo, GithubOAuth2UserInfo, FacebookOAuth2UserInfo {
+public abstract sealed class OidcUserInfo permits KeycloakOidcUserInfo {
     protected Map<String, Object> attributes;
 
-    protected OAuth2UserInfo(Map<String, Object> attributes) {
+    protected OidcUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 
@@ -18,6 +18,8 @@ public abstract sealed class OAuth2UserInfo permits GoogleOAuth2UserInfo, Github
     public abstract String getName();
 
     public abstract String getEmail();
+
+    public abstract Boolean getEmailVerified();
 
     public abstract String getImageUrl();
 }

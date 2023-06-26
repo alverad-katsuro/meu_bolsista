@@ -1,4 +1,4 @@
-package alveradkatsuro.com.br.meu_bolsista.config.oauth2.user;
+package alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user;
 
 import java.util.Map;
 

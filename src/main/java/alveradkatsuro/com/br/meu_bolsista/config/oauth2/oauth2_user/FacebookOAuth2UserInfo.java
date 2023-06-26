@@ -1,15 +1,15 @@
-package alveradkatsuro.com.br.meu_bolsista.config.oauth2.user_keycloak;
+package alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user;
 
 import java.util.Map;
 
-public final class KeycloakOidcUserInfo extends OidcUserInfo {
-    public KeycloakOidcUserInfo(Map<String, Object> attributes) {
+public final class FacebookOAuth2UserInfo extends OAuth2UserInfo {
+    public FacebookOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
     }
 
     @Override
     public String getId() {
-        return (String) attributes.get("sub");
+        return (String) attributes.get("id");
     }
 
     @Override
@@ -20,11 +20,6 @@ public final class KeycloakOidcUserInfo extends OidcUserInfo {
     @Override
     public String getEmail() {
         return (String) attributes.get("email");
-    }
-
-    @Override
-    public Boolean getEmailVerified() {
-        return (Boolean) attributes.get("email_verified");
     }
 
     @Override
@@ -39,6 +34,6 @@ public final class KeycloakOidcUserInfo extends OidcUserInfo {
                 }
             }
         }
-        return "";
+        return null;
     }
 }
