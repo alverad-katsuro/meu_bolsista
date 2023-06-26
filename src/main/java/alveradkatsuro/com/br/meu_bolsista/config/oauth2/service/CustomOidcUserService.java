@@ -117,7 +117,7 @@ public class CustomOidcUserService extends OidcUserService {
                 Set<Authority> authoritys = new HashSet<>();
                 ((List<String>) rolesObject).stream().forEach(role -> {
                     try {
-                        authoritys.add(Authority.valueOf(role.toString()));
+                        authoritys.add(Authority.valueOf(role));
                     } catch (IllegalArgumentException e) {
                         logger.info("Authority not Allowed", e);
                     }
