@@ -23,7 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfo;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfoCustom;
 import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfoFactory;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
@@ -57,7 +57,7 @@ public class CustomOidcUserService extends OidcUserService {
     }
 
     private OidcUser processOidcUser(OidcUserRequest oidcUserRequest, OidcUser oidcUser) {
-        OidcUserInfo oidcUserInfo = OidcUserInfoFactory.getOidcUserInfo(
+        OidcUserInfoCustom oidcUserInfo = OidcUserInfoFactory.getOidcUserInfo(
                 oidcUserRequest.getClientRegistration().getRegistrationId(), oidcUser.getAttributes());
         if (oidcUserInfo.getEmail().isEmpty()) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
@@ -82,7 +82,7 @@ public class CustomOidcUserService extends OidcUserService {
         return user;
     }
 
-    private UsuarioModel registerNewUser(OidcUserRequest oidcUserRequest, OidcUserInfo oidcUserInfo) {
+    private UsuarioModel registerNewUser(OidcUserRequest oidcUserRequest, OidcUserInfoCustom oidcUserInfo) {
         UsuarioModel user = new UsuarioModel();
 
         user.setProvider(AuthProvider.findProviderName(oidcUserRequest.getClientRegistration().getRegistrationId()));
@@ -92,15 +92,20 @@ public class CustomOidcUserService extends OidcUserService {
         setAuthority(user, oidcUserRequest);
         user.setImagemUrl(oidcUserInfo.getImageUrl());
         user = usuarioRepository.save(user);
+        user.setOidcIdToken(oidcUserRequest.getIdToken());
+        user.setClaims(oidcUserRequest.getIdToken().getClaims());
         return user;
     }
 
-    private UsuarioModel updateExistingUser(UsuarioModel existingUser, OidcUserInfo oidcUserInfo,
+    private UsuarioModel updateExistingUser(UsuarioModel existingUser, OidcUserInfoCustom oidcUserInfo,
             OidcUserRequest oidcUserRequest) {
         existingUser.setNome(oidcUserInfo.getName());
         existingUser.setImagemUrl(oidcUserInfo.getImageUrl());
         setAuthority(existingUser, oidcUserRequest);
-        return usuarioRepository.save(existingUser);
+        existingUser = usuarioRepository.save(existingUser);
+        existingUser.setOidcIdToken(oidcUserRequest.getIdToken());
+        existingUser.setClaims(oidcUserRequest.getIdToken().getClaims());
+        return existingUser;
     }
 
     @SuppressWarnings("unchecked")

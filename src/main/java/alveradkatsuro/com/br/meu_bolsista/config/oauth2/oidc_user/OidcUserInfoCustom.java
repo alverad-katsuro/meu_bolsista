@@ -2,10 +2,10 @@ package alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user;
 
 import java.util.Map;
 
-public abstract sealed class OidcUserInfo permits KeycloakOidcUserInfo {
+public abstract sealed class OidcUserInfoCustom permits KeycloakOidcUserInfo {
     protected Map<String, Object> attributes;
 
-    protected OidcUserInfo(Map<String, Object> attributes) {
+    protected OidcUserInfoCustom(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 

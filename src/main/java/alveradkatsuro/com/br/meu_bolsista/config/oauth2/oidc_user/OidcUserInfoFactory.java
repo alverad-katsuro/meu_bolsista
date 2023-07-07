@@ -10,7 +10,7 @@ public class OidcUserInfoFactory {
     private OidcUserInfoFactory() {
     }
 
-    public static OidcUserInfo getOidcUserInfo(String registrationId, Map<String, Object> attributes) {
+    public static OidcUserInfoCustom getOidcUserInfo(String registrationId, Map<String, Object> attributes) {
         if (registrationId.equalsIgnoreCase(AuthProvider.KEYCLOAK.toString())) {
             return new KeycloakOidcUserInfo(attributes);
         } else {

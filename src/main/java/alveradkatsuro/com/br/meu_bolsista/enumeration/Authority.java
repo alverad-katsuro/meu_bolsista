@@ -7,10 +7,10 @@ import lombok.Getter;
 @Getter
 public enum Authority implements GrantedAuthority {
 
-    ADMIN("ROLE_ADMIN"),
-    PESQUISADOR("ROLE_PESQUISADOR"),
-    CANDIDATO("ROLE_CANDIDATO"),
-    USER("ROLE_USER");
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_PESQUISADOR("ROLE_PESQUISADOR"),
+    ROLE_CANDIDATO("ROLE_CANDIDATO"),
+    ROLE_USER("ROLE_USER");
 
     private String code;
 

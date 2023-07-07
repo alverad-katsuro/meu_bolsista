@@ -2,7 +2,7 @@ package alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user;
 
 import java.util.Map;
 
-public final class KeycloakOidcUserInfo extends OidcUserInfo {
+public final class KeycloakOidcUserInfo extends OidcUserInfoCustom {
     public KeycloakOidcUserInfo(Map<String, Object> attributes) {
         super(attributes);
     }

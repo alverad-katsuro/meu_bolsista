@@ -76,30 +76,33 @@ public class UsuarioModel extends Auditable implements UserDetails, OidcUser {
 	@Column(name = "provider_id_usuario", nullable = true, unique = false, length = 100)
 	private String providerId;
 
-	@Override
-	public Map<String, Object> getClaims() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OidcIdToken getIdToken() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public OidcUserInfo getUserInfo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Column(name = "grupos")
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass = Authority.class, fetch = FetchType.EAGER)
 	@CollectionTable(name = "usuario_grupos", joinColumns = @JoinColumn(name = "id_usuario"), uniqueConstraints = @UniqueConstraint(columnNames = {
 			"id_usuario", "grupos" }))
 	private Set<Authority> authorities;
+
+	@Transient
+	private OidcIdToken oidcIdToken;
+
+	@Transient
+	private Map<String, Object> claims;
+
+	@Override
+	public Map<String, Object> getClaims() {
+		return this.claims;
+	}
+
+	@Override
+	public OidcIdToken getIdToken() {
+		return this.oidcIdToken;
+	}
+
+	@Override
+	public OidcUserInfo getUserInfo() {
+		return null;
+	}
 
 	private transient Map<String, Object> attributes;
 

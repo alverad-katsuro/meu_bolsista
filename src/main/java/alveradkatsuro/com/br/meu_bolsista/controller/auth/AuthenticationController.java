@@ -135,7 +135,7 @@ public class AuthenticationController {
 					ErrorType.USER_001.getInternalCode());
 		}
 		UsuarioModel usuarioModel = mapper.map(usuarioDTO, UsuarioModel.class);
-		usuarioModel.setAuthorities(Set.of(Authority.USER));
+		usuarioModel.setAuthorities(Set.of(Authority.ROLE_USER));
 		usuarioModel.setProvider(AuthProvider.LOCAL);
 		usuarioModel = usuarioService.save(usuarioModel);
 
