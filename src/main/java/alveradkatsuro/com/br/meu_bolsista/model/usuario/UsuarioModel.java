@@ -6,7 +6,9 @@ import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
@@ -45,7 +47,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "usuario")
 @EqualsAndHashCode(callSuper = false)
-public class UsuarioModel extends Auditable implements UserDetails, OAuth2User {
+public class UsuarioModel extends Auditable implements UserDetails, OidcUser {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,7 +83,28 @@ public class UsuarioModel extends Auditable implements UserDetails, OAuth2User {
 			"id_usuario", "grupos" }))
 	private Set<Authority> authorities;
 
- 	private transient Map<String, Object> attributes;
+	@Transient
+	private OidcIdToken oidcIdToken;
+
+	@Transient
+	private Map<String, Object> claims;
+
+	@Override
+	public Map<String, Object> getClaims() {
+		return this.claims;
+	}
+
+	@Override
+	public OidcIdToken getIdToken() {
+		return this.oidcIdToken;
+	}
+
+	@Override
+	public OidcUserInfo getUserInfo() {
+		return null;
+	}
+
+	private transient Map<String, Object> attributes;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -123,9 +146,9 @@ public class UsuarioModel extends Auditable implements UserDetails, OAuth2User {
 		return this.email;
 	}
 
-    @Override
-    public String getName() {
-        return this.nome;
-    }
+	@Override
+	public String getName() {
+		return this.nome;
+	}
 
 }

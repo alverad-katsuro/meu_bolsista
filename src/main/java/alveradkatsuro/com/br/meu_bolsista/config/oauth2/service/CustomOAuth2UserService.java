@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user.OAuth2UserInfo;
-import alveradkatsuro.com.br.meu_bolsista.config.oauth2.user.OAuth2UserInfoFactory;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user.OAuth2UserInfo;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oauth2_user.OAuth2UserInfoFactory;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.OAuth2AuthenticationProcessingException;
@@ -73,7 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         user.setProviderId(oAuth2UserInfo.getId());
         user.setNome(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
-        user.setAuthorities(Set.of(Authority.USER));
+        user.setAuthorities(Set.of(Authority.ROLE_USER));
         user.setImagemUrl(oAuth2UserInfo.getImageUrl());
         user = usuarioRepository.save(user);
         return user;

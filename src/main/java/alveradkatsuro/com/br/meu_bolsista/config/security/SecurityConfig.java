@@ -82,7 +82,7 @@ public class SecurityConfig {
 				.oauth2Login(oauth -> oauth.authorizationEndpoint(endpoint -> endpoint.baseUri(
 						"/oauth2/authorize").authorizationRequestRepository(
 								cookieAuthorizationRequestRepository()))
-
+						//.tokenEndpoint(null) aqui da pra retornar o refresh estudar
 						.redirectionEndpoint(red -> red.baseUri("/oauth2/callback/*"))
 						.userInfoEndpoint(user -> user.userService(
 								customOAuth2UserService))
