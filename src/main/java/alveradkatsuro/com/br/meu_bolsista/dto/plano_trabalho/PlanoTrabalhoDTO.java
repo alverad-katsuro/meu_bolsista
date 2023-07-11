@@ -19,6 +19,8 @@ public class PlanoTrabalhoDTO {
 
     private String titulo;
 
+    private String areaTrabalho;
+
     private String descricao;
 
     private String liderNome;

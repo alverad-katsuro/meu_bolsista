@@ -40,7 +40,7 @@ public class PlanoTrabalhoModel extends Auditable {
     private String titulo;
 
     @Column(name = "area_trabalho_plano_trabalho", unique = true, nullable = false)
-    private String areaAtra;
+    private String areaTrabalho;
 
     @Lob
     @Column(name = "descricao_plano_trabalho", unique = true, nullable = false)

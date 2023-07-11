@@ -3,6 +3,7 @@ package alveradkatsuro.com.br.meu_bolsista.controller.plano_trabalho;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,12 +11,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
@@ -49,7 +50,7 @@ public class PlanoTrabalhoController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseType> save(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO,
             @CurrentUser UsuarioModel usuario) {
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
@@ -60,13 +61,33 @@ public class PlanoTrabalhoController {
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
-        return ResponseEntity.created(ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .buildAndExpand(planoTrabalho.getId()).toUri()).body(ResponseType.SUCESS_SAVE);
+        return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+                PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
+                .toUri()).body(ResponseType.SUCESS_SAVE);
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO,
+            @CurrentUser UsuarioModel usuario) { //TODO quebrado
+        PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
+        mapper.map(planoTrabalhoDTO, planoTrabalho);
+        planoTrabalho.setLider(usuario);
+        for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
+            recurso.setId(null);
+            recurso.setPlanoTrabalho(planoTrabalho);
+        }
+        planoTrabalho = planoTrabalhoService.save(planoTrabalho);
+
+        return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+                PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
+                .toUri()).body(ResponseType.SUCESS_UPDATE);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+
     public void deleteByID(@PathVariable Integer id) {
         planoTrabalhoService.deleteById(id);
     }

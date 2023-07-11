@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -82,7 +83,7 @@ public class SecurityConfig {
 				.oauth2Login(oauth -> oauth.authorizationEndpoint(endpoint -> endpoint.baseUri(
 						"/oauth2/authorize").authorizationRequestRepository(
 								cookieAuthorizationRequestRepository()))
-						//.tokenEndpoint(null) aqui da pra retornar o refresh estudar
+						// .tokenEndpoint(null) aqui da pra retornar o refresh estudar
 						.redirectionEndpoint(red -> red.baseUri("/oauth2/callback/*"))
 						.userInfoEndpoint(user -> user.userService(
 								customOAuth2UserService))
@@ -108,6 +109,7 @@ public class SecurityConfig {
 								"/oauth2/**",
 								"/")
 						.permitAll()
+						.requestMatchers(HttpMethod.GET, "/planoTrabalho**/**").permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(tokenAuthenticationFilter(),
 						UsernamePasswordAuthenticationFilter.class)
@@ -123,7 +125,7 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
 				"Access-Control-Allow-Headers", "Access-Control-Allow-Origin"));
 		configuration.setExposedHeaders(
-				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin"));
+				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin", "Location"));
 		configuration.setAllowedMethods(Collections.singletonList("*"));
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
