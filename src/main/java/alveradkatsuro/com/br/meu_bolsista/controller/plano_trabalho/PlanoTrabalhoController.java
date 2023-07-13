@@ -22,6 +22,7 @@ import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
@@ -68,14 +69,15 @@ public class PlanoTrabalhoController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO,
-            @CurrentUser UsuarioModel usuario) { //TODO quebrado
+    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO) {
+        mapper.getConfiguration().setSkipNullEnabled(true);
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
         mapper.map(planoTrabalhoDTO, planoTrabalho);
-        planoTrabalho.setLider(usuario);
-        for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
-            recurso.setId(null);
-            recurso.setPlanoTrabalho(planoTrabalho);
+        for (RecursoMaterialModel recursoMaterialModel : planoTrabalho.getRecursoMateriais()) {
+            recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
+        }
+        for (ProcessoSeletivoModel processoSeletivoModel : planoTrabalho.getProcessoSeletivos()) {
+            processoSeletivoModel.setPlanoTrabalho(planoTrabalho);
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 

@@ -15,6 +15,7 @@ import alveradkatsuro.com.br.meu_bolsista.config.properties.OauthProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.RsaKeyProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
+import alveradkatsuro.com.br.meu_bolsista.util.SetConverter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -47,6 +48,7 @@ public class ApplicationConfig {
 	@Bean
 	public ModelMapper modelMapper() {
 		ModelMapper mapper = new ModelMapper();
+		mapper.addConverter(new SetConverter());
 		mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT).isAmbiguityIgnored();
 		return mapper;
 	}
