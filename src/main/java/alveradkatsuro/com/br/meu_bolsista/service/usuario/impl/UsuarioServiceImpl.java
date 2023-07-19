@@ -84,8 +84,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy) {
-		return usuarioRepository.existsByIdAndCreatedById(id, createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
 }

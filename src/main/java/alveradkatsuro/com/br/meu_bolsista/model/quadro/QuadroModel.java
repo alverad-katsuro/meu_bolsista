@@ -1,9 +1,12 @@
 package alveradkatsuro.com.br.meu_bolsista.model.quadro;
 
+import java.util.Set;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

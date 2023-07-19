@@ -20,7 +20,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 
 	List<UsuarioModel> findAll();
 
-	boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	boolean existsByEmailIgnoreCase(String username);
 

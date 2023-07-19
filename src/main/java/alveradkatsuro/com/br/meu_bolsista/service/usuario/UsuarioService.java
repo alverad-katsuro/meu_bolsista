@@ -67,7 +67,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return
 	 */
-	public boolean existsByIdAndCreatedById(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public boolean existsByUsername(String username);
 }
