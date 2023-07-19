@@ -25,7 +25,11 @@ public class TarefaDocument {
     @DBRef(lazy = true)
     private TarefaDocument pai;
 
-    private LocalDateTime prazo;
+    private LocalDateTime fim;
+
+    private LocalDateTime inicio;
+
+    private String titulo;
 
     private String descricao;
 
@@ -43,8 +47,10 @@ public class TarefaDocument {
 
     private List<Integer> resultadosObtidos;
 
-    private List<AtividadesDocument> atividades;
+    private List<AtividadeDocument> atividades;
 
-    private List<ImpedimentosDocument> impedimentos;
+    private List<ImpedimentoDocument> impedimentos;
+
+    private Integer planoTrabalho;
 
 }

@@ -1,5 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
@@ -31,7 +32,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "plano_trabalho")
 @EqualsAndHashCode(callSuper = false, exclude = "lider")
-public class PlanoTrabalhoModel extends Auditable {
+public class PlanoTrabalhoModel extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +52,9 @@ public class PlanoTrabalhoModel extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lider", unique = false, nullable = false)
     private UsuarioModel lider;
+
+    @OneToMany(mappedBy = "planosTrabalhos", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UsuarioModel> pesquisadores;
 
     @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProcessoSeletivoModel> processoSeletivos;

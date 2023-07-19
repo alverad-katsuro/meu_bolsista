@@ -1,7 +1,5 @@
 package alveradkatsuro.com.br.meu_bolsista.model.tarefa;
 
-import java.time.LocalDate;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ImpedimentosDocument {
+public class AtividadeDocument {
 
-    private String impedimento;
+    private String atividade;
 
-    private LocalDate dataOcorrido;
+    private Boolean concluida;
+
 }

@@ -1,5 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.model.recurso_material;
 
+import java.io.Serializable;
+
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "recurso_material")
 @EqualsAndHashCode(callSuper = false, exclude = "planoTrabalho")
-public class RecursoMaterialModel {
+public class RecursoMaterialModel implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

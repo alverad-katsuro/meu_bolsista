@@ -1,5 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.model.quadro;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.ColumnDefault;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
@@ -24,11 +26,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "quadro")
 @EqualsAndHashCode(callSuper = false, exclude = "planoTrabalho")
-public class QuadroModel extends Auditable {
+public class QuadroModel extends Auditable implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_plano_trabalho", unique = true, nullable = false)
+    @Column(name = "id_quadro", unique = true, nullable = false)
     private Integer id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -37,14 +39,14 @@ public class QuadroModel extends Auditable {
 
     @ColumnDefault(value = "0")
     @Column(name = "quantidade_tarefas", unique = false, nullable = false)
-    private Integer quantidadeTarefas;
+    private int quantidadeTarefas;
 
     @ColumnDefault(value = "0")
     @Column(name = "tarefas_com_atraso", unique = false, nullable = false)
-    private Integer tarefasConcluidasAtrasadas;
+    private int tarefasConcluidasAtrasadas;
 
     @ColumnDefault(value = "0")
     @Column(name = "tarefas_no_prazo", unique = false, nullable = false)
-    private Integer tarefasConcluidasNoPrazo;
+    private int tarefasConcluidasNoPrazo;
 
 }

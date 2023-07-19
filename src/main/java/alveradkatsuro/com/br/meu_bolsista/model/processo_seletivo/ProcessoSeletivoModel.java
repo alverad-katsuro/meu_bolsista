@@ -1,5 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "processo_seletivo")
 @EqualsAndHashCode(callSuper = false, exclude = "candidatos")
-public class ProcessoSeletivoModel {
+public class ProcessoSeletivoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

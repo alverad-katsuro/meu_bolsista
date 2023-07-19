@@ -61,7 +61,7 @@ public class PlanoTrabalhoController {
             recurso.setId(null);
             recurso.setPlanoTrabalho(planoTrabalho);
         }
-        planoTrabalho.setQuadroModel(QuadroModel.builder().build());
+        planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
         return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(

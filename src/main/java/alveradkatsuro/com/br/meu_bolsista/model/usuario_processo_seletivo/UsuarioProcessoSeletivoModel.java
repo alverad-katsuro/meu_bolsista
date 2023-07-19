@@ -1,5 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "usuario_processo_seletivo")
 @EqualsAndHashCode(exclude = { "usuario", "processoSeletivo" })
-public class UsuarioProcessoSeletivoModel {
+public class UsuarioProcessoSeletivoModel implements Serializable {
 
     @EmbeddedId
     private UsuarioProcessoSeletivoModelId id;
