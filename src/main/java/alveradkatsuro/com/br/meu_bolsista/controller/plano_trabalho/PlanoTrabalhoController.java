@@ -76,6 +76,9 @@ public class PlanoTrabalhoController {
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
         mapper.map(planoTrabalhoDTO, planoTrabalho);
         for (RecursoMaterialModel recursoMaterialModel : planoTrabalho.getRecursoMateriais()) {
+            if (recursoMaterialModel.getId() < 1) {
+                recursoMaterialModel.setId(null);
+            }
             recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
         }
         for (ProcessoSeletivoModel processoSeletivoModel : planoTrabalho.getProcessoSeletivos()) {
