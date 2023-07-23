@@ -81,15 +81,15 @@ public class UsuarioModel extends Auditable implements UserDetails, OidcUser {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "usuario_plano_trabalho", joinColumns = {
-			@JoinColumn(name = "id_usuario") }, inverseJoinColumns = {
-					@JoinColumn(name = "id_plano_trabalho") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"id_usuario", "id_plano_trabalho" }))
+			@JoinColumn(name = "usuario_id_usuario") }, inverseJoinColumns = {
+					@JoinColumn(name = "planotrabalho_id_plano_trabalho") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"usuario_id_usuario", "planotrabalho_id_plano_trabalho" }))
 	private Set<PlanoTrabalhoModel> planosTrabalhos;
 
 	@Column(name = "grupos")
 	@Enumerated(EnumType.STRING)
 	@ElementCollection(targetClass = Authority.class, fetch = FetchType.EAGER)
-	@CollectionTable(name = "usuario_grupos", joinColumns = @JoinColumn(name = "id_usuario"), uniqueConstraints = @UniqueConstraint(columnNames = {
+	@CollectionTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "id_usuario"), uniqueConstraints = @UniqueConstraint(columnNames = {
 			"id_usuario", "grupos" }))
 	private Set<Authority> authorities;
 

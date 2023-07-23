@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
+import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -39,6 +41,7 @@ public class PlanoTrabalhoController {
     private final PlanoTrabalhoService planoTrabalhoService;
 
     @GetMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public Page<PlanoTrabalhoDTO> findAll(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "20", required = false) Integer size,
@@ -47,19 +50,23 @@ public class PlanoTrabalhoController {
     }
 
     @GetMapping(value = "/{id}")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public PlanoTrabalhoDTO findByID(@PathVariable Integer id) {
         return mapper.map(planoTrabalhoService.findById(id), PlanoTrabalhoDTO.class);
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<ResponseType> save(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO,
             @CurrentUser UsuarioModel usuario) {
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
         planoTrabalho.setLider(usuario);
         for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
-            recurso.setId(null);
             recurso.setPlanoTrabalho(planoTrabalho);
+        }
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            objetivo.setPlanoTrabalho(planoTrabalho);
         }
         planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
@@ -71,6 +78,7 @@ public class PlanoTrabalhoController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO) {
         mapper.getConfiguration().setSkipNullEnabled(true);
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
@@ -81,8 +89,8 @@ public class PlanoTrabalhoController {
             }
             recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
         }
-        for (ProcessoSeletivoModel processoSeletivoModel : planoTrabalho.getProcessoSeletivos()) {
-            processoSeletivoModel.setPlanoTrabalho(planoTrabalho);
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            objetivo.setPlanoTrabalho(planoTrabalho);
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
@@ -92,8 +100,9 @@ public class PlanoTrabalhoController {
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
 
     public void deleteByID(@PathVariable Integer id) {
         planoTrabalhoService.deleteById(id);

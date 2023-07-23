@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
+import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
@@ -17,6 +18,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -53,7 +55,7 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
     @JoinColumn(name = "lider", unique = false, nullable = false)
     private UsuarioModel lider;
 
-    @OneToMany(mappedBy = "planosTrabalhos", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "planosTrabalhos", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<UsuarioModel> pesquisadores;
 
     @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -61,6 +63,9 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
 
     @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RecursoMaterialModel> recursoMateriais;
+
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ObjetivoModel> objetivos;
 
     @OneToOne(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private QuadroModel quadroModel;

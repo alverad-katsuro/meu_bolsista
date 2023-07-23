@@ -13,7 +13,8 @@ public enum ErrorType {
 
     REPORT_004("Erro no JSON do corpo da requisição.", "RP-005"),
 
-    REPORT_005("Erro ao enviar o email.", "RP-006"),
+    REPORT_005("Falha ao processar requisição.", "RP-005"),
+
     REPORT_006("Erro ao enviar o email.", "RP-006"),
 
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),

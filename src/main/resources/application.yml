@@ -5,7 +5,7 @@ spring:
     name: Meu Bolsista API
   servlet:
     multipart:
-      max-file-size: 5MB
+      max-file-size: 10MB
   #configuração do jackson
   jackson:
     default-property-inclusion: NON_NULL

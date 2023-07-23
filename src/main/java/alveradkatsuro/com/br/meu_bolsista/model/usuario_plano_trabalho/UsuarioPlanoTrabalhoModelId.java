@@ -8,9 +8,9 @@ import lombok.Data;
 @Embeddable
 public class UsuarioPlanoTrabalhoModelId {
 
-    @Column(name = "usuario_id", unique = false, nullable = false)
+    @Column(name = "id_usuario", unique = false, nullable = false)
     private Integer usuarioId;
 
-    @Column(name = "plano_trabalho_id", unique = false, nullable = false)
+    @Column(name = "id_plano_trabalho", unique = false, nullable = false)
     private Integer planoTrabalhoId;
 }
