@@ -35,8 +35,7 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 			"FROM " +
 			"    usuario u " +
 			"LEFT JOIN " +
-			"    usuario_plano_trabalho upt ON u.id = upt.usuario.id " +
-			"where upt.planoTrabalho.id = :planoTrabalhoId or :planoTrabalhoId = 0"+
+			"    usuario_plano_trabalho upt ON u.id = upt.usuario.id and upt.planoTrabalho.id = :planoTrabalhoId " +
 			"and :authority member of u.authorities")
 	<T> List<T> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, Authority authority, Class<T> tipo);
 }
