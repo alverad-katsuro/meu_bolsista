@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
-import alveradkatsuro.com.br.meu_bolsista.projection.usuario.novo_plano.UsuarioNovoPlanoProjection;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario.UsuarioRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
