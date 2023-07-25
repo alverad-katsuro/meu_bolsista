@@ -23,7 +23,8 @@ import lombok.NoArgsConstructor;
 public class UsuarioPlanoTrabalhoModel {
 
     @EmbeddedId
-    private UsuarioPlanoTrabalhoModelId id;
+    @Builder.Default
+    private UsuarioPlanoTrabalhoModelId id = new UsuarioPlanoTrabalhoModelId();
 
     @Column(name = "carga_horaria_usuario_plano", unique = false, nullable = false)
     private Integer cargaHoraria;

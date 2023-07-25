@@ -16,7 +16,8 @@ public interface UsuarioPlanoTrabalhoRepository
 			"  u.id as id, " +
 			"  u.nome as nome, " +
 			"  case when upt.cargaHoraria is null then 0 else upt.cargaHoraria end as cargaHoraria, " +
-			"  case when upt.usuario is null then false else true end as participante " +
+			"  case when upt.usuario is null then false else true end as participante, " +
+			"  upt.planoTrabalho.id as planoTrabalhoId " +
 			"from " +
 			"  usuario u " +
 			"left join usuario_plano_trabalho upt on " +

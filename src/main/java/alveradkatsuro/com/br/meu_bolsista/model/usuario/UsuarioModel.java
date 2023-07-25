@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.AuthProvider;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
-import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -25,8 +25,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -79,12 +78,8 @@ public class UsuarioModel extends Auditable implements UserDetails, OidcUser {
 	@Column(name = "provider_id_usuario", nullable = true, unique = false, length = 100)
 	private String providerId;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "usuario_plano_trabalho", joinColumns = {
-			@JoinColumn(name = "usuario_id_usuario") }, inverseJoinColumns = {
-					@JoinColumn(name = "planotrabalho_id_plano_trabalho") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"usuario_id_usuario", "planotrabalho_id_plano_trabalho" }))
-	private Set<PlanoTrabalhoModel> planosTrabalhos;
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+	private Set<UsuarioPlanoTrabalhoModel> planosTrabalhos;
 
 	@Column(name = "grupos")
 	@Enumerated(EnumType.STRING)

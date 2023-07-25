@@ -9,4 +9,6 @@ public interface UsuarioNovoPlanoProjection {
     Integer getCargaHoraria();
 
     Boolean getParticipante();
+
+    Integer getPlanoTrabalhoId();
 }
