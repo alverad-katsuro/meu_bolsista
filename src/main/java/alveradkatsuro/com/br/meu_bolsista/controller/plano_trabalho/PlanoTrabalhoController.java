@@ -1,5 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.controller.plano_trabalho;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.modelmapper.ModelMapper;
@@ -35,6 +36,7 @@ import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -50,13 +52,15 @@ public class PlanoTrabalhoController {
 
     private final PlanoTrabalhoService planoTrabalhoService;
 
+    private final UsuarioPlanoTrabalhoService usuarioPlanoTrabalhoService;
+
     @GetMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public Page<PlanoTrabalhoDTO> findAll(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "20", required = false) Integer size,
             @RequestParam(defaultValue = "ASC", required = false) Direction direction) {
-        return planoTrabalhoService.findAll(page, size, direction).map(e -> mapper.map(e, PlanoTrabalhoDTO.class));
+        return planoTrabalhoService.findAll(page, size, direction).map(this::fromModel);
     }
 
     @GetMapping(value = "/{id}")
@@ -106,13 +110,29 @@ public class PlanoTrabalhoController {
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
         mapper.map(planoTrabalhoDTO, planoTrabalho);
         for (RecursoMaterialModel recursoMaterialModel : planoTrabalho.getRecursoMateriais()) {
-            if (recursoMaterialModel.getId() < 1) {
-                recursoMaterialModel.setId(null);
-            }
             recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
         }
         for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
             objetivo.setPlanoTrabalho(planoTrabalho);
+        }
+        planoTrabalho.getPesquisadores().clear();
+        for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoDTO.getPesquisadores()) {
+            UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel;
+            try {
+                usuarioPlanoTrabalhoModel = usuarioPlanoTrabalhoService.findById(pesquisador.getId(),
+                        planoTrabalho.getId());
+                usuarioPlanoTrabalhoModel.setCargaHoraria(pesquisador.getCargaHoraria());
+            } catch (NoSuchElementException e) {
+                usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
+                        .usuario(usuarioService.findById(pesquisador.getId()))
+                        .planoTrabalho(planoTrabalho)
+                        .cargaHoraria(pesquisador.getCargaHoraria())
+                        .build();
+            }
+
+            usuarioPlanoTrabalhoModel.getUsuario().getPlanosTrabalhos().add(usuarioPlanoTrabalhoModel);
+            planoTrabalho.getPesquisadores()
+                    .add(usuarioPlanoTrabalhoModel);
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
