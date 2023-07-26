@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.Set;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
+import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,14 +55,17 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
     @JoinColumn(name = "lider", unique = false, nullable = false)
     private UsuarioModel lider;
 
-    @OneToMany(mappedBy = "planosTrabalhos", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UsuarioModel> pesquisadores;
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<UsuarioPlanoTrabalhoModel> pesquisadores;
 
-    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProcessoSeletivoModel> processoSeletivos;
 
     @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RecursoMaterialModel> recursoMateriais;
+
+    @OneToMany(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ObjetivoModel> objetivos;
 
     @OneToOne(mappedBy = "planoTrabalho", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private QuadroModel quadroModel;

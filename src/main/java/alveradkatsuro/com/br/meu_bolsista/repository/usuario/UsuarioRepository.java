@@ -3,8 +3,10 @@ package alveradkatsuro.com.br.meu_bolsista.repository.usuario;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 
 /**
@@ -25,4 +27,15 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	boolean existsByEmailIgnoreCase(String username);
 
 	Optional<UsuarioModel> findByEmailIgnoreCase(String username);
+
+	@Query(value = "select  " +
+			"    u.id as id, " +
+			"    u.nome as nome, " +
+			"    CASE WHEN upt.usuario IS NOT NULL and :planoTrabalhoId != 0 THEN true ELSE false END AS participante " +
+			"FROM " +
+			"    usuario u " +
+			"LEFT JOIN " +
+			"    usuario_plano_trabalho upt ON u.id = upt.usuario.id and upt.planoTrabalho.id = :planoTrabalhoId " +
+			"and :authority member of u.authorities")
+	<T> List<T> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, Authority authority, Class<T> tipo);
 }

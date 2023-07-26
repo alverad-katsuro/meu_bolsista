@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario.UsuarioRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import lombok.RequiredArgsConstructor;
@@ -87,5 +89,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
 		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
+
+    @Override
+    public List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId,
+            Authority authority) {
+        return usuarioRepository.findUsuariosNotInPlanoTrabalho(planoTrabalhoId, authority, UsuarioNovoPlanoProjection.class);
+    }
+
+
 
 }

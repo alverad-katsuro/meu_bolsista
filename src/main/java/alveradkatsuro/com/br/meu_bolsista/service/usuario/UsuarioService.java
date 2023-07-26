@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
 
 /**
  * Interface responsável por especificar os metodos a serem implementados.
@@ -70,4 +72,7 @@ public interface UsuarioService extends UserDetailsService {
 	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
 
 	public boolean existsByUsername(String username);
+
+	List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, Authority authority);
+
 }

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,21 +25,25 @@ public class TarefaController {
     private final TarefaService tarefaService;
 
     @GetMapping
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<TarefaDocument> findByPlanoTrabalho(Integer planoTrabalhoId) {
         return tarefaService.findByPlanoTrabalho(planoTrabalhoId);
     }
 
     @GetMapping(value = "/{id}")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument findById(@PathVariable ObjectId id) {
         return tarefaService.findById(id);
     }
 
     @PostMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument save(@RequestBody TarefaDocument tarefaDocument) {
         return tarefaService.save(tarefaDocument);
     }
 
     @PutMapping
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument update(@RequestBody TarefaDocument tarefaDocument) {
         return tarefaService.save(tarefaDocument);
     }

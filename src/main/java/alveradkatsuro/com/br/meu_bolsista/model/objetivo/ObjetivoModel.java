@@ -1,4 +1,4 @@
-package alveradkatsuro.com.br.meu_bolsista.model.recurso_material;
+package alveradkatsuro.com.br.meu_bolsista.model.objetivo;
 
 import java.io.Serializable;
 
@@ -21,19 +21,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "recurso_material")
+@Entity(name = "objetivo")
 @EqualsAndHashCode(callSuper = false, exclude = "planoTrabalho")
-public class RecursoMaterialModel implements Serializable {
+public class ObjetivoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_recurso_material", unique = true, nullable = false)
+    @Column(name = "id_objetivo", unique = true, nullable = false)
     private Integer id;
 
-    @Column(name = "descricao_recurso_material", unique = false, nullable = false)
+    @Column(name = "descricao_objetivo", unique = false, nullable = false)
     private String descricao;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plano_trabalho_recurso_material", unique = false, nullable = false)
+    @JoinColumn(name = "plano_trabalho_objetivo", unique = false, nullable = false)
     private PlanoTrabalhoModel planoTrabalho;
 }

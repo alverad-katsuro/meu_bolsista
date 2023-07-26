@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.repository.plano_trabalho.PlanoTrabalhoRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,11 +24,13 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     }
 
     @Override
+    @Transactional
     public Page<PlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction) {
         return planoTrabalhoRepository.findAll(PageRequest.of(page, size, Sort.by(direction, "titulo")));
     }
 
     @Override
+    @Transactional
     public PlanoTrabalhoModel findById(Integer id) {
         return planoTrabalhoRepository.findById(id).orElseThrow();
     }
