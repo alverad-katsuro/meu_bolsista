@@ -38,7 +38,7 @@ import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
-import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaService;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +52,7 @@ public class PlanoTrabalhoController {
 
     private final ModelMapper mapper;
 
-    private final TarefaService tarefaService;
+    private final TarefaDocumentService tarefaService;
 
     private final UsuarioService usuarioService;
 
@@ -83,7 +83,6 @@ public class PlanoTrabalhoController {
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
         planoTrabalho.setLider(usuario);
         planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
-        List<TarefaDocument> tarefas = new ArrayList<>();
         for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
             recurso.setPlanoTrabalho(planoTrabalho);
         }
@@ -104,6 +103,7 @@ public class PlanoTrabalhoController {
 
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
+        List<TarefaDocument> tarefas = new ArrayList<>();
         for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
             tarefas.add(TarefaDocument.builder().titulo(objetivo
                     .getDescricao())
@@ -152,6 +152,23 @@ public class PlanoTrabalhoController {
                     .add(usuarioPlanoTrabalhoModel);
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
+
+        List<TarefaDocument> tarefas = new ArrayList<>();
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            if (!tarefaService.existsByObjetivoId(objetivo.getId())) {
+                tarefas.add(TarefaDocument.builder().titulo(objetivo
+                        .getDescricao())
+                        .quadroId(planoTrabalho.getQuadroModel().getId())
+                        .objetivoId(objetivo.getId())
+                        .build());
+            } else {
+                TarefaDocument tarefa = tarefaService.findByQuadroIdAndObjetivoId(planoTrabalho.getQuadroModel().getId(), objetivo.getId());
+                tarefa.setTitulo(objetivo.getDescricao());
+                tarefas.add(tarefa);
+            }
+        }
+
+        tarefaService.save(tarefas);
 
         return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
                 PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))

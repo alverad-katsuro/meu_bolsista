@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TarefaService {
+public class TarefaDocumentService {
 
     private final TarefaMongoRepository tarefaMongoRepository;
 
@@ -19,8 +19,16 @@ public class TarefaService {
         return tarefaMongoRepository.findByQuadroId(quadroId);
     }
 
+    public boolean existsByObjetivoId(Integer objetivoId) {
+        return tarefaMongoRepository.existsByObjetivoId(objetivoId);
+    }
+
     public TarefaDocument findById(ObjectId id) {
         return tarefaMongoRepository.findById(id).orElseThrow();
+    }
+
+    public TarefaDocument findByQuadroIdAndObjetivoId(Integer quadroId, Integer objetivoId) {
+        return tarefaMongoRepository.findByQuadroIdAndObjetivoId(quadroId, objetivoId).orElseThrow();
     }
 
     public TarefaDocument save(TarefaDocument tarefaDocument) {
