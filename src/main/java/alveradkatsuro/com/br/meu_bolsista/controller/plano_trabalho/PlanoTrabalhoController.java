@@ -89,7 +89,6 @@ public class PlanoTrabalhoController {
         }
         for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
             objetivo.setPlanoTrabalho(planoTrabalho);
-            tarefas.add(TarefaDocument.builder().titulo(objetivo.getDescricao()).build());
         }
         planoTrabalho.getPesquisadores().clear();
         for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoDTO.getPesquisadores()) {
@@ -105,8 +104,12 @@ public class PlanoTrabalhoController {
 
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
-        for (TarefaDocument tarefa : tarefas) {
-            tarefa.setQuadroId(planoTrabalho.getQuadroModel().getId());
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            tarefas.add(TarefaDocument.builder().titulo(objetivo
+                    .getDescricao())
+                    .quadroId(planoTrabalho.getQuadroModel().getId())
+                    .objetivoId(objetivo.getId())
+                    .build());
         }
 
         tarefaService.save(tarefas);

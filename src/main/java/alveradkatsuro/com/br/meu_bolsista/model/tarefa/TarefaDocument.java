@@ -38,6 +38,8 @@ public class TarefaDocument {
 
     private Integer quadroId;
 
+    private Integer objetivoId;
+
     private ColunaKanban colunaKanban;
 
     private Integer posicaoKanban;
