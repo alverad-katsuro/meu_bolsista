@@ -1,5 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.controller.plano_trabalho;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -32,9 +34,11 @@ import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
+import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,6 +51,8 @@ import lombok.RequiredArgsConstructor;
 public class PlanoTrabalhoController {
 
     private final ModelMapper mapper;
+
+    private final TarefaService tarefaService;
 
     private final UsuarioService usuarioService;
 
@@ -77,11 +83,13 @@ public class PlanoTrabalhoController {
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
         planoTrabalho.setLider(usuario);
         planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
+        List<TarefaDocument> tarefas = new ArrayList<>();
         for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
             recurso.setPlanoTrabalho(planoTrabalho);
         }
         for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
             objetivo.setPlanoTrabalho(planoTrabalho);
+            tarefas.add(TarefaDocument.builder().titulo(objetivo.getDescricao()).build());
         }
         planoTrabalho.getPesquisadores().clear();
         for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoDTO.getPesquisadores()) {
@@ -96,6 +104,12 @@ public class PlanoTrabalhoController {
         }
 
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
+
+        for (TarefaDocument tarefa : tarefas) {
+            tarefa.setQuadroId(planoTrabalho.getQuadroModel().getId());
+        }
+
+        tarefaService.save(tarefas);
 
         return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
                 PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))

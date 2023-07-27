@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface TarefaMongoRepository extends MongoRepository<TarefaDocument, ObjectId> {
 
-    List<TarefaDocument> findByPlanoTrabalho(Integer planoTrabalho);
+    List<TarefaDocument> findByQuadroId(Integer quadroId);
 }

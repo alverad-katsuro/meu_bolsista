@@ -44,11 +44,11 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
     @Column(name = "titulo_plano_trabalho", unique = true, nullable = false)
     private String titulo;
 
-    @Column(name = "area_trabalho_plano_trabalho", unique = true, nullable = false)
+    @Column(name = "area_trabalho_plano_trabalho", unique = false, nullable = false)
     private String areaTrabalho;
 
     @Lob
-    @Column(name = "descricao_plano_trabalho", unique = true, nullable = false)
+    @Column(name = "descricao_plano_trabalho", unique = false, nullable = false)
     private String descricao;
 
     @ManyToOne(fetch = FetchType.LAZY)

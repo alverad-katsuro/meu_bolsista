@@ -26,8 +26,8 @@ public class TarefaController {
 
     @GetMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<TarefaDocument> findByPlanoTrabalho(Integer planoTrabalhoId) {
-        return tarefaService.findByPlanoTrabalho(planoTrabalhoId);
+    public List<TarefaDocument> findByQuadroId(Integer quadroId) {
+        return tarefaService.findByQuadroId(quadroId);
     }
 
     @GetMapping(value = "/{id}")

@@ -15,8 +15,8 @@ public class TarefaService {
 
     private final TarefaMongoRepository tarefaMongoRepository;
 
-    public List<TarefaDocument> findByPlanoTrabalho(Integer planoTrabalhoId) {
-        return tarefaMongoRepository.findByPlanoTrabalho(planoTrabalhoId);
+    public List<TarefaDocument> findByQuadroId(Integer quadroId) {
+        return tarefaMongoRepository.findByQuadroId(quadroId);
     }
 
     public TarefaDocument findById(ObjectId id) {
@@ -25,6 +25,10 @@ public class TarefaService {
 
     public TarefaDocument save(TarefaDocument tarefaDocument) {
         return tarefaMongoRepository.save(tarefaDocument);
+    }
+
+    public List<TarefaDocument> save(List<TarefaDocument> tarefaDocuments) {
+        return tarefaMongoRepository.saveAll(tarefaDocuments);
     }
 
     public TarefaDocument update(TarefaDocument tarefaDocument) {
