@@ -13,6 +13,16 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 
+  data:
+      mongodb:
+        host: ${MONGO_HOST}
+        database: ${MONGO_DB}
+        port: ${MONGO_PORT}
+        username: ${MONGO_INITDB_ROOT_USERNAME}
+        password: ${MONGO_INITDB_ROOT_PASSWORD}
+        authentication-database: admin # habilitar autenticação
+        auto-index-creation: true # Atualizar indices quando autlaizar o model.
+
   sql:
     init:
       mode: always

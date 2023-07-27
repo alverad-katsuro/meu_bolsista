@@ -1,5 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.model.tarefa;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,10 +11,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ColunaKanban;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Document
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,6 +36,10 @@ public class TarefaDocument {
 
     private String descricao;
 
+    private Integer quadroId;
+
+    private Integer objetivoId;
+
     private ColunaKanban colunaKanban;
 
     private Integer posicaoKanban;
@@ -51,6 +58,24 @@ public class TarefaDocument {
 
     private List<ImpedimentoDocument> impedimentos;
 
-    private Integer planoTrabalho;
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class AtividadeDocument {
 
+        private String atividade;
+
+        private Boolean concluida;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class ImpedimentoDocument {
+
+        private String impedimento;
+
+        private LocalDate dataOcorrido;
+    }
 }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
-import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaService;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -22,28 +22,28 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/tarefa")
 public class TarefaController {
 
-    private final TarefaService tarefaService;
+    private final TarefaDocumentService tarefaService;
 
     @GetMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<TarefaDocument> findByPlanoTrabalho(Integer planoTrabalhoId) {
-        return tarefaService.findByPlanoTrabalho(planoTrabalhoId);
+    public List<TarefaDocument> findByQuadroId(Integer quadroId) {
+        return tarefaService.findByQuadroId(quadroId);
     }
 
     @GetMapping(value = "/{id}")
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument findById(@PathVariable ObjectId id) {
         return tarefaService.findById(id);
     }
 
     @PostMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument save(@RequestBody TarefaDocument tarefaDocument) {
         return tarefaService.save(tarefaDocument);
     }
 
     @PutMapping
-	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDocument update(@RequestBody TarefaDocument tarefaDocument) {
         return tarefaService.save(tarefaDocument);
     }

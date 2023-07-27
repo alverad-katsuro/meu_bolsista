@@ -68,7 +68,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity, RequestMatcherBuilder mvc) throws Exception {
 
 		return httpSecurity.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -91,25 +91,19 @@ public class SecurityConfig {
 						.failureHandler(oAuth2AuthenticationFailureHandler))
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(
-								"/auth/**",
-								"/v3/api-docs/**",
-								"/swagger-ui/**",
-								"/swagger-ui.html",
-								"/login",
-								"/error",
-								"/favicon.ico",
-								"/*/*.png",
-								"/*/*.gif",
-								"/*/*.svg",
-								"/*/*.jpg",
-								"/*/*.html",
-								"/*/*.css",
-								"/*/*.js",
-								"/auth/**",
-								"/oauth2/**",
-								"/")
+								mvc.matchers(
+										"/auth/**",
+										"/v3/api-docs/**",
+										"/swagger-ui/**",
+										"/swagger-ui.html",
+										"/login",
+										"/error",
+										"/favicon.ico",
+										"/auth/**",
+										"/oauth2/**",
+										"/"))
 						.permitAll()
-						.requestMatchers(HttpMethod.GET, "/planoTrabalho**/**").permitAll()
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/planoTrabalho**/**")).permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(tokenAuthenticationFilter(),
 						UsernamePasswordAuthenticationFilter.class)
@@ -125,7 +119,8 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Requestor-Type", "Content-Type",
 				"Access-Control-Allow-Headers", "Access-Control-Allow-Origin"));
 		configuration.setExposedHeaders(
-				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin", "Location"));
+				Arrays.asList("X-Get-Header", "Access-Control-Allow-Methods", "Access-Control-Allow-Origin",
+						"Location"));
 		configuration.setAllowedMethods(Collections.singletonList("*"));
 
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

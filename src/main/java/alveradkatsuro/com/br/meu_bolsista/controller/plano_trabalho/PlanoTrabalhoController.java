@@ -1,5 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.controller.plano_trabalho;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -32,9 +34,11 @@ import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
+import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,6 +51,8 @@ import lombok.RequiredArgsConstructor;
 public class PlanoTrabalhoController {
 
     private final ModelMapper mapper;
+
+    private final TarefaDocumentService tarefaService;
 
     private final UsuarioService usuarioService;
 
@@ -97,6 +103,17 @@ public class PlanoTrabalhoController {
 
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
 
+        List<TarefaDocument> tarefas = new ArrayList<>();
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            tarefas.add(TarefaDocument.builder().titulo(objetivo
+                    .getDescricao())
+                    .quadroId(planoTrabalho.getQuadroModel().getId())
+                    .objetivoId(objetivo.getId())
+                    .build());
+        }
+
+        tarefaService.save(tarefas);
+
         return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
                 PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
                 .toUri()).body(ResponseType.SUCESS_SAVE);
@@ -135,6 +152,23 @@ public class PlanoTrabalhoController {
                     .add(usuarioPlanoTrabalhoModel);
         }
         planoTrabalho = planoTrabalhoService.save(planoTrabalho);
+
+        List<TarefaDocument> tarefas = new ArrayList<>();
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            if (!tarefaService.existsByObjetivoId(objetivo.getId())) {
+                tarefas.add(TarefaDocument.builder().titulo(objetivo
+                        .getDescricao())
+                        .quadroId(planoTrabalho.getQuadroModel().getId())
+                        .objetivoId(objetivo.getId())
+                        .build());
+            } else {
+                TarefaDocument tarefa = tarefaService.findByQuadroIdAndObjetivoId(planoTrabalho.getQuadroModel().getId(), objetivo.getId());
+                tarefa.setTitulo(objetivo.getDescricao());
+                tarefas.add(tarefa);
+            }
+        }
+
+        tarefaService.save(tarefas);
 
         return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
                 PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
