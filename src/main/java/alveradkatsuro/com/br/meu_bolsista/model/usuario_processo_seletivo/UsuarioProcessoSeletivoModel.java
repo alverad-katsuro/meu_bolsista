@@ -1,7 +1,9 @@
 package alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.bson.types.ObjectId;
 
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
@@ -32,10 +34,10 @@ public class UsuarioProcessoSeletivoModel implements Serializable {
     private Boolean aprovado;
 
     @Column(name = "inscricao_usuario_processo", unique = false, nullable = false)
-    private LocalDate inscricao;
+    private LocalDateTime inscricao;
 
     @Column(name = "curriculo_usuario_processo", unique = true, nullable = false)
-    private String curriculo;
+    private ObjectId curriculo;
 
     @MapsId(value = "usuarioId")
     @ManyToOne(fetch = FetchType.LAZY)

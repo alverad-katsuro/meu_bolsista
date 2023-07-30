@@ -15,12 +15,14 @@ public class ProcessoSeletivoDTO {
 
     private Integer id;
 
-    private String areaInteresse;
-
-    private String requisitos;
+    private LocalDate fim;
 
     private LocalDate inicio;
 
-    private LocalDate fim;
+    private String requisitos;
+
+    private String areaInteresse;
+
+    private Integer planoTrabalhoId;
 
 }

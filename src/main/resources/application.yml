@@ -68,6 +68,7 @@ spring:
 # Swagger
 springdoc:
   swagger-ui:
+    filter: true
     use-root-path: true
   show-login-endpoint: true
 
