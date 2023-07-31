@@ -1,7 +1,9 @@
 package alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo;
 
 import java.time.LocalDate;
+import java.util.Set;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_processo_seletivo.UsuarioProcessoSeletivoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +25,8 @@ public class ProcessoSeletivoDTO {
 
     private String areaInteresse;
 
-    private Integer planoTrabalhoId;
+    private Set<UsuarioProcessoSeletivoDTO> candidatos;
+
+    private ProcessoSeletivoPlanoTabalhoDTO planoTrabalho;
 
 }

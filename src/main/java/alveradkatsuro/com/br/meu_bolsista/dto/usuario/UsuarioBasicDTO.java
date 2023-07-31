@@ -13,4 +13,6 @@ public class UsuarioBasicDTO {
 
     private String nome;
 
+    private String email;
+
 }

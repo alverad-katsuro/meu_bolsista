@@ -1,5 +1,8 @@
 package alveradkatsuro.com.br.meu_bolsista.controller.processo_seletivo;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import alveradkatsuro.com.br.meu_bolsista.controller.arquivo.ArquivoController;
 import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoPlanoTabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
+import alveradkatsuro.com.br.meu_bolsista.projection.processo_seletivo.ProcessoSeletivoProjection;
 import alveradkatsuro.com.br.meu_bolsista.service.processo_seletivo.ProcessoSeletivoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,14 +49,34 @@ public class ProcessoSeletivoController {
             @RequestParam(defaultValue = "15", required = false) Integer size,
             @RequestParam(defaultValue = "ASC", required = false) Direction direction,
             @RequestParam(defaultValue = "id", required = false) String[] properties) {
-        return processoSeletivoService.findAll(page, size, direction, properties)
-                .map(e -> mapper.map(e, ProcessoSeletivoDTO.class));
+        return processoSeletivoService.findAll(page, size, direction, properties, ProcessoSeletivoDTO.class,
+                ProcessoSeletivoProjection.class);
+    }
+
+    @GetMapping(value = "/planoTrabalhoDisponiveis")
+    public List<ProcessoSeletivoPlanoTabalhoDTO> findAllPlanoTrabalhoDisponiveis() {
+        return processoSeletivoService.findProcessosDisponiveis();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     public ProcessoSeletivoDTO findById(@PathVariable Integer id) {
-        return mapper.map(processoSeletivoService.findById(id), ProcessoSeletivoDTO.class);
+        ProcessoSeletivoDTO processoSeletivoDTO = processoSeletivoService.findById(id, ProcessoSeletivoDTO.class,
+                ProcessoSeletivoProjection.class);
+        processoSeletivoDTO.getCandidatos().forEach(e -> {
+            try {
+                e.setCurriculo(WebMvcLinkBuilder
+                        .linkTo(WebMvcLinkBuilder
+                                .methodOn(ArquivoController.class)
+                                .recuperarArquivo(e.getCurriculo()))
+                        .toUri().toString());
+            } catch (IllegalArgumentException | SecurityException | IOException
+                    | NotFoundException e1) {
+                e1.printStackTrace();
+            }
+
+        });
+        return processoSeletivoDTO;
     }
 
     @PostMapping

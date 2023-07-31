@@ -3,14 +3,17 @@ package alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import org.bson.types.ObjectId;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
 
+import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import lombok.AllArgsConstructor;
@@ -24,26 +27,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario_processo_seletivo")
-@EqualsAndHashCode(exclude = { "usuario", "processoSeletivo" })
-public class UsuarioProcessoSeletivoModel implements Serializable {
+@EqualsAndHashCode(exclude = { "usuario", "processoSeletivo" }, callSuper = false)
+public class UsuarioProcessoSeletivoModel extends Auditable implements Serializable {
 
     @EmbeddedId
-    private UsuarioProcessoSeletivoModelId id;
+    @Builder.Default
+    private UsuarioProcessoSeletivoModelId id = new UsuarioProcessoSeletivoModelId();
 
+    @ColumnDefault(value = "false")
     @Column(name = "aprovado_usuario_processo", unique = false, nullable = false)
     private Boolean aprovado;
 
-    @Column(name = "inscricao_usuario_processo", unique = false, nullable = false)
+    @CreatedDate
+    @ColumnDefault(value = "now()")
+    @Column(name = "inscricao_usuario_processo", unique = false)
     private LocalDateTime inscricao;
 
     @Column(name = "curriculo_usuario_processo", unique = true, nullable = false)
-    private ObjectId curriculo;
+    private String curriculo;
 
     @MapsId(value = "usuarioId")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", unique = false, nullable = false)
     private UsuarioModel usuario;
 
-    @MapsId(value = "processoSeletivoId")
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId(value = "processoSeletivoId")
+    @JoinColumn(name = "processo_seletivo_id", unique = false, nullable = false)
     private ProcessoSeletivoModel processoSeletivo;
 }

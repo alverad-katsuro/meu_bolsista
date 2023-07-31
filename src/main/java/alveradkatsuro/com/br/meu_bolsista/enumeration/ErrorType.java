@@ -17,6 +17,8 @@ public enum ErrorType {
 
     REPORT_006("Erro ao enviar o email.", "RP-006"),
 
+    REPORT_007("Inscrição fora do prazo.", "RP-007"),
+
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
 
     DATABASE_001("Falha ao tentar salvar no banco de dados.", "DB-001"),

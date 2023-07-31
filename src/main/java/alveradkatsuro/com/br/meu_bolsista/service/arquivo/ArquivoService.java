@@ -1,6 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.service.arquivo;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bson.types.ObjectId;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 
@@ -33,6 +35,30 @@ public class ArquivoService {
         return gridFsTemplate.store(
                 arquivo.getArquivo().getInputStream(), arquivo.getNome().orElse(UUID.randomUUID().toString()),
                 arquivo.getArquivo().getContentType());
+    }
+
+    public ObjectId salvarArquivo(ObjectId id, Optional<String> nome, MultipartFile arquivo)
+            throws IOException {
+        if (id != null) {
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
+        }
+        return gridFsTemplate.store(
+                arquivo.getInputStream(), nome.orElse(UUID.randomUUID().toString()),
+                arquivo.getContentType());
+    }
+
+    public ObjectId salvarArquivo(Optional<String> nome, MultipartFile arquivo)
+            throws IOException {
+        return gridFsTemplate.store(
+                arquivo.getInputStream(), nome.orElse(UUID.randomUUID().toString()),
+                arquivo.getContentType());
+    }
+
+    public ObjectId salvarArquivo(MultipartFile arquivo)
+            throws IOException {
+        return gridFsTemplate.store(
+                arquivo.getInputStream(), UUID.randomUUID().toString(),
+                arquivo.getContentType());
     }
 
     public GridFsResource recuperarArquivo(ObjectId id)

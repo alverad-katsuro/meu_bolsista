@@ -104,6 +104,8 @@ public class SecurityConfig {
 										"/"))
 						.permitAll()
 						.requestMatchers(mvc.matchers(HttpMethod.GET, "/planoTrabalho**/**")).permitAll()
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/processoSeletivo**/**")).permitAll()
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/arquivo/**")).permitAll()
 						.anyRequest().authenticated())
 				.addFilterBefore(tokenAuthenticationFilter(),
 						UsernamePasswordAuthenticationFilter.class)

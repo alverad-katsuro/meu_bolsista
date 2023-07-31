@@ -6,6 +6,7 @@ import java.util.Set;
 
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo.UsuarioProcessoSeletivoModel;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -52,6 +53,7 @@ public class ProcessoSeletivoModel implements Serializable {
     @JoinColumn(name = "plano_trabalho", unique = false, nullable = false)
     private PlanoTrabalhoModel planoTrabalho;
 
-    @OneToMany(mappedBy = "processoSeletivo", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "processoSeletivo", cascade = {
+            CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE }, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<UsuarioProcessoSeletivoModel> candidatos;
 }

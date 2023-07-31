@@ -20,6 +20,7 @@ import alveradkatsuro.com.br.meu_bolsista.enumeration.ErrorType;
 import alveradkatsuro.com.br.meu_bolsista.erros.ErrorResponse;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.DataNotDeletedException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.DataNotSaveException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.DeadlineRegistrationException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NameAlreadyExistsException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
@@ -180,6 +181,15 @@ public class ControllerAdvise {
 				ErrorType.REPORT_004.getMessage(),
 				ex.getLocalizedMessage(),
 				ErrorType.REPORT_004.getInternalCode());
+	}
+
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(DeadlineRegistrationException.class)
+	public ErrorResponse handleDeadlineRegistrationException(DeadlineRegistrationException ex) {
+		return new ErrorResponse(
+				ErrorType.REPORT_007.getMessage(),
+				ex.getLocalizedMessage(),
+				ErrorType.REPORT_007.getInternalCode());
 	}
 
 	/**

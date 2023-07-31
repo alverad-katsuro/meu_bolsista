@@ -15,14 +15,12 @@ public class UsuarioProcessoSeletivoDTO {
 
     private UsuarioProcessoSeletivoModelId id;
 
-    private Boolean aprovado;
+    private Boolean aprovado = false;
 
     private LocalDateTime inscricao;
 
     private String curriculo;
 
     private UsuarioBasicDTO usuario;
-
-    private Integer processoSeletivoId;
 
 }
