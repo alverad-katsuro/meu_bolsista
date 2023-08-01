@@ -21,6 +21,8 @@ public class ProcessoSeletivoDTO {
 
     private LocalDate inicio;
 
+    private boolean inscrito;
+
     private String requisitos;
 
     private String areaInteresse;
