@@ -9,8 +9,7 @@ spring:
   #configuração do jackson
   jackson:
     default-property-inclusion: NON_NULL
-  jpa:
-    defer-datasource-initialization: true
+ 
 
 # Email configuration
   mail:
@@ -68,6 +67,7 @@ spring:
 # Swagger
 springdoc:
   swagger-ui:
+    filter: true
     use-root-path: true
   show-login-endpoint: true
 

@@ -14,7 +14,7 @@ public class NotFoundException extends Exception {
     }
 
     public NotFoundException() {
-        super(ErrorType.REPORT_004.getMessage());
-        this.internalCode = ErrorType.REPORT_004.getInternalCode();
+        super(ErrorType.REPORT_003.getMessage());
+        this.internalCode = ErrorType.REPORT_003.getInternalCode();
     }
 }

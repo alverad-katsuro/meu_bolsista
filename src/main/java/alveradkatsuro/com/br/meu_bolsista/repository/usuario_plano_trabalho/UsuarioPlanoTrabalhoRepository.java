@@ -2,6 +2,8 @@ package alveradkatsuro.com.br.meu_bolsista.repository.usuario_plano_trabalho;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,5 +27,9 @@ public interface UsuarioPlanoTrabalhoRepository
 			"  and upt.planoTrabalho.id = :planoTrabalhoId " +
 			"and :authority member of u.authorities")
 	<T> List<T> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId, Authority authority, Class<T> tipo);
+
+	Page<UsuarioPlanoTrabalhoModel> findAll(Pageable pageable);
+
+	<T> Page<T> findBy(Pageable pageable, Class<T> tipo);
 
 }

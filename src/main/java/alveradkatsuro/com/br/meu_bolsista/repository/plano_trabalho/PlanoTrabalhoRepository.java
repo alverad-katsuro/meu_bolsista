@@ -9,4 +9,7 @@ import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoMode
 public interface PlanoTrabalhoRepository extends CrudRepository<PlanoTrabalhoModel, Integer> {
 
     Page<PlanoTrabalhoModel> findAll(Pageable page);
+
+    <T> Page<T> findBy(Pageable page, Class<T> tipo);
+
 }

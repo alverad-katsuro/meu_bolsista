@@ -30,6 +30,7 @@ import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.recurso_material.RecursoMaterialDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
@@ -40,7 +41,7 @@ import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPl
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
-import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.impl.UsuarioPlanoTrabalhoServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class PlanoTrabalhoController {
 
     private final PlanoTrabalhoService planoTrabalhoService;
 
-    private final UsuarioPlanoTrabalhoService usuarioPlanoTrabalhoService;
+    private final UsuarioPlanoTrabalhoServiceImpl usuarioPlanoTrabalhoService;
 
     @GetMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -122,7 +123,7 @@ public class PlanoTrabalhoController {
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO) {
+    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO) throws NotFoundException {
         mapper.getConfiguration().setSkipNullEnabled(true);
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
         mapper.map(planoTrabalhoDTO, planoTrabalho);
@@ -151,7 +152,7 @@ public class PlanoTrabalhoController {
             planoTrabalho.getPesquisadores()
                     .add(usuarioPlanoTrabalhoModel);
         }
-        planoTrabalho = planoTrabalhoService.save(planoTrabalho);
+        planoTrabalho = planoTrabalhoService.update(planoTrabalho);
 
         List<TarefaDocument> tarefas = new ArrayList<>();
         for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
