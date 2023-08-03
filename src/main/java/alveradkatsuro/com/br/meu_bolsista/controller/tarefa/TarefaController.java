@@ -3,6 +3,7 @@ package alveradkatsuro.com.br.meu_bolsista.controller.tarefa;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +25,9 @@ public class TarefaController {
 
     private final TarefaDocumentService tarefaService;
 
-    @GetMapping
+    @GetMapping(value = "/quadro/{quadroId}")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public List<TarefaDocument> findByQuadroId(Integer quadroId) {
+    public List<TarefaDocument> findByQuadroId(@PathVariable Integer quadroId) {
         return tarefaService.findByQuadroId(quadroId);
     }
 
@@ -38,8 +39,9 @@ public class TarefaController {
 
     @PostMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public TarefaDocument save(@RequestBody TarefaDocument tarefaDocument) {
-        return tarefaService.save(tarefaDocument);
+    public ResponseEntity<String> save(@RequestBody TarefaDocument tarefaDocument) {
+        tarefaDocument = tarefaService.save(tarefaDocument);
+        return ResponseEntity.ok(tarefaDocument.getId().toString());
     }
 
     @PutMapping

@@ -22,7 +22,7 @@ public class QuadroController {
 
     @GetMapping(value = "/painel")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public Page<QuadroPainelDTO> getMethodName(
+    public Page<QuadroPainelDTO> consultarTarefas(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "15", required = false) Integer size,
             @RequestParam(defaultValue = "ASC", required = false) Direction direction) {

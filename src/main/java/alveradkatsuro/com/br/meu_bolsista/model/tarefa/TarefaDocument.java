@@ -25,24 +25,25 @@ public class TarefaDocument {
     @Id
     private ObjectId id;
 
-    @DBRef(lazy = true)
-    private TarefaDocument pai;
+    private String titulo;
+
+    private String descricao;
+
+    @Builder.Default
+    private ColunaKanban colunaKanban = ColunaKanban.TODO;
 
     private LocalDateTime fim;
 
     private LocalDateTime inicio;
 
-    private String titulo;
-
-    private String descricao;
-
     private Integer quadroId;
 
-    private Integer objetivoId;
-
-    private ColunaKanban colunaKanban;
-
     private Integer posicaoKanban;
+
+    @DBRef(lazy = true)
+    private TarefaDocument pai;
+
+    private Integer objetivoId;
 
     private Boolean concluida;
 
