@@ -16,4 +16,7 @@ public interface TarefaMongoRepository extends MongoRepository<TarefaDocument, O
     Optional<TarefaDocument> findByQuadroIdAndObjetivoId(Integer quadroId, Integer objetivoId);
 
     boolean existsByObjetivoId(Integer objetivoId);
+
+    
+
 }

@@ -2,9 +2,15 @@ package alveradkatsuro.com.br.meu_bolsista.service.tarefa;
 
 import java.util.List;
 
+import org.bson.Document;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaIndexDTO;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.repository.tarefa.TarefaMongoRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class TarefaDocumentService {
+
+    private final MongoOperations mongoOperations;
 
     private final TarefaMongoRepository tarefaMongoRepository;
 
@@ -42,4 +50,14 @@ public class TarefaDocumentService {
     public TarefaDocument update(TarefaDocument tarefaDocument) {
         return tarefaMongoRepository.save(tarefaDocument);
     }
+
+    public void updateIndex(TarefaIndexDTO... tarefaIndexDTOs) {
+        for (TarefaIndexDTO tarefaIndexDTO : tarefaIndexDTOs) {
+            Document document = new Document();
+            mongoOperations.getConverter().write(tarefaIndexDTO, document);
+            Update update = new Update();
+            document.forEach(update::set);
+            mongoOperations.findAndModify(
+                    Query.query(Criteria.where("_id").is(tarefaIndexDTO.getId())), update, TarefaDocument.class);
+        }    }
 }
