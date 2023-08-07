@@ -13,6 +13,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.KeycloakOidcUserInfo;
+import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfoCustom;
 import alveradkatsuro.com.br.meu_bolsista.dto.objetivo.ObjetivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.recurso_material.RecursoMaterialDTO;
@@ -80,9 +82,10 @@ public class PlanoTrabalhoController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<ResponseType> save(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO,
-            @CurrentUser UsuarioModel usuario) {
+            JwtAuthenticationToken token) {
+        OidcUserInfoCustom oidcUserInfoCustom = new KeycloakOidcUserInfo(token);
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoDTO, PlanoTrabalhoModel.class);
-        planoTrabalho.setLider(usuario);
+        planoTrabalho.setLider(UsuarioModel.builder().id(oidcUserInfoCustom.getId()).build());
         planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
         for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
             recurso.setPlanoTrabalho(planoTrabalho);
@@ -123,7 +126,8 @@ public class PlanoTrabalhoController {
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO) throws NotFoundException {
+    public ResponseEntity<ResponseType> update(@RequestBody PlanoTrabalhoDTO planoTrabalhoDTO)
+            throws NotFoundException {
         mapper.getConfiguration().setSkipNullEnabled(true);
         PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.findById(planoTrabalhoDTO.getId());
         mapper.map(planoTrabalhoDTO, planoTrabalho);
@@ -163,7 +167,8 @@ public class PlanoTrabalhoController {
                         .objetivoId(objetivo.getId())
                         .build());
             } else {
-                TarefaDocument tarefa = tarefaService.findByQuadroIdAndObjetivoId(planoTrabalho.getQuadroModel().getId(), objetivo.getId());
+                TarefaDocument tarefa = tarefaService
+                        .findByQuadroIdAndObjetivoId(planoTrabalho.getQuadroModel().getId(), objetivo.getId());
                 tarefa.setTitulo(objetivo.getDescricao());
                 tarefas.add(tarefa);
             }

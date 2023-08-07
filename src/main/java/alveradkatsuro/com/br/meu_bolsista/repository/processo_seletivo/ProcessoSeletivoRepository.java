@@ -27,7 +27,8 @@ public interface ProcessoSeletivoRepository extends JpaRepository<ProcessoSeleti
             " plano_trabalho pt " +
             "left join processo_seletivo ps on " +
             " ps.id = pt.id " +
-            "where Date(ps.fim) < Date(now()) ")
+            "and Date(ps.fim) >= Date(now()) " +
+            "where ps.id is null")
     List<ProcessoSeletivoPlanoTabalhoDTO> findProcessosDisponiveis();
 
 }

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioPlanoTrabalhoDTO {
 
-    Integer id;
+    String id;
 
     String nome;
 

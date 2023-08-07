@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
@@ -28,8 +26,6 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioServiceImpl implements UsuarioService {
 
 	private final UsuarioRepository usuarioRepository;
-
-	private final PasswordEncoder passwordEncoder;
 
 	/**
 	 * Metodo responsável por buscar um determinado usuário pelo seu username.
@@ -54,7 +50,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public UsuarioModel findById(Integer idUsuario) {
+	public UsuarioModel findById(String idUsuario) {
 		return usuarioRepository.findById(idUsuario).orElseThrow();
 	}
 
@@ -64,20 +60,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	public UsuarioModel save(UsuarioModel usuario) {
-		usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 		return usuarioRepository.save(usuario);
 	}
 
 	public UsuarioModel update(UsuarioModel usuario) throws InvalidRequestException {
 		if (usuario.getId() != null) {
-			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
 			return usuarioRepository.save(usuario);
 		} else {
 			throw new InvalidRequestException();
 		}
 	}
 
-	public boolean deleteById(Integer idUsuario) {
+	public boolean deleteById(String idUsuario) {
 		if (usuarioRepository.existsById(idUsuario)) {
 			usuarioRepository.deleteById(idUsuario);
 			return true;
@@ -86,16 +80,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy) {
+	public boolean existsByIdAndCreatedBy(String id, String createdBy) {
 		return usuarioRepository.existsByIdAndCreatedBy(id, createdBy);
 	}
 
-    @Override
-    public List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId,
-            Authority authority) {
-        return usuarioRepository.findUsuariosNotInPlanoTrabalho(planoTrabalhoId, authority, UsuarioNovoPlanoProjection.class);
-    }
-
-
+	@Override
+	public List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId,
+			String role) {
+		return usuarioRepository.findUsuariosNotInPlanoTrabalho(planoTrabalhoId, role,
+				UsuarioNovoPlanoProjection.class);
+	}
 
 }

@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import alveradkatsuro.com.br.meu_bolsista.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -25,16 +24,15 @@ import lombok.RequiredArgsConstructor;
 public class AuditConfig {
 
 	@Bean
-	public AuditorAware<Integer> auditorAware() {
+	public AuditorAware<String> auditorProvider() {
 		return () -> {
 			JwtAuthenticationToken authToken = SecurityContextHolder.getContext()
 					.getAuthentication() instanceof JwtAuthenticationToken
 							? (JwtAuthenticationToken) SecurityContextHolder.getContext().getAuthentication()
 							: null;
-
 			if (authToken != null) {
-				return Optional.of(Integer
-						.parseInt(authToken.getTokenAttributes().get(JwtUtils.USER_ID.getPropriedade()).toString()));
+				return Optional.of(
+						authToken.getName());
 			} else
 				return Optional.ofNullable(null);
 		};

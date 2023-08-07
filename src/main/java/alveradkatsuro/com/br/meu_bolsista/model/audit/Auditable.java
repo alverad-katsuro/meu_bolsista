@@ -31,7 +31,7 @@ public class Auditable {
 
 	@CreatedBy
 	@Column(name = "created_by", updatable = false)
-	protected Integer createdBy;
+	protected String createdBy;
 
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
@@ -41,7 +41,7 @@ public class Auditable {
 
 	@LastModifiedBy
 	@Column(name = "last_modified_by")
-	protected Integer lastModifiedBy;
+	protected String lastModifiedBy;
 
 	@LastModifiedDate
 	@Temporal(TemporalType.TIMESTAMP)

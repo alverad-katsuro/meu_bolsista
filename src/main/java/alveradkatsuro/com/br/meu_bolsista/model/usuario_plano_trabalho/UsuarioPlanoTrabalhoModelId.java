@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UsuarioPlanoTrabalhoModelId {
 
     @Column(name = "id_usuario", unique = false, nullable = false)
-    private Integer usuarioId;
+    private String usuarioId;
 
     @Column(name = "id_plano_trabalho", unique = false, nullable = false)
     private Integer planoTrabalhoId;

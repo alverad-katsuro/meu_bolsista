@@ -73,7 +73,7 @@ public class UsuarioProcessoSeletivoController {
 
         @ResponseStatus(code = HttpStatus.OK)
         @GetMapping(value = "/{usuarioId}/{processoSeletivoId}")
-        public UsuarioProcessoSeletivoDTO findById(@PathVariable Integer usuarioId,
+        public UsuarioProcessoSeletivoDTO findById(@PathVariable String usuarioId,
                         @PathVariable Integer processoSeletivoId) {
                 return mapper.map(usuarioProcessoSeletivoService.findById(usuarioId, processoSeletivoId),
                                 UsuarioProcessoSeletivoDTO.class);
@@ -121,7 +121,7 @@ public class UsuarioProcessoSeletivoController {
         @ResponseStatus(code = HttpStatus.NO_CONTENT)
         @DeleteMapping(value = "/{usuarioId}/{planoTrabalhoId}")
         @Operation(security = { @SecurityRequirement(name = "Bearer") })
-        public void deleteById(@PathVariable Integer usuarioId, @PathVariable Integer planoTrabalhoId) {
+        public void deleteById(@PathVariable String usuarioId, @PathVariable Integer planoTrabalhoId) {
                 usuarioProcessoSeletivoService.deleteById(usuarioId, planoTrabalhoId);
         }
 }

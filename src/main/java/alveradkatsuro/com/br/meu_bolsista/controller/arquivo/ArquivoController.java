@@ -27,7 +27,7 @@ public class ArquivoController {
     private final ArquivoService arquivoService;
 
     @GetMapping(value = "/{id}")
-@Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<Resource> recuperarArquivo(@PathVariable String id)
             throws IllegalArgumentException, SecurityException, IOException, NotFoundException {
 

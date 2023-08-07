@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 
 /**
@@ -18,11 +17,11 @@ import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
  * @since 26/03/2023
  * @version 1.0
  */
-public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer> {
+public interface UsuarioRepository extends CrudRepository<UsuarioModel, String> {
 
 	List<UsuarioModel> findAll();
 
-	boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	boolean existsByIdAndCreatedBy(String id, String createdBy);
 
 	boolean existsByEmailIgnoreCase(String username);
 
@@ -31,11 +30,12 @@ public interface UsuarioRepository extends CrudRepository<UsuarioModel, Integer>
 	@Query(value = "select  " +
 			"    u.id as id, " +
 			"    u.nome as nome, " +
-			"    CASE WHEN upt.usuario IS NOT NULL and :planoTrabalhoId != 0 THEN true ELSE false END AS participante " +
+			"    CASE WHEN upt.usuario IS NOT NULL and :planoTrabalhoId != 0 THEN true ELSE false END AS participante "
+			+
 			"FROM " +
 			"    usuario u " +
 			"LEFT JOIN " +
 			"    usuario_plano_trabalho upt ON u.id = upt.usuario.id and upt.planoTrabalho.id = :planoTrabalhoId " +
-			"and :authority member of u.authorities")
-	<T> List<T> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, Authority authority, Class<T> tipo);
+			"and :role member of u.roles")
+	<T> List<T> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, String role, Class<T> tipo);
 }

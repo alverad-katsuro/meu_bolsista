@@ -2,9 +2,6 @@ package alveradkatsuro.com.br.meu_bolsista.service.usuario;
 
 import java.util.List;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
@@ -16,7 +13,7 @@ import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo
  * @since 26/03/2023
  * @version 1.0.1
  */
-public interface UsuarioService extends UserDetailsService {
+public interface UsuarioService {
 
 	/**
 	 * Método responsável por persistir determinado usuário no banco de dados.
@@ -32,7 +29,7 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param idUsuario ID de um usuário
 	 * @return
 	 */
-	public UsuarioModel findById(Integer idUsuario);
+	public UsuarioModel findById(String idUsuario);
 
 	/**
 	 * Método responsável por encontrar todos os usuários cadastrados.
@@ -54,7 +51,7 @@ public interface UsuarioService extends UserDetailsService {
 	 *
 	 * @param idUsuario ID de um usuário
 	 */
-	public boolean deleteById(Integer idUsuario);
+	public boolean deleteById(String idUsuario);
 
 	/**
 	 * Método responsável por encontrar um determinado usuário por seu username.
@@ -69,10 +66,10 @@ public interface UsuarioService extends UserDetailsService {
 	 * @param createdBy
 	 * @return
 	 */
-	public boolean existsByIdAndCreatedBy(Integer id, Integer createdBy);
+	public boolean existsByIdAndCreatedBy(String id, String createdBy);
 
 	public boolean existsByUsername(String username);
 
-	List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, Authority authority);
+	List<UsuarioNovoPlanoProjection> findUsuariosNotInPlanoTrabalho(Integer planoTrabalhoId, String role);
 
 }

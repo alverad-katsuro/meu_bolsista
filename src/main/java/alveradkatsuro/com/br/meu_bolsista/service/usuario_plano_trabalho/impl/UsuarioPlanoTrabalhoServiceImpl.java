@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
@@ -23,7 +22,7 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 	private final UsuarioPlanoTrabalhoRepository usuarioPlanoTrabalhoRepository;
 
 	@Override
-	public UsuarioPlanoTrabalhoModel findById(Integer usuarioId, Integer planoTrabalhoId) {
+	public UsuarioPlanoTrabalhoModel findById(String usuarioId, Integer planoTrabalhoId) {
 		return this.findById(new UsuarioPlanoTrabalhoModelId(usuarioId, planoTrabalhoId));
 	}
 
@@ -34,8 +33,8 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 
 	@Override
 	public List<UsuarioNovoPlanoProjection> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId,
-			Authority authority) {
-		return usuarioPlanoTrabalhoRepository.findAllUsuariosInPlanoTrabalho(planoTrabalhoId, authority,
+			String role) {
+		return usuarioPlanoTrabalhoRepository.findAllUsuariosInPlanoTrabalho(planoTrabalhoId, role,
 				UsuarioNovoPlanoProjection.class);
 	}
 
@@ -45,7 +44,7 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 	}
 
 	@Override
-	public void deleteById(Integer usuarioId, Integer planoTrabalhoId) {
+	public void deleteById(String usuarioId, Integer planoTrabalhoId) {
 		this.deleteById(new UsuarioPlanoTrabalhoModelId(usuarioId, planoTrabalhoId));
 	}
 

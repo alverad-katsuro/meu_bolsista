@@ -13,26 +13,26 @@ import alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo.Usuari
 
 public interface UsuarioProcessoSeletivoService {
 
-        public UsuarioProcessoSeletivoModel findById(Integer usuarioId, Integer usuarioProcessoSeletivoId);
+	public UsuarioProcessoSeletivoModel findById(String usuarioId, Integer usuarioProcessoSeletivoId);
 
-        public UsuarioProcessoSeletivoModel findById(UsuarioProcessoSeletivoModelId id);
+	public UsuarioProcessoSeletivoModel findById(UsuarioProcessoSeletivoModelId id);
 
-        public Page<UsuarioProcessoSeletivoModel> findAll(Integer page, Integer size, Direction direction,
-                        String[] properties);
+	public Page<UsuarioProcessoSeletivoModel> findAll(Integer page, Integer size, Direction direction,
+			String[] properties);
 
-        public <T, Z> Page<T> findAll(Integer page, Integer size, Direction direction,
-                        String[] properties, Class<T> type, Class<Z> projection);
+	public <T, Z> Page<T> findAll(Integer page, Integer size, Direction direction,
+			String[] properties, Class<T> type, Class<Z> projection);
 
-        public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-                        MultipartFile arquivo)
-                        throws IOException, DeadlineRegistrationException;
+	public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
+			MultipartFile arquivo)
+			throws IOException, DeadlineRegistrationException;
 
-        public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-                        MultipartFile arquivo)
-                        throws NotFoundException, IOException;
+	public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
+			MultipartFile arquivo)
+			throws NotFoundException, IOException;
 
-        public void deleteById(UsuarioProcessoSeletivoModelId id);
+	public void deleteById(UsuarioProcessoSeletivoModelId id);
 
-        public void deleteById(Integer usuarioId, Integer usuarioProcessoSeletivoId);
+	public void deleteById(String usuarioId, Integer usuarioProcessoSeletivoId);
 
 }

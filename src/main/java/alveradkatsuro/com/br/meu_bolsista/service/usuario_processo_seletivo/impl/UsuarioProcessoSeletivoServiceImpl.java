@@ -30,7 +30,7 @@ public class UsuarioProcessoSeletivoServiceImpl implements UsuarioProcessoSeleti
 	private final UsuarioProcessoSeletivoRepository usuarioProcessoSeletivoRepository;
 
 	@Override
-	public UsuarioProcessoSeletivoModel findById(Integer usuarioId, Integer processoSeletivoId) {
+	public UsuarioProcessoSeletivoModel findById(String usuarioId, Integer processoSeletivoId) {
 		return this.findById(new UsuarioProcessoSeletivoModelId(usuarioId, processoSeletivoId));
 	}
 
@@ -45,7 +45,7 @@ public class UsuarioProcessoSeletivoServiceImpl implements UsuarioProcessoSeleti
 	}
 
 	@Override
-	public void deleteById(Integer usuarioId, Integer planoTrabalhoId) {
+	public void deleteById(String usuarioId, Integer planoTrabalhoId) {
 		this.deleteById(new UsuarioProcessoSeletivoModelId(usuarioId, planoTrabalhoId));
 	}
 

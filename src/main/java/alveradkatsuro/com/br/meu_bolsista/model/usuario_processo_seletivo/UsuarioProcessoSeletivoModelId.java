@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioProcessoSeletivoModelId implements Serializable {
 
-    private Integer usuarioId;
+    private String usuarioId;
 
     private Integer processoSeletivoId;
 }

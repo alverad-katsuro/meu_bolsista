@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 
@@ -25,8 +24,8 @@ public interface UsuarioPlanoTrabalhoRepository
 			"left join usuario_plano_trabalho upt on " +
 			"  upt.usuario.id = u.id " +
 			"  and upt.planoTrabalho.id = :planoTrabalhoId " +
-			"and :authority member of u.authorities")
-	<T> List<T> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId, Authority authority, Class<T> tipo);
+			"and :role member of u.roles")
+	<T> List<T> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId, String role, Class<T> tipo);
 
 	Page<UsuarioPlanoTrabalhoModel> findAll(Pageable pageable);
 
