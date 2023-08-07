@@ -54,8 +54,10 @@ public class TarefaController {
     @PutMapping
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<String> update(@RequestBody TarefaDTO tarefaDTO) {
-        TarefaDocument tarefaDocument = tarefaService.save(mapper.map(tarefaDTO, TarefaDocument.class));
-        return ResponseEntity.ok(tarefaDocument.getId().toString());
+        TarefaDocument tarefaDocument = mapper.map(tarefaDTO, TarefaDocument.class);
+        tarefaDocument.setId(new ObjectId(tarefaDTO.getId()));
+        tarefaService.update(tarefaDocument);
+        return ResponseEntity.ok(tarefaDTO.getId());
     }
 
     @PutMapping(value = "/index")

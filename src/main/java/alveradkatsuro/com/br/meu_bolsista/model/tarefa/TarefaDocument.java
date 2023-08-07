@@ -68,6 +68,8 @@ public class TarefaDocument {
 
         private Boolean concluida;
 
+        private Integer index;
+
     }
 
     @Data
@@ -78,5 +80,8 @@ public class TarefaDocument {
         private String impedimento;
 
         private LocalDate dataOcorrido;
+
+        private Integer index;
+
     }
 }
