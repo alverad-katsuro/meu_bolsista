@@ -2,6 +2,7 @@ package alveradkatsuro.com.br.meu_bolsista.dto.tarefa;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -51,7 +52,8 @@ public class TarefaDTO {
 
     private List<Integer> resultadosObtidos;
 
-    private List<AtividadeDocument> atividades;
+    @Builder.Default
+    private List<AtividadeDocument> atividades = new ArrayList<>();
 
     private List<ImpedimentoDocument> impedimentos;
 
@@ -60,9 +62,13 @@ public class TarefaDTO {
     @AllArgsConstructor
     public class AtividadeDocument {
 
+        private String id;
+
         private String atividade;
 
         private Boolean concluida;
+
+        private Integer index;
 
     }
 

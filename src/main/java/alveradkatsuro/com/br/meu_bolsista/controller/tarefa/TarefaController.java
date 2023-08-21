@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.AtividadeIndexDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaBasicDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaIndexDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
+import alveradkatsuro.com.br.meu_bolsista.model.tarefa.AtividadeDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.AtividadeDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,6 +34,8 @@ public class TarefaController {
     private final ModelMapper mapper;
 
     private final TarefaDocumentService tarefaService;
+
+    private final AtividadeDocumentService atividadeDocumentService;
 
     @GetMapping(value = "/quadro/{quadroId}")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
@@ -49,6 +54,33 @@ public class TarefaController {
     public ResponseEntity<String> save(@RequestBody TarefaBasicDTO tarefaBasicDTO) {
         TarefaDocument tarefaDocument = tarefaService.save(mapper.map(tarefaBasicDTO, TarefaDocument.class));
         return ResponseEntity.ok(tarefaDocument.getId().toString());
+    }
+
+    @PostMapping(value = "/{id}/atividade")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> save(@PathVariable String id, @RequestBody AtividadeDocument atividadeDocument) {
+        TarefaDocument tarefaDocument = tarefaService.findById(new ObjectId(id));
+        atividadeDocument.setTarefa(tarefaDocument);
+        tarefaDocument.getAtividades().add(atividadeDocument);
+        tarefaService.save(tarefaDocument);
+        return ResponseEntity.ok(atividadeDocument.getId().toString());
+    }
+
+    @PutMapping(value = "/{id}/atividade")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> updateAtividade(@PathVariable String id,
+            @RequestBody AtividadeDocument atividadeDocument) {
+        AtividadeDocument noBanco = atividadeDocumentService.findById(atividadeDocument.getId());
+        mapper.map(atividadeDocument, noBanco);
+        atividadeDocumentService.save(noBanco);
+        return ResponseEntity.ok(atividadeDocument.getId().toString());
+    }
+
+    @PutMapping(value = "/atividade/index")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public ResponseEntity<String> updateAtividadeIndex(@RequestBody List<AtividadeIndexDTO> atividadeDocuments) {
+        atividadeDocuments.forEach(atividadeDocumentService::updateIndex);
+        return ResponseEntity.ok(ResponseType.SUCESS_SAVE.getMessage());
     }
 
     @PutMapping

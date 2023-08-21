@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Document(value = "tarefa_document")
 @NoArgsConstructor
 @AllArgsConstructor
+@Document(value = "tarefa_document")
 public class TarefaDocument {
 
     @Id
@@ -55,22 +55,10 @@ public class TarefaDocument {
 
     private List<Integer> resultadosObtidos;
 
+    @DBRef
     private List<AtividadeDocument> atividades;
 
     private List<ImpedimentoDocument> impedimentos;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class AtividadeDocument {
-
-        private String atividade;
-
-        private Boolean concluida;
-
-        private Integer index;
-
-    }
 
     @Data
     @NoArgsConstructor
