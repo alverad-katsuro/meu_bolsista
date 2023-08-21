@@ -1,6 +1,6 @@
 logging:
   level:
-    '[org.hibernate.stat]': debug
+    "[org.hibernate.stat]": debug
 
 spring:
   #DEVTOOLS
@@ -14,14 +14,14 @@ spring:
     password: ${POSTGRES_PASSWORD}
 
   data:
-      mongodb:
-        host: ${MONGO_HOST}
-        database: ${MONGO_DB}
-        port: ${MONGO_PORT}
-        username: ${MONGO_INITDB_ROOT_USERNAME}
-        password: ${MONGO_INITDB_ROOT_PASSWORD}
-        authentication-database: admin # habilitar autenticação
-        auto-index-creation: true # Atualizar indices quando autlaizar o model.
+    mongodb:
+      host: ${MONGO_HOST}
+      database: ${MONGO_DB}
+      port: ${MONGO_PORT}
+      username: ${MONGO_INITDB_ROOT_USERNAME}
+      password: ${MONGO_INITDB_ROOT_PASSWORD}
+      authentication-database: admin # habilitar autenticação
+      auto-index-creation: true # Atualizar indices quando autlaizar o model.
 
   sql:
     init:
@@ -35,8 +35,8 @@ spring:
     hibernate:
       ddl-auto: update
       naming:
-        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
-      '[hibernate.format_sql]' : true
-      '[hibernate.generate_statistics]' : true
-      '[persistence.schema-generation.scripts.create-target]' : create.sql
+      "[hibernate.format_sql]": true
+      "[hibernate.generate_statistics]": true
+      "[persistence.schema-generation.scripts.create-target]": create.sql

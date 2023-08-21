@@ -1,15 +1,35 @@
 package alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+import org.bson.types.ObjectId;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
+import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
+import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.repository.plano_trabalho.PlanoTrabalhoRepository;
+import alveradkatsuro.com.br.meu_bolsista.service.arquivo.ArquivoService;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
+import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.impl.UsuarioPlanoTrabalhoServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +37,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
+    private final ModelMapper mapper;
+
+    private final ArquivoService arquivoService;
+
+    private final UsuarioService usuarioService;
+
+    private final TarefaDocumentService tarefaService;
+
     private final PlanoTrabalhoRepository planoTrabalhoRepository;
+
+    private final UsuarioPlanoTrabalhoServiceImpl usuarioPlanoTrabalhoService;
 
     @Override
     public void deleteById(Integer id) {
@@ -27,7 +57,8 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     @Override
     @Transactional
     public Page<PlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction) {
-        return planoTrabalhoRepository.findBy(PageRequest.of(page, size, Sort.by(direction, "titulo")), PlanoTrabalhoModel.class);
+        return planoTrabalhoRepository.findBy(PageRequest.of(page, size, Sort.by(direction, "titulo")),
+                PlanoTrabalhoModel.class);
     }
 
     @Override
@@ -37,17 +68,118 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     }
 
     @Override
-    public PlanoTrabalhoModel save(PlanoTrabalhoModel planoTrabalho) {
+    public PlanoTrabalhoModel save(String liderId, PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo) throws IOException {
+
+        ObjectId capaResourceId = arquivoService.salvarArquivo(arquivo);
+
+        PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoCreateDTO, PlanoTrabalhoModel.class);
+        planoTrabalho.setCapaResourceId(capaResourceId.toString());
+        planoTrabalho.setLider(UsuarioModel.builder().id(liderId).build());
+        planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
+
+        for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
+            recurso.setPlanoTrabalho(planoTrabalho);
+        }
+
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            objetivo.setPlanoTrabalho(planoTrabalho);
+        }
+
+        planoTrabalho.getPesquisadores().clear();
+
+        for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
+            UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
+                    .usuario(usuarioService.findById(pesquisador.getId()))
+                    .planoTrabalho(planoTrabalho)
+                    .cargaHoraria(pesquisador.getCargaHoraria())
+                    .build();
+            usuarioPlanoTrabalhoModel.getUsuario().getPlanosTrabalhos().add(usuarioPlanoTrabalhoModel);
+            planoTrabalho.getPesquisadores()
+                    .add(usuarioPlanoTrabalhoModel);
+        }
+
+        planoTrabalho = planoTrabalhoRepository.save(planoTrabalho);
+
+        List<TarefaDocument> tarefas = new ArrayList<>();
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            tarefas.add(TarefaDocument.builder().titulo(objetivo
+                    .getDescricao())
+                    .quadroId(planoTrabalho.getQuadroModel().getId())
+                    .objetivoId(objetivo.getId())
+                    .build());
+        }
+
+        tarefaService.save(tarefas);
+
         return planoTrabalhoRepository.save(planoTrabalho);
     }
 
     @Override
-    public PlanoTrabalhoModel update(PlanoTrabalhoModel planoTrabalho) throws NotFoundException {
-        if (!planoTrabalhoRepository.existsById(planoTrabalho.getId())) {
+    public PlanoTrabalhoModel update(PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo)
+            throws NotFoundException, IOException {
+
+        if (!planoTrabalhoRepository.existsById(planoTrabalhoCreateDTO.getId())) {
             throw new NotFoundException();
         }
-        return this.save(planoTrabalho);
-    }
 
+        mapper.getConfiguration().setSkipNullEnabled(true);
+
+        PlanoTrabalhoModel planoTrabalho = this.findById(planoTrabalhoCreateDTO.getId());
+
+        if (arquivo != null) {
+            arquivoService.salvarArquivo(new ObjectId(planoTrabalhoCreateDTO.getCapaResourceId()),
+                    arquivo);
+        }
+
+        mapper.map(planoTrabalhoCreateDTO, planoTrabalho);
+
+        for (RecursoMaterialModel recursoMaterialModel : planoTrabalho.getRecursoMateriais()) {
+            recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
+        }
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            objetivo.setPlanoTrabalho(planoTrabalho);
+        }
+
+        planoTrabalho.getPesquisadores().clear();
+        for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
+            UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel;
+            try {
+                usuarioPlanoTrabalhoModel = usuarioPlanoTrabalhoService.findById(pesquisador.getId(),
+                        planoTrabalho.getId());
+                usuarioPlanoTrabalhoModel.setCargaHoraria(pesquisador.getCargaHoraria());
+            } catch (NoSuchElementException e) {
+                usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
+                        .usuario(usuarioService.findById(pesquisador.getId()))
+                        .planoTrabalho(planoTrabalho)
+                        .cargaHoraria(pesquisador.getCargaHoraria())
+                        .build();
+            }
+
+            usuarioPlanoTrabalhoModel.getUsuario().getPlanosTrabalhos().add(usuarioPlanoTrabalhoModel);
+            planoTrabalho.getPesquisadores()
+                    .add(usuarioPlanoTrabalhoModel);
+        }
+        planoTrabalho = planoTrabalhoRepository.save(planoTrabalho);
+
+        List<TarefaDocument> tarefas = new ArrayList<>();
+        for (ObjetivoModel objetivo : planoTrabalho.getObjetivos()) {
+            if (!tarefaService.existsByObjetivoId(objetivo.getId())) {
+                tarefas.add(TarefaDocument.builder().titulo(objetivo
+                        .getDescricao())
+                        .quadroId(planoTrabalho.getQuadroModel().getId())
+                        .objetivoId(objetivo.getId())
+                        .build());
+            } else {
+                TarefaDocument tarefa = tarefaService
+                        .findByQuadroIdAndObjetivoId(planoTrabalho.getQuadroModel().getId(), objetivo.getId());
+                tarefa.setTitulo(objetivo.getDescricao());
+                tarefas.add(tarefa);
+            }
+        }
+
+        tarefaService.save(tarefas);
+
+        return planoTrabalho;
+    }
 
 }

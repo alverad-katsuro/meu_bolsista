@@ -15,19 +15,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlanoTrabalhoDTO {
+public class PlanoTrabalhoCreateDTO {
 
     private Integer id;
 
     private String titulo;
 
-    private String capaUrl;
+    private String areaTrabalho;
 
     private String descricao;
 
     private String liderNome;
-
-    private String areaTrabalho;
 
     private String capaResourceId;
 

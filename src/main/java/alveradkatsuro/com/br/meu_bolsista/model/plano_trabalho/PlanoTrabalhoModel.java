@@ -47,6 +47,9 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
     @Column(name = "area_trabalho_plano_trabalho", unique = false, nullable = false)
     private String areaTrabalho;
 
+    @Column(name = "capa_resource_id_plano_trabalho", unique = false, nullable = true)
+    private String capaResourceId;
+
     @Lob
     @Column(name = "descricao_plano_trabalho", unique = false, nullable = false)
     private String descricao;

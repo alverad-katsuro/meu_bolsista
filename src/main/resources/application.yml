@@ -10,6 +10,22 @@ spring:
   jackson:
     default-property-inclusion: NON_NULL
 
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      database: ${MONGO_DB}
+      port: ${MONGO_PORT}
+      username: ${MONGO_INITDB_ROOT_USERNAME}
+      password: ${MONGO_INITDB_ROOT_PASSWORD}
+      authentication-database: admin # habilitar autenticação
+      auto-index-creation: true # Atualizar indices quando autlaizar o model.
+
   security:
     oauth2:
       client:
@@ -25,12 +41,11 @@ spring:
             issuer-uri: ${KEYCLOACK_URL}
             user-name-attribute: preferred_username
       resourceserver:
-          jwt:
-            issuer-uri: ${KEYCLOACK_URL}
-            jwk-set-uri: ${KEYCLOACK_URL}/protocol/openid-connect/certs
+        jwt:
+          issuer-uri: ${KEYCLOACK_URL}
+          jwk-set-uri: ${KEYCLOACK_URL}/protocol/openid-connect/certs
 
-
-# Email configuration
+  # Email configuration
   mail:
     host: smtp.gmail.com
     port: 587
@@ -42,7 +57,6 @@ spring:
           auth: true
           starttls:
             enable: true
-
 
 # Swagger
 springdoc:
@@ -56,8 +70,8 @@ springdoc:
 
 logging:
   file:
-      name: /var/log/meuBolsistaApi.log
-      path: /var/log
+    name: /var/log/meuBolsistaApi.log
+    path: /var/log
   pattern:
     console: "%d %-5level %logger : %msg%n"
   level:
@@ -67,10 +81,8 @@ logging:
 
 # keys
 rsa:
-  private-key:
-    classpath:certs/private.pem
-  public-key:
-    classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
 
 # Server configuration
 server:
@@ -80,7 +92,7 @@ server:
     enabled: true
     min-response-size: 2048
     mime-types:
-    - application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+      - application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
 
 token:
   domain: ${DOMAIN_COOKIE}

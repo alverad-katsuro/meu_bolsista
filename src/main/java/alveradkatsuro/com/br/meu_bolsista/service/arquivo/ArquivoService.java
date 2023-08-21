@@ -47,6 +47,16 @@ public class ArquivoService {
                 arquivo.getContentType());
     }
 
+    public ObjectId salvarArquivo(ObjectId id, MultipartFile arquivo)
+            throws IOException {
+        if (id != null) {
+            gridFsTemplate.delete(new Query(Criteria.where("_id").is(id)));
+        }
+        return gridFsTemplate.store(
+                arquivo.getInputStream(), UUID.randomUUID().toString(),
+                arquivo.getContentType());
+    }
+
     public ObjectId salvarArquivo(Optional<String> nome, MultipartFile arquivo)
             throws IOException {
         return gridFsTemplate.store(

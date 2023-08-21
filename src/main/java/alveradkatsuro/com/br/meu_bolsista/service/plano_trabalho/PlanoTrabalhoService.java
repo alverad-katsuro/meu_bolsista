@@ -1,8 +1,12 @@
 package alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho;
 
+import java.io.IOException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.web.multipart.MultipartFile;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 
@@ -12,9 +16,11 @@ public interface PlanoTrabalhoService {
 
     public Page<PlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction);
 
-    public PlanoTrabalhoModel save(PlanoTrabalhoModel planoTrabalho);
+    public PlanoTrabalhoModel save(String liderId, PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo)
+            throws IOException;
 
-    public PlanoTrabalhoModel update(PlanoTrabalhoModel planoTrabalho) throws NotFoundException ;
+    public PlanoTrabalhoModel update(PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO,
+            MultipartFile arquivo) throws NotFoundException, IOException;
 
     public void deleteById(Integer id);
 
