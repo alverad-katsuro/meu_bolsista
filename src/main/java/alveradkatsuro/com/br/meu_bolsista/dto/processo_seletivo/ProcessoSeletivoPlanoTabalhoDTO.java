@@ -14,4 +14,8 @@ public class ProcessoSeletivoPlanoTabalhoDTO {
 
     private String titulo;
 
+    private String capaUrl;
+
+    private String capaResourceId;
+
 }

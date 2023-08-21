@@ -34,7 +34,9 @@ import alveradkatsuro.com.br.meu_bolsista.service.processo_seletivo.ProcessoSele
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/processoSeletivo")
@@ -52,7 +54,19 @@ public class ProcessoSeletivoController {
             @RequestParam(defaultValue = "ASC", required = false) Direction direction,
             @RequestParam(defaultValue = "id", required = false) String[] properties) {
         return processoSeletivoService.findAll(page, size, direction, properties, ProcessoSeletivoDTO.class,
-                ProcessoSeletivoProjection.class);
+                ProcessoSeletivoProjection.class).map(ps -> {
+                    try {
+                        ps.getPlanoTrabalho().setCapaUrl(
+                                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+                                        ArquivoController.class)
+                                        .recuperarArquivo(ps.getPlanoTrabalho().getCapaResourceId()))
+                                        .toUri().toString());
+                    } catch (IllegalArgumentException | SecurityException | IOException | NotFoundException e) {
+                        log.catching(e);
+                        return null;
+                    }
+                    return ps;
+                });
     }
 
     @GetMapping(value = "/planoTrabalhoDisponiveis")

@@ -27,6 +27,8 @@ public interface ProcessoSeletivoProjection {
 
         public String getTitulo();
 
+        public String getCapaResourceId();
+
     }
 
 }
