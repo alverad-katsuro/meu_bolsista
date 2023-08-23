@@ -53,18 +53,18 @@ public class TarefaDTO {
     private List<Integer> resultadosObtidos;
 
     @Builder.Default
-    private List<AtividadeDocument> atividades = new ArrayList<>();
+    private List<AtividadeDTO> atividades = new ArrayList<>();
 
-    private List<ImpedimentoDocument> impedimentos;
+    private List<ImpedimentoDTO> impedimentos;
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class AtividadeDocument {
+    public static class AtividadeDTO {
 
         private String id;
 
-        private String atividade;
+        private String titulo;
 
         private Boolean concluida;
 
@@ -75,7 +75,7 @@ public class TarefaDTO {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public class ImpedimentoDocument {
+    public static class ImpedimentoDTO {
 
         private String impedimento;
 

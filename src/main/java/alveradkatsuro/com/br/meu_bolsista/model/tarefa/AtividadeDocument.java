@@ -18,7 +18,7 @@ public class AtividadeDocument {
     @Id
     private ObjectId id = new ObjectId();
 
-    private String atividade;
+    private String titulo;
 
     private Boolean concluida;
 

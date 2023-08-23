@@ -55,7 +55,7 @@ public class TarefaDocument {
 
     private List<Integer> resultadosObtidos;
 
-    @DBRef
+    @DBRef(lazy = false)
     private List<AtividadeDocument> atividades;
 
     private List<ImpedimentoDocument> impedimentos;

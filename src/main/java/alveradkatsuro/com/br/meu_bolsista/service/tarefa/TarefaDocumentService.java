@@ -59,5 +59,6 @@ public class TarefaDocumentService {
             document.forEach(update::set);
             mongoOperations.findAndModify(
                     Query.query(Criteria.where("_id").is(tarefaIndexDTO.getId())), update, TarefaDocument.class);
-        }    }
+        }
+    }
 }
