@@ -69,10 +69,9 @@ public class TarefaController {
         return ResponseEntity.ok(atividadeDocument.getId().toString());
     }
 
-    @PutMapping(value = "/{id}/atividade")
+    @PutMapping(value = "/atividade")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ResponseEntity<String> updateAtividade(@PathVariable String id,
-            @RequestBody AtividadeDTO atividadeDTO) {
+    public ResponseEntity<String> updateAtividade(@RequestBody AtividadeDTO atividadeDTO) {
         AtividadeDocument noBanco = atividadeDocumentService.findById(new ObjectId(atividadeDTO.getId()));
         mapper.map(atividadeDTO, noBanco);
         noBanco.setId(new ObjectId(atividadeDTO.getId()));
