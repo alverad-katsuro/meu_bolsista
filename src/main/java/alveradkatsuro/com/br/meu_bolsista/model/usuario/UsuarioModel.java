@@ -1,10 +1,6 @@
 package alveradkatsuro.com.br.meu_bolsista.model.usuario;
 
-import java.util.Collection;
 import java.util.Set;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
@@ -39,7 +35,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity(name = "usuario")
 @EqualsAndHashCode(callSuper = false)
-public class UsuarioModel extends Auditable implements UserDetails {
+public class UsuarioModel extends Auditable {
 
 	@Id
 	@Column(name = "id_usuario", unique = true, nullable = false)
@@ -77,37 +73,6 @@ public class UsuarioModel extends Auditable implements UserDetails {
 	@Transient
 	public String getLastName() {
 		return this.nome.replace(getFirstName(), "");
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPassword() {
-		return null;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return false;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return false;
 	}
 
 }

@@ -39,6 +39,14 @@ public class AtividadeDocumentService {
         return atividadeMongoRepository.save(tarefaDocument);
     }
 
+    public void deleteById(ObjectId id) {
+        atividadeMongoRepository.deleteById(id);
+    }
+
+    public void deleteById(String id) {
+        this.deleteById(new ObjectId(id));
+    }
+
     public void updateIndex(AtividadeIndexDTO... atividadeIndexDTOs) {
         for (AtividadeIndexDTO atividadeIndexDTO : atividadeIndexDTOs) {
             Document document = new Document();
@@ -47,5 +55,6 @@ public class AtividadeDocumentService {
             document.forEach(update::set);
             mongoOperations.findAndModify(
                     Query.query(Criteria.where("_id").is(atividadeIndexDTO.getId())), update, AtividadeDocument.class);
-        }    }
+        }
+    }
 }

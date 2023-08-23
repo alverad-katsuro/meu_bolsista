@@ -51,6 +51,13 @@ public class TarefaDocumentService {
         return tarefaMongoRepository.save(tarefaDocument);
     }
 
+    public void removeAtividade(String tarefaId, String atividadeId) {
+        Query query = new Query(Criteria.where("_id").is(tarefaId));
+        Update update = new Update().pull("atividades", Query.query(Criteria.where("$id").is(atividadeId)));
+
+        mongoOperations.updateMulti(query, update, TarefaDocument.class);
+    }
+
     public void updateIndex(TarefaIndexDTO... tarefaIndexDTOs) {
         for (TarefaIndexDTO tarefaIndexDTO : tarefaIndexDTOs) {
             Document document = new Document();
