@@ -68,7 +68,9 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     }
 
     @Override
-    public PlanoTrabalhoModel save(String liderId, PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo) throws IOException {
+    @Transactional
+    public PlanoTrabalhoModel save(String liderId, PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo)
+            throws IOException {
 
         ObjectId capaResourceId = arquivoService.salvarArquivo(arquivo);
 
@@ -115,6 +117,7 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     }
 
     @Override
+    @Transactional
     public PlanoTrabalhoModel update(PlanoTrabalhoCreateDTO planoTrabalhoCreateDTO, MultipartFile arquivo)
             throws NotFoundException, IOException {
 
