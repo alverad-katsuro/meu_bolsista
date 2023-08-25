@@ -21,11 +21,13 @@ import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaBasicDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO.AtividadeDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaIndexDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.AtividadeDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.AtividadeDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,8 @@ public class TarefaController {
 
     private final ModelMapper mapper;
 
+    private final UsuarioService usuarioService;
+
     private final TarefaDocumentService tarefaService;
 
     private final AtividadeDocumentService atividadeDocumentService;
@@ -44,13 +48,13 @@ public class TarefaController {
     @GetMapping(value = "/quadro/{quadroId}")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public List<TarefaBasicDTO> findByQuadroId(@PathVariable Integer quadroId) {
-        return tarefaService.findByQuadroId(quadroId).stream().map(e -> mapper.map(e, TarefaBasicDTO.class)).toList();
+        return tarefaService.findByQuadroId(quadroId).stream().map(this::convertToBasicDTO).toList();
     }
 
     @GetMapping(value = "/{id}")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public TarefaDTO findById(@PathVariable String id) {
-        return mapper.map(tarefaService.findById(new ObjectId(id)), TarefaDTO.class);
+        return convertToDTO(tarefaService.findById(new ObjectId(id)));
     }
 
     @PostMapping
@@ -117,6 +121,24 @@ public class TarefaController {
     public ResponseEntity<String> updateIndex(@RequestBody List<TarefaIndexDTO> tarefaBasicDTOs) {
         tarefaBasicDTOs.forEach(tarefaService::updateIndex);
         return ResponseEntity.ok(ResponseType.SUCESS_SAVE.getMessage());
+    }
+
+    private TarefaBasicDTO convertToBasicDTO(TarefaDocument tarefaDocument) {
+        var tarefaBasic = mapper.map(tarefaDocument, TarefaBasicDTO.class);
+        if (tarefaDocument.getResponsavel() != null) {
+            var responsavel = usuarioService.findById(tarefaDocument.getResponsavel());
+            tarefaBasic.setResponsavel(mapper.map(responsavel, UsuarioDTO.class));
+        }
+        return tarefaBasic;
+    }
+
+    private TarefaDTO convertToDTO(TarefaDocument tarefaDocument) {
+        var tarefa = mapper.map(tarefaDocument, TarefaDTO.class);
+        if (tarefaDocument.getResponsavel() != null) {
+            var responsavel = usuarioService.findById(tarefaDocument.getResponsavel());
+            tarefa.setResponsavel(mapper.map(responsavel, UsuarioDTO.class));
+        }
+        return tarefa;
     }
 
 }

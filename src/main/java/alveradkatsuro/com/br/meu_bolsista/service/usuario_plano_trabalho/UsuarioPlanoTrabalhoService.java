@@ -9,6 +9,7 @@ import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioPlanoProjection;
 
 public interface UsuarioPlanoTrabalhoService {
 
@@ -18,6 +19,8 @@ public interface UsuarioPlanoTrabalhoService {
 
         public List<UsuarioNovoPlanoProjection> findAllUsuariosInPlanoTrabalho(Integer usuarioPlanoTrabalhoId,
                         String role);
+
+        public List<UsuarioPlanoProjection> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId);
 
         public Page<UsuarioPlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction,
                         String[] properties);

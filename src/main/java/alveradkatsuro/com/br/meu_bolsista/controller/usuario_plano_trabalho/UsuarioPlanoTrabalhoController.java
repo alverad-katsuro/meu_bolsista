@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario_processo_seletivo.UsuarioProcessoSeletivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
@@ -39,12 +40,21 @@ public class UsuarioPlanoTrabalhoController {
 
         private final UsuarioPlanoTrabalhoService usuarioPlanoTrabalhoService;
 
-        @GetMapping(value = "/estaNoPlanoTrabalho")
+        @GetMapping(value = "/estaNoPlanoTrabalho", params = "planoTrabalhoId")
         @Operation(security = { @SecurityRequirement(name = "Bearer") })
         public List<UsuarioNovoPlanoProjection> estaNoPlanoTrabalho(
                         @RequestParam(required = false, defaultValue = "0") Integer planoTrabalhoId,
                         @RequestParam(required = false, defaultValue = "ROLE_PESQUISADOR") String role) {
                 return usuarioPlanoTrabalhoService.findAllUsuariosInPlanoTrabalho(planoTrabalhoId, role);
+        }
+
+        @GetMapping(value = "/{planoTrabalhoId}/usuarios")
+        @Operation(security = { @SecurityRequirement(name = "Bearer") })
+        public List<UsuarioPlanoTrabalhoDTO> estaNoPlanoTrabalho(
+                        @PathVariable Integer planoTrabalhoId) {
+                return usuarioPlanoTrabalhoService.findUsuarioPlanoInPlanoTrabalho(planoTrabalhoId).stream()
+                                .map(e -> mapper.map(e, UsuarioPlanoTrabalhoDTO.class))
+                                .toList();
         }
 
         @GetMapping

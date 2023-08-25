@@ -11,6 +11,7 @@ import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioPlanoProjection;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario_plano_trabalho.UsuarioPlanoTrabalhoRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import lombok.RequiredArgsConstructor;
@@ -72,4 +73,8 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 		return usuarioPlanoTrabalhoRepository.save(usuarioPlanoTrabalho);
 	}
 
+	@Override
+	public List<UsuarioPlanoProjection> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) {
+		return usuarioPlanoTrabalhoRepository.findByPlanoTrabalhoId(planoTrabalhoId);
+	}
 }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
-import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
@@ -89,7 +89,7 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
         planoTrabalho.getPesquisadores().clear();
 
-        for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
+        for (UsuarioPlanoTrabalhoCreateDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
             UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
                     .usuario(usuarioService.findById(pesquisador.getId()))
                     .planoTrabalho(planoTrabalho)
@@ -144,7 +144,7 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
         }
 
         planoTrabalho.getPesquisadores().clear();
-        for (UsuarioPlanoTrabalhoDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
+        for (UsuarioPlanoTrabalhoCreateDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
             UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel;
             try {
                 usuarioPlanoTrabalhoModel = usuarioPlanoTrabalhoService.findById(pesquisador.getId(),

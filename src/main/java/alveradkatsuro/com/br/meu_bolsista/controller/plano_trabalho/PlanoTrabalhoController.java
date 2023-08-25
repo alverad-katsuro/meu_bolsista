@@ -32,7 +32,7 @@ import alveradkatsuro.com.br.meu_bolsista.dto.objetivo.ObjetivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.recurso_material.RecursoMaterialDTO;
-import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
@@ -126,7 +126,7 @@ public class PlanoTrabalhoController {
 							new TypeToken<Set<RecursoMaterialDTO>>() {
 							}.getType()))
 					.pesquisadores(planoTrabalhoModel.getPesquisadores().stream()
-							.map(e -> UsuarioPlanoTrabalhoDTO.builder()
+							.map(e -> UsuarioPlanoTrabalhoCreateDTO.builder()
 									.id(e.getUsuario().getId())
 									.planoTrabalhoId(e.getPlanoTrabalho().getId())
 									.cargaHoraria(e.getCargaHoraria())

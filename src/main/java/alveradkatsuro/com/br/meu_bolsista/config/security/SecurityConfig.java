@@ -61,11 +61,12 @@ public class SecurityConfig {
 										"/oauth2/**",
 										"/"))
 						.permitAll()
-						.requestMatchers(mvc.matchers(HttpMethod.GET,"/planoTrabalho**/**"))
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/planoTrabalho**/**"))
 						.permitAll()
-						.requestMatchers(mvc.matchers(HttpMethod.GET,"/processoSeletivo**/**"))
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/processoSeletivo**/**"))
 						.permitAll()
 						.requestMatchers(mvc.matchers(HttpMethod.GET, "/arquivo/**")).permitAll()
+						.requestMatchers(mvc.matchers(HttpMethod.GET, "/**")).permitAll()
 						.anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2
 						.jwt(Customizer.withDefaults()))

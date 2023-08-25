@@ -3,6 +3,7 @@ package alveradkatsuro.com.br.meu_bolsista.dto.tarefa;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ColunaKanban;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,6 @@ public class TarefaBasicDTO {
 
     private List<String> etiquetas;
 
-    private Integer responsavel;
+    private UsuarioDTO responsavel;
 
 }

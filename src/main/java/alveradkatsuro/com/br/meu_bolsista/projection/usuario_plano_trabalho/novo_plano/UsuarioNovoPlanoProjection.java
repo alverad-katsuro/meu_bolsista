@@ -11,4 +11,5 @@ public interface UsuarioNovoPlanoProjection {
     Boolean getParticipante();
 
     Integer getPlanoTrabalhoId();
+    
 }

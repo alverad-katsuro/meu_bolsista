@@ -5,10 +5,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ColunaKanban;
-import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,8 +35,7 @@ public class TarefaDTO {
 
     private Integer posicaoKanban;
 
-    @DBRef(lazy = true)
-    private TarefaDocument pai;
+    private TarefaDTO pai;
 
     private Integer objetivoId;
 
@@ -48,7 +45,7 @@ public class TarefaDTO {
 
     private List<String> etiquetas;
 
-    private Integer responsavel;
+    private UsuarioDTO responsavel;
 
     private List<Integer> resultadosObtidos;
 

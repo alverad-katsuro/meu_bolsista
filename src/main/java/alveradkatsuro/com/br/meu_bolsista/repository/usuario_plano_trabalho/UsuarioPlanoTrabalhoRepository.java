@@ -9,6 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
+import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioPlanoProjection;
 
 public interface UsuarioPlanoTrabalhoRepository
 		extends CrudRepository<UsuarioPlanoTrabalhoModel, UsuarioPlanoTrabalhoModelId> {
@@ -30,5 +31,7 @@ public interface UsuarioPlanoTrabalhoRepository
 	Page<UsuarioPlanoTrabalhoModel> findAll(Pageable pageable);
 
 	<T> Page<T> findBy(Pageable pageable, Class<T> tipo);
+
+	List<UsuarioPlanoProjection> findByPlanoTrabalhoId(Integer planoTrabalhoId);
 
 }

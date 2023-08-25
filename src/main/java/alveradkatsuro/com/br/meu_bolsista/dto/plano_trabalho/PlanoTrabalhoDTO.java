@@ -5,7 +5,7 @@ import java.util.Set;
 import alveradkatsuro.com.br.meu_bolsista.dto.objetivo.ObjetivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.recurso_material.RecursoMaterialDTO;
-import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +37,6 @@ public class PlanoTrabalhoDTO {
 
     private Set<RecursoMaterialDTO> recursoMateriais;
 
-    private Set<UsuarioPlanoTrabalhoDTO> pesquisadores;
+    private Set<UsuarioPlanoTrabalhoCreateDTO> pesquisadores;
 
 }

@@ -1,6 +1,5 @@
 package alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho;
 
-import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioPlanoTrabalhoDTO {
+public class UsuarioPlanoTrabalhoCreateDTO {
+
+    String id;
+
+    String nome;
 
     Integer cargaHoraria;
 
-    UsuarioDTO usuario;
+    Boolean participante;
+
+    Integer planoTrabalhoId;
 
 }

@@ -51,7 +51,7 @@ public class TarefaDocument {
 
     private List<String> etiquetas;
 
-    private Integer responsavel;
+    private String responsavel;
 
     private List<Integer> resultadosObtidos;
 
