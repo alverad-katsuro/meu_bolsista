@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.AtividadeIndexDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.IndicarPesquisadorDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaBasicDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO.AtividadeDTO;
@@ -74,6 +76,24 @@ public class TarefaController {
         atividadeDocumentService.save(atividadeDocument);
         tarefaService.save(tarefaDocument);
         return ResponseEntity.ok(atividadeDocument.getId().toString());
+    }
+
+    @PostMapping(value = "/{id}/ingressar")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public void ingressarTarefa(@PathVariable String id, JwtAuthenticationToken token) {
+        TarefaDocument tarefaDocument = tarefaService.findById(new ObjectId(id));
+        tarefaDocument.setResponsavel(token.getName());
+        tarefaService.save(tarefaDocument);
+    }
+
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @PostMapping(value = "/{id}/indicarPesquisadorTarefa")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public void ingressarTarefa(@PathVariable String id, @RequestBody IndicarPesquisadorDTO indicarPesquisadorDTO) {
+        TarefaDocument tarefaDocument = tarefaService.findById(new ObjectId(id));
+        tarefaDocument.setResponsavel(indicarPesquisadorDTO.getPesquisadorId());
+        tarefaService.save(tarefaDocument);
     }
 
     @PutMapping(value = "/atividade")
