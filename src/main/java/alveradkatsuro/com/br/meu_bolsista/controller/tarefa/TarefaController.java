@@ -144,6 +144,13 @@ public class TarefaController {
         return ResponseEntity.ok(ResponseType.SUCESS_SAVE.getMessage());
     }
 
+    @DeleteMapping(value = "/{id}")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable String id) {
+        tarefaService.deleteById(new ObjectId(id));
+    }
+
     private TarefaBasicDTO convertToBasicDTO(TarefaDocument tarefaDocument) {
         var tarefaBasic = mapper.map(tarefaDocument, TarefaBasicDTO.class);
         if (tarefaDocument.getResponsavel() != null) {

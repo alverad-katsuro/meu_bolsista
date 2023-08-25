@@ -35,6 +35,10 @@ public class TarefaDocumentService {
         return tarefaMongoRepository.findById(id).orElseThrow();
     }
 
+    public void deleteById(ObjectId id) {
+        tarefaMongoRepository.deleteById(id);
+    }
+
     public TarefaDocument findByQuadroIdAndObjetivoId(Integer quadroId, Integer objetivoId) {
         return tarefaMongoRepository.findByQuadroIdAndObjetivoId(quadroId, objetivoId).orElseThrow();
     }
