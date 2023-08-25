@@ -18,4 +18,9 @@ public class ProcessoSeletivoPlanoTabalhoDTO {
 
     private String capaResourceId;
 
+    public ProcessoSeletivoPlanoTabalhoDTO(Integer id, String titulo) {
+        this.id = id;
+        this.titulo = titulo;
+    }
+
 }
