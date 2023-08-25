@@ -125,6 +125,7 @@ public class TarefaController {
     public ResponseEntity<String> update(@RequestBody TarefaDTO tarefaDTO) {
         mapper.getConfiguration().setSkipNullEnabled(true);
         TarefaDocument tarefaDocument = mapper.map(tarefaDTO, TarefaDocument.class);
+        tarefaDocument.setResponsavel(tarefaDTO.getResponsavel().getId());
         tarefaDocument.getAtividades().clear();
         tarefaDocument.setAtividades(tarefaDTO.getAtividades().stream().map(e -> {
             AtividadeDocument atividadeDocument = mapper.map(e, AtividadeDocument.class);
