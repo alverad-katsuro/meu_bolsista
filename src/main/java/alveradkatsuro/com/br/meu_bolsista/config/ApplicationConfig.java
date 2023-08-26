@@ -17,9 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import alveradkatsuro.com.br.meu_bolsista.config.properties.AnexosStoreApiProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.CorsProperties;
+import alveradkatsuro.com.br.meu_bolsista.config.properties.KeycloakProperties;
 import alveradkatsuro.com.br.meu_bolsista.config.properties.RegistrationDefaultProperties;
-import alveradkatsuro.com.br.meu_bolsista.config.properties.RsaKeyProperties;
-import alveradkatsuro.com.br.meu_bolsista.config.properties.TokenProperties;
 import alveradkatsuro.com.br.meu_bolsista.util.SetConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +34,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
-@EnableConfigurationProperties(value = { RsaKeyProperties.class, TokenProperties.class, CorsProperties.class,
-		RegistrationDefaultProperties.class, AnexosStoreApiProperties.class })
+@EnableConfigurationProperties(value = { CorsProperties.class, RegistrationDefaultProperties.class,
+		AnexosStoreApiProperties.class, KeycloakProperties.class })
 public class ApplicationConfig {
 
 	private final RegistrationDefaultProperties registrationDefaultProperties;
