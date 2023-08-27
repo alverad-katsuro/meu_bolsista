@@ -4,19 +4,11 @@ public interface UsuarioPlanoProjection {
 
     Integer getCargaHoraria();
 
-    UsuarioProjection getUsuario();
+    UsuarioPlanoIdProjection getId();
 
-    interface UsuarioProjection {
+    interface UsuarioPlanoIdProjection {
 
-        String getId();
-
-        String geEmail();
-
-        String getNome();
-
-        String getLattes();
-
-        String getImagemUrl();
+        String getUsuarioId();
 
     }
 

@@ -36,8 +36,8 @@ public class ArquivoStorageServiceImpl implements ArquivoStorageService {
     public String salvarArquivo(Optional<String> id, Optional<String> nome, MultipartFile arquivo) {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("arquivo", arquivo.getResource());
-        nome.ifPresent((e) -> builder.part("nome", e));
-        id.ifPresent((e) -> builder.part("id", e));
+        nome.ifPresent(e -> builder.part("nome", e));
+        id.ifPresent(e -> builder.part("id", e));
         return webClient.post()
                 .uri(anexosStoreApiProperties.salvarArquivo())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.MULTIPART_FORM_DATA.toString())

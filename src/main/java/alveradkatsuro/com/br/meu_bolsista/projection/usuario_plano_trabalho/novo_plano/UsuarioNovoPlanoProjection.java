@@ -2,14 +2,14 @@ package alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.nov
 
 public interface UsuarioNovoPlanoProjection {
 
-    String getId();
+    String getId(); // usuario ID
 
-    String getNome();
+    String getNome(); // Nome do usuario
 
-    Integer getCargaHoraria();
+    int getCargaHoraria();
 
     Boolean getParticipante();
 
     Integer getPlanoTrabalhoId();
-    
+
 }

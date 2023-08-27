@@ -23,17 +23,19 @@ import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaBasicDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO.AtividadeDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaIndexDTO;
-import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.AtividadeDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
+import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.AtividadeDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
-import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/tarefa")
@@ -41,7 +43,7 @@ public class TarefaController {
 
     private final ModelMapper mapper;
 
-    private final UsuarioService usuarioService;
+    private final KeycloakService keycloakService;
 
     private final TarefaDocumentService tarefaService;
 
@@ -156,8 +158,11 @@ public class TarefaController {
     private TarefaBasicDTO convertToBasicDTO(TarefaDocument tarefaDocument) {
         var tarefaBasic = mapper.map(tarefaDocument, TarefaBasicDTO.class);
         if (tarefaDocument.getResponsavel() != null) {
-            var responsavel = usuarioService.findById(tarefaDocument.getResponsavel());
-            tarefaBasic.setResponsavel(mapper.map(responsavel, UsuarioDTO.class));
+            try {
+                tarefaBasic.setResponsavel(keycloakService.getUserDTO(tarefaDocument.getResponsavel()));
+            } catch (NotFoundException e) {
+                log.error("Error in retrieve user: {}", tarefaDocument.getResponsavel());
+            }
         }
         return tarefaBasic;
     }
@@ -165,8 +170,11 @@ public class TarefaController {
     private TarefaDTO convertToDTO(TarefaDocument tarefaDocument) {
         var tarefa = mapper.map(tarefaDocument, TarefaDTO.class);
         if (tarefaDocument.getResponsavel() != null) {
-            var responsavel = usuarioService.findById(tarefaDocument.getResponsavel());
-            tarefa.setResponsavel(mapper.map(responsavel, UsuarioDTO.class));
+            try {
+                tarefa.setResponsavel(keycloakService.getUserDTO(tarefaDocument.getResponsavel()));
+            } catch (NotFoundException e) {
+                log.error("Error in retrieve user: {}", tarefaDocument.getResponsavel());
+            }
         }
         return tarefa;
     }

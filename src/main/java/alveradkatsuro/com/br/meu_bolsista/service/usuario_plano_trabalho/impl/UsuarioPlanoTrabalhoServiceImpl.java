@@ -1,24 +1,36 @@
 package alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.impl;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.user.UserDataKeycloak;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioNovoPlanoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.UsuarioPlanoNotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
-import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioPlanoProjection;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario_plano_trabalho.UsuarioPlanoTrabalhoRepository;
+import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoService {
+
+	private final ModelMapper mapper;
+
+	private final KeycloakService keycloakService;
 
 	private final UsuarioPlanoTrabalhoRepository usuarioPlanoTrabalhoRepository;
 
@@ -33,10 +45,30 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 	}
 
 	@Override
-	public List<UsuarioNovoPlanoProjection> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId,
+	public List<UsuarioNovoPlanoDTO> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId,
 			String role) {
-		return usuarioPlanoTrabalhoRepository.findAllUsuariosInPlanoTrabalho(planoTrabalhoId, role,
-				UsuarioNovoPlanoProjection.class);
+
+		List<UserDataKeycloak> userDataKeycloaks = keycloakService.getUserInRole(role);
+
+		return userDataKeycloaks.stream().map(e -> {
+			Optional<UsuarioNovoPlanoProjection> usuarioNovoPlanoProjection = usuarioPlanoTrabalhoRepository
+					.findAllUsuariosInPlanoTrabalho(planoTrabalhoId, e.getId(),
+							UsuarioNovoPlanoProjection.class);
+			UsuarioNovoPlanoDTO dto;
+			if (usuarioNovoPlanoProjection.isPresent()) {
+				dto = mapper.map(usuarioNovoPlanoProjection.get(), UsuarioNovoPlanoDTO.class);
+				dto.setNome(e.getFullName());
+			} else {
+				dto = UsuarioNovoPlanoDTO.builder()
+						.id(e.getId())
+						.nome(e.getFullName())
+						.participante(false)
+						.cargaHoraria(0)
+						.planoTrabalhoId(planoTrabalhoId)
+						.build();
+			}
+			return dto;
+		}).toList();
 	}
 
 	@Override
@@ -74,7 +106,25 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 	}
 
 	@Override
-	public List<UsuarioPlanoProjection> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) {
-		return usuarioPlanoTrabalhoRepository.findByPlanoTrabalhoId(planoTrabalhoId);
+	public List<UsuarioPlanoDTO> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) throws NotFoundException {
+		try {
+			return usuarioPlanoTrabalhoRepository.findByPlanoTrabalhoId(planoTrabalhoId).stream().map(e -> {
+				UsuarioDTO usuarioDTO;
+				try {
+					usuarioDTO = keycloakService.getUserDTO(e.getId().getUsuarioId());
+					return UsuarioPlanoDTO.builder()
+							.cargaHoraria(e.getCargaHoraria())
+							.usuario(usuarioDTO)
+							.build();
+				} catch (NotFoundException e1) {
+					throw new UsuarioPlanoNotFoundException("Erro ao processar usuário", e1);
+				}
+			}).collect(Collectors.toList());
+		} catch (RuntimeException e) {
+			if (e.getCause() instanceof NotFoundException) {
+				throw (NotFoundException) e.getCause();
+			}
+			throw e;
+		}
 	}
 }

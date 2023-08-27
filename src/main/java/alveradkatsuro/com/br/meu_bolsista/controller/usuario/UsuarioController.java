@@ -5,9 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
-import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
-import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
+import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUserToken;
+import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.user.UserDataKeycloak;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +18,13 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(value = "/usuario")
 public class UsuarioController {
 
-    private final UsuarioService usuarioService;
+    private final KeycloakService keycloakService;
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public UsuarioModel getCurrentUser(@CurrentUser UsuarioModel userPrincipal) {
-        return usuarioService.findById(userPrincipal.getId());
+    public UserDataKeycloak getCurrentUser(@CurrentUserToken String id) throws NotFoundException {
+        return keycloakService.getUser(id);
     }
 
 }

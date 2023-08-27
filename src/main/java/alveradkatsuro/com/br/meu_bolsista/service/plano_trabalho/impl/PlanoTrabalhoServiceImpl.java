@@ -22,13 +22,12 @@ import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoMode
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
 import alveradkatsuro.com.br.meu_bolsista.model.recurso_material.RecursoMaterialModel;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
-import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 import alveradkatsuro.com.br.meu_bolsista.repository.plano_trabalho.PlanoTrabalhoRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.arquivo.ArquivoService;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
-import alveradkatsuro.com.br.meu_bolsista.service.usuario.UsuarioService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.impl.UsuarioPlanoTrabalhoServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +39,6 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
     private final ModelMapper mapper;
 
     private final ArquivoService arquivoService;
-
-    private final UsuarioService usuarioService;
 
     private final TarefaDocumentService tarefaService;
 
@@ -76,7 +73,7 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
         PlanoTrabalhoModel planoTrabalho = mapper.map(planoTrabalhoCreateDTO, PlanoTrabalhoModel.class);
         planoTrabalho.setCapaResourceId(capaResourceId.toString());
-        planoTrabalho.setLider(UsuarioModel.builder().id(liderId).build());
+        planoTrabalho.setLiderId(liderId);
         planoTrabalho.setQuadroModel(QuadroModel.builder().planoTrabalho(planoTrabalho).build());
 
         for (RecursoMaterialModel recurso : planoTrabalho.getRecursoMateriais()) {
@@ -91,11 +88,10 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
         for (UsuarioPlanoTrabalhoCreateDTO pesquisador : planoTrabalhoCreateDTO.getPesquisadores()) {
             UsuarioPlanoTrabalhoModel usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
-                    .usuario(usuarioService.findById(pesquisador.getId()))
+                    .id(UsuarioPlanoTrabalhoModelId.builder().usuarioId(pesquisador.getId()).build())
                     .planoTrabalho(planoTrabalho)
                     .cargaHoraria(pesquisador.getCargaHoraria())
                     .build();
-            usuarioPlanoTrabalhoModel.getUsuario().getPlanosTrabalhos().add(usuarioPlanoTrabalhoModel);
             planoTrabalho.getPesquisadores()
                     .add(usuarioPlanoTrabalhoModel);
         }
@@ -152,13 +148,11 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
                 usuarioPlanoTrabalhoModel.setCargaHoraria(pesquisador.getCargaHoraria());
             } catch (NoSuchElementException e) {
                 usuarioPlanoTrabalhoModel = UsuarioPlanoTrabalhoModel.builder()
-                        .usuario(usuarioService.findById(pesquisador.getId()))
+                        .id(UsuarioPlanoTrabalhoModelId.builder().usuarioId(pesquisador.getId()).build())
                         .planoTrabalho(planoTrabalho)
                         .cargaHoraria(pesquisador.getCargaHoraria())
                         .build();
             }
-
-            usuarioPlanoTrabalhoModel.getUsuario().getPlanosTrabalhos().add(usuarioPlanoTrabalhoModel);
             planoTrabalho.getPesquisadores()
                     .add(usuarioPlanoTrabalhoModel);
         }

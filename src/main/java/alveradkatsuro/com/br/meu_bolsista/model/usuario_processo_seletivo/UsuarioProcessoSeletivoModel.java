@@ -8,7 +8,6 @@ import org.springframework.data.annotation.CreatedDate;
 
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario_processo_seletivo")
-@EqualsAndHashCode(exclude = { "usuario", "processoSeletivo" }, callSuper = false)
+@EqualsAndHashCode(exclude = { "processoSeletivo" }, callSuper = false)
 public class UsuarioProcessoSeletivoModel extends Auditable implements Serializable {
 
     @EmbeddedId
@@ -46,10 +45,10 @@ public class UsuarioProcessoSeletivoModel extends Auditable implements Serializa
     @Column(name = "curriculo_usuario_processo", unique = true, nullable = false)
     private String curriculo;
 
-    @MapsId(value = "usuarioId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", unique = false, nullable = false)
-    private UsuarioModel usuario;
+    // @MapsId(value = "usuarioId")
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "usuario_id", unique = false, nullable = false)
+    // private UsuarioModel usuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId(value = "processoSeletivoId")

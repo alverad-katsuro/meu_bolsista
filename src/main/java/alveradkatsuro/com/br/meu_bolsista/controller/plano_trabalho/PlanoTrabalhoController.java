@@ -58,6 +58,7 @@ public class PlanoTrabalhoController {
 			@RequestParam(defaultValue = "0", required = false) Integer page,
 			@RequestParam(defaultValue = "20", required = false) Integer size,
 			@RequestParam(defaultValue = "ASC", required = false) Direction direction) {
+
 		return planoTrabalhoService.findAll(page, size, direction).map(this::fromModel);
 	}
 
@@ -117,7 +118,6 @@ public class PlanoTrabalhoController {
 					.capaUrl(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
 							ArquivoController.class).recuperarArquivo(planoTrabalhoModel.getCapaResourceId()))
 							.toUri().toString())
-					.liderNome(planoTrabalhoModel.getLider().getNome())
 					.titulo(planoTrabalhoModel.getTitulo())
 					.objetivos(mapper.map(planoTrabalhoModel.getObjetivos(),
 							new TypeToken<Set<ObjetivoDTO>>() {
@@ -127,7 +127,7 @@ public class PlanoTrabalhoController {
 							}.getType()))
 					.pesquisadores(planoTrabalhoModel.getPesquisadores().stream()
 							.map(e -> UsuarioPlanoTrabalhoCreateDTO.builder()
-									.id(e.getUsuario().getId())
+									.id(e.getId().getUsuarioId())
 									.planoTrabalhoId(e.getPlanoTrabalho().getId())
 									.cargaHoraria(e.getCargaHoraria())
 									.build())

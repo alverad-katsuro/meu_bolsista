@@ -14,11 +14,15 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import alveradkatsuro.com.br.meu_bolsista.config.properties.KeycloakProperties;
 import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.role.RealmRoleKeycloak;
 import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.user.UserDataKeycloak;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioBasicDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
+import alveradkatsuro.com.br.meu_bolsista.util.CreateUrlResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Log4j2
@@ -70,7 +74,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Override
     public UserDataKeycloak getUser(String id) throws NotFoundException {
         return webClient.get()
-                .uri(keycloakProperties.append(id))
+                .uri(keycloakProperties.usersAppend(id))
                 .retrieve()
                 .bodyToMono(UserDataKeycloak.class)
                 .onErrorResume(WebClientResponseException.class,
@@ -80,9 +84,26 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
+    public List<UserDataKeycloak> getUserInRole(Authority authority) {
+        return getUserInRole(authority.toString());
+    }
+
+    @Override
+    public List<UserDataKeycloak> getUserInRole(String authority) {
+        return webClient.get()
+                .uri(keycloakProperties.rolesAppend(authority, "users"))
+                .retrieve()
+                .bodyToFlux(UserDataKeycloak.class)
+                .onErrorResume(WebClientResponseException.class,
+                        ex -> ex.getStatusCode() == HttpStatusCode.valueOf(404) ? Flux.empty() : Flux.error(ex))
+                .collectList()
+                .block();
+    }
+
+    @Override
     public void updateUser(UserDataKeycloak userDataKeycloak) {
         webClient.put()
-                .uri(keycloakProperties.append(userDataKeycloak.getId()))
+                .uri(keycloakProperties.usersAppend(userDataKeycloak.getId()))
                 .bodyValue(userDataKeycloak)
                 .retrieve()
                 .bodyToMono(Void.class)
@@ -100,7 +121,7 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         }).toList();
         webClient.post()
-                .uri(keycloakProperties.append(id, "role-mappings/realm"))
+                .uri(keycloakProperties.usersAppend(id, "role-mappings/realm"))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue(realmRoleKeycloaks)
                 .retrieve()
@@ -120,7 +141,7 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         }).toList();
         webClient.method(HttpMethod.DELETE)
-                .uri(keycloakProperties.append(id, "role-mappings/realm"))
+                .uri(keycloakProperties.usersAppend(id, "role-mappings/realm"))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue(realmRoleKeycloaks)
                 .retrieve()
@@ -129,4 +150,25 @@ public class KeycloakServiceImpl implements KeycloakService {
                 .subscribe();
     }
 
+    @Override
+    public UsuarioDTO getUserDTO(String id) throws NotFoundException {
+        UserDataKeycloak userDataKeycloak = getUser(id);
+        return UsuarioDTO.builder()
+                .id(userDataKeycloak.getId())
+                .nome(String.format("%s %s", userDataKeycloak.getFirstName(), userDataKeycloak.getLastName()))
+                .email(userDataKeycloak.getEmail())
+                .imagemUrl(CreateUrlResource.createUrlResource(userDataKeycloak.getPictureId()))
+                .lattes(userDataKeycloak.getLattes())
+                .build();
+    }
+
+    @Override
+    public UsuarioBasicDTO getUserBasicDTO(String id) throws NotFoundException {
+        UserDataKeycloak userDataKeycloak = getUser(id);
+        return UsuarioBasicDTO.builder()
+                .id(userDataKeycloak.getId())
+                .nome(String.format("%s %s", userDataKeycloak.getFirstName(), userDataKeycloak.getLastName()))
+                .email(userDataKeycloak.getEmail())
+                .build();
+    }
 }

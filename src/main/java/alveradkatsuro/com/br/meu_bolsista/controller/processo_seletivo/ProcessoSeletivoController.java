@@ -21,14 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUser;
+import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUserToken;
 import alveradkatsuro.com.br.meu_bolsista.controller.arquivo.ArquivoController;
 import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoPlanoTabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import alveradkatsuro.com.br.meu_bolsista.projection.processo_seletivo.ProcessoSeletivoProjection;
 import alveradkatsuro.com.br.meu_bolsista.service.processo_seletivo.ProcessoSeletivoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,12 +76,12 @@ public class ProcessoSeletivoController {
     @GetMapping(value = "/{id}")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public ProcessoSeletivoDTO findById(@PathVariable Integer id, @CurrentUser UsuarioModel usuario) {
+    public ProcessoSeletivoDTO findById(@PathVariable Integer id, @CurrentUserToken String usuarioId) {
         ProcessoSeletivoDTO processoSeletivoDTO = processoSeletivoService.findById(id, ProcessoSeletivoDTO.class,
                 ProcessoSeletivoProjection.class);
         processoSeletivoDTO.getCandidatos().forEach(e -> {
-            if (usuario != null && !processoSeletivoDTO.isInscrito()) {
-                processoSeletivoDTO.setInscrito(e.getId().getUsuarioId().equals(usuario.getId()));
+            if (usuarioId != null && !processoSeletivoDTO.isInscrito()) {
+                processoSeletivoDTO.setInscrito(e.getId().getUsuarioId().equals(usuarioId));
             }
             try {
                 e.setCurriculo(WebMvcLinkBuilder

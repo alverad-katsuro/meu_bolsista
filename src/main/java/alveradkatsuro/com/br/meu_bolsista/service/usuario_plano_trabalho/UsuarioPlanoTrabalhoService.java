@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
 
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioNovoPlanoDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
-import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioNovoPlanoProjection;
-import alveradkatsuro.com.br.meu_bolsista.projection.usuario_plano_trabalho.novo_plano.UsuarioPlanoProjection;
 
 public interface UsuarioPlanoTrabalhoService {
 
@@ -17,10 +17,10 @@ public interface UsuarioPlanoTrabalhoService {
 
         public UsuarioPlanoTrabalhoModel findById(UsuarioPlanoTrabalhoModelId id);
 
-        public List<UsuarioNovoPlanoProjection> findAllUsuariosInPlanoTrabalho(Integer usuarioPlanoTrabalhoId,
+        public List<UsuarioNovoPlanoDTO> findAllUsuariosInPlanoTrabalho(Integer usuarioPlanoTrabalhoId,
                         String role);
 
-        public List<UsuarioPlanoProjection> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId);
+        public List<UsuarioPlanoDTO> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) throws NotFoundException;
 
         public Page<UsuarioPlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction,
                         String[] properties);

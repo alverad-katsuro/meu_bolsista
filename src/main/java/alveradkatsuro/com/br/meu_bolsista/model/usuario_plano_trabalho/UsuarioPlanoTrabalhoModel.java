@@ -1,7 +1,8 @@
 package alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho;
 
+import java.io.Serializable;
+
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
-import alveradkatsuro.com.br.meu_bolsista.model.usuario.UsuarioModel;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -19,8 +20,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "usuario_plano_trabalho")
-@EqualsAndHashCode(exclude = { "usuario", "planoTrabalho" })
-public class UsuarioPlanoTrabalhoModel {
+@EqualsAndHashCode(exclude = { "planoTrabalho" })
+public class UsuarioPlanoTrabalhoModel implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @EmbeddedId
     @Builder.Default
@@ -28,10 +31,6 @@ public class UsuarioPlanoTrabalhoModel {
 
     @Column(name = "carga_horaria_usuario_plano", unique = false, nullable = false)
     private Integer cargaHoraria;
-
-    @MapsId(value = "usuarioId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UsuarioModel usuario;
 
     @MapsId(value = "planoTrabalhoId")
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.repository.usuario_plano_trabalho;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,18 +16,24 @@ public interface UsuarioPlanoTrabalhoRepository
 		extends CrudRepository<UsuarioPlanoTrabalhoModel, UsuarioPlanoTrabalhoModelId> {
 
 	@Query(value = "select " +
-			"  u.id as id, " +
-			"  u.nome as nome, " +
-			"  case when upt.cargaHoraria is null then 0 else upt.cargaHoraria end as cargaHoraria, " +
-			"  case when upt.usuario is null then false else true end as participante, " +
+			"  upt.id.usuarioId as id, " +
+			"  '' as nome, " +
+			"  case " +
+			"    when upt.cargaHoraria is null then 0 " +
+			"    else upt.cargaHoraria " +
+			"  end as cargaHoraria, " +
+			"  case " +
+			"    when upt.id.usuarioId is null then false " +
+			"    else true " +
+			"  end as participante, " +
 			"  upt.planoTrabalho.id as planoTrabalhoId " +
 			"from " +
-			"  usuario u " +
-			"left join usuario_plano_trabalho upt on " +
-			"  upt.usuario.id = u.id " +
-			"  and upt.planoTrabalho.id = :planoTrabalhoId " +
-			"and :role member of u.roles")
-	<T> List<T> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId, String role, Class<T> tipo);
+			"  usuario_plano_trabalho upt " +
+			"where " +
+			"  upt.planoTrabalho.id = :planoTrabalhoId " +
+			"and  upt.id.usuarioId = :usuarioId ")
+
+	<P> Optional<P> findAllUsuariosInPlanoTrabalho(Integer planoTrabalhoId, String usuarioId, Class<P> projection);
 
 	Page<UsuarioPlanoTrabalhoModel> findAll(Pageable pageable);
 
