@@ -66,8 +66,6 @@ public class SecurityConfig {
 						.requestMatchers(mvc.matchers(HttpMethod.GET, "/processoSeletivo**/**"))
 						.permitAll()
 						.requestMatchers(mvc.matchers(HttpMethod.GET, "/arquivo/**")).permitAll()
-						.requestMatchers(mvc.matchers(HttpMethod.GET, "/**")).permitAll()
-						.requestMatchers(mvc.matchers("/teste/**")).permitAll()
 						.anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2
 						.jwt(Customizer.withDefaults()))

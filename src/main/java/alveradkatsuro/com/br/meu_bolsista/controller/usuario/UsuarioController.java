@@ -46,7 +46,7 @@ public class UsuarioController {
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<ResponseType> update(
             @Valid @RequestPart("usuario") UserDataKeycloak usuario,
-            @RequestPart(required = false) MultipartFile arquivo,
+            @RequestPart(required = false) MultipartFile foto,
             @CurrentUserToken String id)
             throws NotFoundException, IOException, UnauthorizedRequestException {
 
@@ -54,14 +54,14 @@ public class UsuarioController {
             throw new UnauthorizedRequestException();
         }
 
-        if (arquivo != null) {
+        if (foto != null) {
             ObjectId pictureId;
             final String pictureIdString = "pictureId";
             if (usuario.getAttributes().containsKey(pictureIdString)) {
                 pictureId = arquivoService
-                        .salvarArquivo(new ObjectId((String) usuario.getAttributes().get(pictureIdString).get(0)), arquivo);
+                        .salvarArquivo(new ObjectId((String) usuario.getAttributes().get(pictureIdString).get(0)), foto);
             } else {
-                pictureId = arquivoService.salvarArquivo(arquivo);
+                pictureId = arquivoService.salvarArquivo(foto);
                 usuario.getAttributes().put(pictureIdString, List.of(pictureId.toString()));
             }
             final String picture = CreateUrlResource.createUrlResource(pictureId);
