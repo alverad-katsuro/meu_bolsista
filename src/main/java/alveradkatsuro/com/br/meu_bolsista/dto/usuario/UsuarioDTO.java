@@ -26,6 +26,6 @@ public class UsuarioDTO {
 
 	private String lattes;
 
-	private String imagemUrl;
+	private String picture;
 
 }

@@ -2,6 +2,7 @@ package alveradkatsuro.com.br.meu_bolsista.util;
 
 import java.io.IOException;
 
+import org.bson.types.ObjectId;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import alveradkatsuro.com.br.meu_bolsista.controller.arquivo.ArquivoController;
@@ -22,5 +23,9 @@ public class CreateUrlResource {
             log.error("Erro ao criar url do recurso: {}", resourceId);
             return null;
         }
+    }
+
+    public static String createUrlResource(ObjectId resourceId) {
+        return createUrlResource(resourceId.toString());
     }
 }

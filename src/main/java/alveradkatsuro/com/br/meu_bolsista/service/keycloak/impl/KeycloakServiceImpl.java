@@ -19,7 +19,6 @@ import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.Authority;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
-import alveradkatsuro.com.br.meu_bolsista.util.CreateUrlResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import reactor.core.publisher.Flux;
@@ -157,7 +156,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                 .id(userDataKeycloak.getId())
                 .nome(String.format("%s %s", userDataKeycloak.getFirstName(), userDataKeycloak.getLastName()))
                 .email(userDataKeycloak.getEmail())
-                .imagemUrl(CreateUrlResource.createUrlResource(userDataKeycloak.getPictureId()))
+                .picture(userDataKeycloak.getPicture())
                 .lattes(userDataKeycloak.getLattes())
                 .build();
     }
