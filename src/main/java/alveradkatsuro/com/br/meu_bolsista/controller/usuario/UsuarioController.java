@@ -55,8 +55,17 @@ public class UsuarioController {
         }
 
         if (arquivo != null) {
-            ObjectId pictureId = arquivoService.salvarArquivo(arquivo);
+            ObjectId pictureId;
+            final String pictureIdString = "pictureId";
+            if (usuario.getAttributes().containsKey(pictureIdString)) {
+                pictureId = arquivoService
+                        .salvarArquivo(new ObjectId((String) usuario.getAttributes().get(pictureIdString).get(0)), arquivo);
+            } else {
+                pictureId = arquivoService.salvarArquivo(arquivo);
+                usuario.getAttributes().put(pictureIdString, List.of(pictureId.toString()));
+            }
             final String picture = CreateUrlResource.createUrlResource(pictureId);
+            usuario.getAttributes().remove("picture");
             usuario.getAttributes().put("picture", List.of(picture));
         }
 

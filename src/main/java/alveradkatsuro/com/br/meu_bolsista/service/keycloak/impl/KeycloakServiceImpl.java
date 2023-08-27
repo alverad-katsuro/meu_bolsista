@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import alveradkatsuro.com.br.meu_bolsista.config.properties.KeycloakProperties;
 import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.role.RealmRoleKeycloak;
 import alveradkatsuro.com.br.meu_bolsista.dto.keycloak.user.UserDataKeycloak;
@@ -103,9 +105,11 @@ public class KeycloakServiceImpl implements KeycloakService {
     public void updateUser(UserDataKeycloak userDataKeycloak) {
         webClient.put()
                 .uri(keycloakProperties.usersAppend(userDataKeycloak.getId()))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue(userDataKeycloak)
                 .retrieve()
                 .bodyToMono(Void.class)
+                .doOnError(throwable -> log.error("Error in update User: {}", throwable.getMessage()))
                 .subscribe();
     }
 

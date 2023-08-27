@@ -3,6 +3,8 @@ package alveradkatsuro.com.br.meu_bolsista.dto.keycloak.user;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,10 +48,12 @@ public class UserDataKeycloak {
 
     private Access access;
 
+    @JsonIgnore
     public String getFullName() {
         return String.format("%s %s", getFirstName(), getLastName());
     }
 
+    @JsonIgnore
     public String getPicture() {
         if (attributes != null && attributes.containsKey("picture")) {
             List<Object> pictureObj = attributes.get("picture");
@@ -60,6 +64,7 @@ public class UserDataKeycloak {
         return null;
     }
 
+    @JsonIgnore
     public String getLattes() {
         if (attributes != null && attributes.containsKey("lattes")) {
             List<Object> pictureObj = attributes.get("lattes");
