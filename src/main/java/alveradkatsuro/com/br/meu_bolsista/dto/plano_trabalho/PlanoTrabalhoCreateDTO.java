@@ -25,8 +25,6 @@ public class PlanoTrabalhoCreateDTO {
 
     private String descricao;
 
-    private String liderNome;
-
     private String capaResourceId;
 
     private Set<ObjetivoDTO> objetivos;

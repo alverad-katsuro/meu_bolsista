@@ -6,7 +6,6 @@ import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUserToken;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.AtividadeIndexDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.IndicarPesquisadorDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaBasicDTO;
@@ -25,9 +25,11 @@ import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaDTO.AtividadeDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.tarefa.TarefaIndexDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.UnauthorizedRequestException;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.AtividadeDocument;
 import alveradkatsuro.com.br.meu_bolsista.model.tarefa.TarefaDocument;
 import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
+import alveradkatsuro.com.br.meu_bolsista.service.quadro.QuadroService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.AtividadeDocumentService;
 import alveradkatsuro.com.br.meu_bolsista.service.tarefa.TarefaDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +44,8 @@ import lombok.extern.log4j.Log4j2;
 public class TarefaController {
 
     private final ModelMapper mapper;
+
+    private final QuadroService quadroService;
 
     private final KeycloakService keycloakService;
 
@@ -83,9 +87,13 @@ public class TarefaController {
     @PostMapping(value = "/{id}/ingressar")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
-    public void ingressarTarefa(@PathVariable String id, JwtAuthenticationToken token) {
+    public void ingressarTarefa(@PathVariable String id, @CurrentUserToken String usuarioId)
+            throws UnauthorizedRequestException {
         TarefaDocument tarefaDocument = tarefaService.findById(new ObjectId(id));
-        tarefaDocument.setResponsavel(token.getName());
+        if (!quadroService.pesquisadorNoQuadro(usuarioId, tarefaDocument.getQuadroId())) {
+            throw new UnauthorizedRequestException("Usuario não está no plano de trabalho");
+        }
+        tarefaDocument.setResponsavel(usuarioId);
         tarefaService.save(tarefaDocument);
     }
 
@@ -159,9 +167,11 @@ public class TarefaController {
         var tarefaBasic = mapper.map(tarefaDocument, TarefaBasicDTO.class);
         if (tarefaDocument.getResponsavel() != null) {
             try {
-                tarefaBasic.setResponsavel(keycloakService.getUserDTO(tarefaDocument.getResponsavel()));
+                var userDataKeycloak = keycloakService.getUserDTO(tarefaDocument.getResponsavel());
+                tarefaBasic.setResponsavel(userDataKeycloak);
             } catch (NotFoundException e) {
                 log.error("Error in retrieve user: {}", tarefaDocument.getResponsavel());
+                return tarefaBasic;
             }
         }
         return tarefaBasic;

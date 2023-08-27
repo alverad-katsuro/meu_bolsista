@@ -13,5 +13,19 @@ public interface QuadroRepository extends PagingAndSortingRepository<QuadroModel
     @Query(value = "select q.id as id, pt.titulo as titulo from quadro q inner join plano_trabalho pt on q.planoTrabalho.id = pt.id")
     Page<QuadroPainelProjection> findAllPainelProjection(Pageable pageable);
 
-
+    @Query(value = "select " +
+            "  exists( " +
+            "  select " +
+            "    1 " +
+            "  from " +
+            "    quadro q " +
+            "  inner join plano_trabalho pt on " +
+            "    pt.id = q.planoTrabalho.id " +
+            "  inner join usuario_plano_trabalho upt on " +
+            "    upt.id.planoTrabalhoId = pt.id " +
+            "    and upt.id.usuarioId = :usuarioId " +
+            "  where " +
+            "    q.id = :quadroId " +
+            ") ")
+    boolean pesquisadorNoQuadro(String usuarioId, Integer quadroId);
 }

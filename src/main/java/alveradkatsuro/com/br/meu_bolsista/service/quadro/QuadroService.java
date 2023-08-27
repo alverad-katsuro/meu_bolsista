@@ -22,4 +22,8 @@ public class QuadroService {
         return quadroRepository.findAllPainelProjection(PageRequest.of(page, size, direction, "id"))
                 .map(e -> mapper.map(e, QuadroPainelDTO.class));
     }
+
+    public boolean pesquisadorNoQuadro(String pesquisadorId, Integer quadroId) {
+        return quadroRepository.pesquisadorNoQuadro(pesquisadorId, quadroId);
+    }
 }

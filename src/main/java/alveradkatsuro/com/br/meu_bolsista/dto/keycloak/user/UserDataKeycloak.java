@@ -40,29 +40,28 @@ public class UserDataKeycloak {
 
     private Access access;
 
-
     public String getFullName() {
         return String.format("%s %s", getFirstName(), getLastName());
     }
 
     public String getPictureId() {
-        if (attributes.containsKey("pictureId")) {
+        if (attributes != null && attributes.containsKey("pictureId")) {
             List<Object> pictureObj = attributes.get("pictureId");
             if (!pictureObj.isEmpty()) {
                 return (String) pictureObj.get(0);
             }
         }
-        return "";
+        return null;
     }
 
     public String getLattes() {
-        if (attributes.containsKey("lattes")) {
+        if (attributes != null && attributes.containsKey("lattes")) {
             List<Object> pictureObj = attributes.get("lattes");
             if (!pictureObj.isEmpty()) {
                 return (String) pictureObj.get(0);
             }
         }
-        return "";
+        return null;
     }
 
     @Data

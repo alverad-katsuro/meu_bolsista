@@ -13,6 +13,11 @@ public class UnauthorizedRequestException extends Exception {
         this.internalCode = internalCode;
     }
 
+    public UnauthorizedRequestException(String message) {
+        super(message);
+        this.internalCode = ErrorType.UNAUTHORIZED_TRANSACTION.getInternalCode();
+    }
+
     public UnauthorizedRequestException() {
         super(ErrorType.UNAUTHORIZED_TRANSACTION.getMessage());
         this.internalCode = ErrorType.UNAUTHORIZED_TRANSACTION.getInternalCode();
