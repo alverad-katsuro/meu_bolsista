@@ -39,7 +39,8 @@ public interface QuadroRepository extends PagingAndSortingRepository<QuadroModel
             "  q.planoTrabalho.id = pt.id " +
             "inner join usuario_plano_trabalho upt on " +
             "  pt.id = upt.id.planoTrabalhoId " +
-            "  and upt.id.usuarioId = :usuarioId ")
+            "  and upt.id.usuarioId = :usuarioId " +
+            "where pt.finalizado = false")
     Page<QuadroPainelProjection> findAllForPanelAndUserIn(String usuarioId, PageRequest of);
 
 }

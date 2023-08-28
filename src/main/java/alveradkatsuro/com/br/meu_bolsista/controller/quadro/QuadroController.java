@@ -36,7 +36,7 @@ public class QuadroController {
         if (authorithies.contains(Authority.ROLE_ADMIN.toString())) {
             return quadroService.findAllForPanel(page, size, direction);
         } else {
-            return quadroService.findAllForPanelAndUserIn(usuarioId, page, size, direction);
+            return quadroService.findAllForPanelAndUserIn(usuarioId, page, size, direction); 
         }
     }
 

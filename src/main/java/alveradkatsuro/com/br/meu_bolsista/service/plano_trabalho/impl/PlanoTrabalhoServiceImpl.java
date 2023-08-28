@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
-import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.UnsubmittedReportException;
@@ -209,7 +208,5 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
         planoTrabalhoRepository.setRelatorioResourceId(planoTrabalhoId, relatorioResourceId.toString());
 
     }
-
-
 
 }
