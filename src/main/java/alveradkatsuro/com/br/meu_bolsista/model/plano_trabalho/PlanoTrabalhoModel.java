@@ -3,6 +3,8 @@ package alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import alveradkatsuro.com.br.meu_bolsista.model.audit.Auditable;
 import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
@@ -46,6 +48,13 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
 
     @Column(name = "capa_resource_id_plano_trabalho", unique = false, nullable = true)
     private String capaResourceId;
+
+    @ColumnDefault(value = "false")
+    @Column(name = "finalizado_plano_trabalho", unique = false, nullable = true)
+    private Boolean finalizado;
+
+    @Column(name = "relatorio_resource_id_plano_trabalho", unique = false, nullable = true)
+    private String relatorioResourceId;
 
     @Lob
     @Column(name = "descricao_plano_trabalho", unique = false, nullable = false)

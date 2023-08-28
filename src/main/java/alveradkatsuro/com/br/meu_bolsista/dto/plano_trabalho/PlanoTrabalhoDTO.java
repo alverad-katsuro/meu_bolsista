@@ -27,9 +27,13 @@ public class PlanoTrabalhoDTO {
 
     private String liderNomeId;
 
+    private Boolean finalizado;
+
     private String areaTrabalho;
 
     private String capaResourceId;
+
+    private String relatorioResourceId;
 
     private Set<ObjetivoDTO> objetivos;
 
