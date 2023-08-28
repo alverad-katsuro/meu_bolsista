@@ -1,6 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.repository.quadro;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -28,4 +29,17 @@ public interface QuadroRepository extends PagingAndSortingRepository<QuadroModel
             "    q.id = :quadroId " +
             ") ")
     boolean pesquisadorNoQuadro(String usuarioId, Integer quadroId);
+
+    @Query(value = "select " +
+            "  q.id as id,  " +
+            "  pt.titulo as titulo " +
+            "from " +
+            "  quadro q " +
+            "inner join plano_trabalho pt on " +
+            "  q.planoTrabalho.id = pt.id " +
+            "inner join usuario_plano_trabalho upt on " +
+            "  pt.id = upt.id.planoTrabalhoId " +
+            "  and upt.id.usuarioId = :usuarioId ")
+    Page<QuadroPainelProjection> findAllForPanelAndUserIn(String usuarioId, PageRequest of);
+
 }

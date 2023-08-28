@@ -14,16 +14,6 @@ public interface UsuarioProcessoSeletivoProjection {
 
     public String getCurriculo();
 
-    public UsuarioBasicProjection getUsuario();
-
-    public interface UsuarioBasicProjection {
-
-        public Integer getId();
-
-        public String getNome();
-
-        public String getEmail();
-
-    }
+    public String getUsuarioId();
 
 }

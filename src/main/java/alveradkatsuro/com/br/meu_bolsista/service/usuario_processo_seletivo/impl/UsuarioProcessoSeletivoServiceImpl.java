@@ -2,20 +2,17 @@ package alveradkatsuro.com.br.meu_bolsista.service.usuario_processo_seletivo.imp
 
 import java.io.IOException;
 
-import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import alveradkatsuro.com.br.meu_bolsista.exceptions.DeadlineRegistrationException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo.UsuarioProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.usuario_processo_seletivo.UsuarioProcessoSeletivoModelId;
 import alveradkatsuro.com.br.meu_bolsista.repository.usuario_processo_seletivo.UsuarioProcessoSeletivoRepository;
-import alveradkatsuro.com.br.meu_bolsista.service.arquivo.ArquivoService;
 import alveradkatsuro.com.br.meu_bolsista.service.usuario_processo_seletivo.UsuarioProcessoSeletivoService;
 import lombok.RequiredArgsConstructor;
 
@@ -24,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class UsuarioProcessoSeletivoServiceImpl implements UsuarioProcessoSeletivoService {
 
 	private final ModelMapper mapper;
-
-	private final ArquivoService arquivoService;
 
 	private final UsuarioProcessoSeletivoRepository usuarioProcessoSeletivoRepository;
 
@@ -64,28 +59,29 @@ public class UsuarioProcessoSeletivoServiceImpl implements UsuarioProcessoSeleti
 	}
 
 	@Override
-	public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-			MultipartFile arquivo)
+	public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo)
 			throws IOException, DeadlineRegistrationException {
-		if (!usuarioProcessoSeletivoRepository.inscricaoNoPrazo(usuarioProcessoSeletivo.getProcessoSeletivo().getId())) {
+		if (!usuarioProcessoSeletivoRepository
+				.inscricaoNoPrazo(usuarioProcessoSeletivo.getProcessoSeletivo().getId())) {
 			throw new DeadlineRegistrationException();
 		}
-		ObjectId curriculoId = arquivoService.salvarArquivo(arquivo);
 		usuarioProcessoSeletivo.setAprovado(false);
-		usuarioProcessoSeletivo.setCurriculo(curriculoId.toString());
 		return usuarioProcessoSeletivoRepository.save(usuarioProcessoSeletivo);
 	}
 
 	@Override
-	public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-			MultipartFile arquivo)
+	public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo)
 			throws NotFoundException, IOException {
 		if (usuarioProcessoSeletivoRepository.existsById(usuarioProcessoSeletivo.getId())) {
 			throw new NotFoundException();
 		}
-		ObjectId curriculoId = arquivoService.salvarArquivo(arquivo);
-		usuarioProcessoSeletivo.setCurriculo(curriculoId.toString());
 		return usuarioProcessoSeletivoRepository.save(usuarioProcessoSeletivo);
+	}
+
+	@Override
+	public boolean estouNoProcesso(Integer processoSeletivoId, String usuarioId) {
+		return usuarioProcessoSeletivoRepository.existsByIdProcessoSeletivoIdAndIdUsuarioId(processoSeletivoId,
+				usuarioId);
 	}
 
 }

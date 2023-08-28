@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.web.multipart.MultipartFile;
 
 import alveradkatsuro.com.br.meu_bolsista.exceptions.DeadlineRegistrationException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
@@ -23,16 +22,16 @@ public interface UsuarioProcessoSeletivoService {
 	public <T, Z> Page<T> findAll(Integer page, Integer size, Direction direction,
 			String[] properties, Class<T> type, Class<Z> projection);
 
-	public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-			MultipartFile arquivo)
+	public UsuarioProcessoSeletivoModel save(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo)
 			throws IOException, DeadlineRegistrationException;
 
-	public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo,
-			MultipartFile arquivo)
+	public UsuarioProcessoSeletivoModel update(UsuarioProcessoSeletivoModel usuarioProcessoSeletivo)
 			throws NotFoundException, IOException;
 
 	public void deleteById(UsuarioProcessoSeletivoModelId id);
 
 	public void deleteById(String usuarioId, Integer usuarioProcessoSeletivoId);
+
+	public boolean estouNoProcesso(Integer processoSeletivoId, String usuarioId);
 
 }

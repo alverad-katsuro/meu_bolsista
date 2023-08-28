@@ -29,6 +29,7 @@ import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
 import alveradkatsuro.com.br.meu_bolsista.projection.processo_seletivo.ProcessoSeletivoProjection;
+import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
 import alveradkatsuro.com.br.meu_bolsista.service.processo_seletivo.ProcessoSeletivoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -42,6 +43,8 @@ import lombok.extern.log4j.Log4j2;
 public class ProcessoSeletivoController {
 
     private final ModelMapper mapper;
+
+    private final KeycloakService keycloakService;
 
     private final ProcessoSeletivoService processoSeletivoService;
 
@@ -80,20 +83,17 @@ public class ProcessoSeletivoController {
         ProcessoSeletivoDTO processoSeletivoDTO = processoSeletivoService.findById(id, ProcessoSeletivoDTO.class,
                 ProcessoSeletivoProjection.class);
         processoSeletivoDTO.getCandidatos().forEach(e -> {
+            if (e.getId() != null) {
+                try {
+                    var usuarioBasicDTO = keycloakService.getUserBasicDTO(e.getId().getUsuarioId());
+                    e.setUsuario(usuarioBasicDTO);
+                } catch (NotFoundException e1) {
+                    log.error("Não Foi encontrado o usuario com id: {}", e.getId().getUsuarioId());
+                }
+            }
             if (usuarioId != null && !processoSeletivoDTO.isInscrito()) {
                 processoSeletivoDTO.setInscrito(e.getId().getUsuarioId().equals(usuarioId));
             }
-            try {
-                e.setCurriculo(WebMvcLinkBuilder
-                        .linkTo(WebMvcLinkBuilder
-                                .methodOn(ArquivoController.class)
-                                .recuperarArquivo(e.getCurriculo()))
-                        .toUri().toString());
-            } catch (IllegalArgumentException | SecurityException | IOException
-                    | NotFoundException e1) {
-                e1.printStackTrace();
-            }
-
         });
 
         return processoSeletivoDTO;

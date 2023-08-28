@@ -26,4 +26,10 @@ public class QuadroService {
     public boolean pesquisadorNoQuadro(String pesquisadorId, Integer quadroId) {
         return quadroRepository.pesquisadorNoQuadro(pesquisadorId, quadroId);
     }
+
+    public Page<QuadroPainelDTO> findAllForPanelAndUserIn(String usuarioId, Integer page, Integer size,
+            Direction direction) {
+        return quadroRepository.findAllForPanelAndUserIn(usuarioId, PageRequest.of(page, size, direction, "id"))
+                .map(e -> mapper.map(e, QuadroPainelDTO.class));
+    }
 }

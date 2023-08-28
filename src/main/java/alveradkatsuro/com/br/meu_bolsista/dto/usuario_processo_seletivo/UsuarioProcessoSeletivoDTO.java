@@ -19,8 +19,6 @@ public class UsuarioProcessoSeletivoDTO {
 
     private LocalDateTime inscricao;
 
-    private String curriculo;
-
     private UsuarioBasicDTO usuario;
 
 }

@@ -26,4 +26,6 @@ public interface UsuarioProcessoSeletivoRepository
     @Query(value = "select Date(ps.fim) >= Date(now()) as noPrazo from processo_seletivo ps where ps.id = :planoTrabalhoId")
     boolean inscricaoNoPrazo(Integer planoTrabalhoId);
 
+    boolean existsByIdProcessoSeletivoIdAndIdUsuarioId(Integer processoSeletivoId, String usuarioId);
+
 }

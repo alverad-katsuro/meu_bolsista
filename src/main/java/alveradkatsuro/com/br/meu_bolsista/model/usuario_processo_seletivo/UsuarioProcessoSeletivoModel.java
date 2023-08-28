@@ -42,14 +42,6 @@ public class UsuarioProcessoSeletivoModel extends Auditable implements Serializa
     @Column(name = "inscricao_usuario_processo", unique = false)
     private LocalDateTime inscricao;
 
-    @Column(name = "curriculo_usuario_processo", unique = true, nullable = false)
-    private String curriculo;
-
-    // @MapsId(value = "usuarioId")
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "usuario_id", unique = false, nullable = false)
-    // private UsuarioModel usuario;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId(value = "processoSeletivoId")
     @JoinColumn(name = "processo_seletivo_id", unique = false, nullable = false)
