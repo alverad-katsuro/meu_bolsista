@@ -25,6 +25,7 @@ import alveradkatsuro.com.br.meu_bolsista.exceptions.InvalidRequestException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NameAlreadyExistsException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.UnauthorizedRequestException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.UnsubmittedReportException;
 import jakarta.mail.MessagingException;
 
 /**
@@ -95,6 +96,17 @@ public class ControllerAdvise {
 				.internalCode(ErrorType.USER_002.getInternalCode())
 				.build();
 	}
+
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	@ExceptionHandler(UnsubmittedReportException.class)
+	public ErrorResponse handleUnsubmittedReportException(UnsubmittedReportException ex) {
+		return new ErrorResponse(
+				ex.getMessage(),
+				ex.getLocalizedMessage(),
+				ex.getInternalCode());
+	}
+
+
 
 	/**
 	 * Caso a autenticação não seja bem sucedida, será retornado a mensagem

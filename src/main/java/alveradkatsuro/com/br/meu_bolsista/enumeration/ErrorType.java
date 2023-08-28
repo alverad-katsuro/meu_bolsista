@@ -19,6 +19,8 @@ public enum ErrorType {
 
     REPORT_007("Inscrição fora do prazo.", "RP-007"),
 
+    REPORT_008("Relatorio não submetido.", "RP-008"),
+
     UNAUTHORIZED_TRANSACTION("Permisões insuficientes para realizar esta transação", "SECURITY-001"),
 
     DATABASE_001("Falha ao tentar salvar no banco de dados.", "DB-001"),

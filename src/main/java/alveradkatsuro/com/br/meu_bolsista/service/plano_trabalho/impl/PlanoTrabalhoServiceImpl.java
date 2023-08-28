@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.UnsubmittedReportException;
 import alveradkatsuro.com.br.meu_bolsista.model.objetivo.ObjetivoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
 import alveradkatsuro.com.br.meu_bolsista.model.quadro.QuadroModel;
@@ -178,5 +180,36 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
         return planoTrabalho;
     }
+
+    @Override
+    @Transactional
+    public void updateFinalizar(boolean isFinalizado, Integer planoTrabalhoId) throws UnsubmittedReportException {
+        if (isFinalizado && !relatorioSubmetido(planoTrabalhoId)) {
+            throw new UnsubmittedReportException();
+        }
+        planoTrabalhoRepository.updateFinalizar(isFinalizado, planoTrabalhoId);
+    }
+
+    @Override
+    public boolean relatorioSubmetido(Integer planoTrabalhoId) {
+        return planoTrabalhoRepository.existsByIdAndRelatorioResourceIdIsNotNull(planoTrabalhoId);
+    }
+
+    @Override
+    public boolean isUsuarioNoPlano(Integer planoTrabalhoId, String usuarioId) {
+        return planoTrabalhoRepository.existsByIdAndPesquisadoresId(planoTrabalhoId, usuarioId);
+    }
+
+    @Override
+    @Transactional
+    public void submeterRelatorio(Integer planoTrabalhoId, MultipartFile arquivo) throws IOException {
+
+        ObjectId relatorioResourceId = arquivoService.salvarArquivo(arquivo);
+
+        planoTrabalhoRepository.setRelatorioResourceId(planoTrabalhoId, relatorioResourceId.toString());
+
+    }
+
+
 
 }

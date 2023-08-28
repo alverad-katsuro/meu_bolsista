@@ -11,6 +11,12 @@ public enum ResponseType {
 
     SUCESS_DELETE("Dado deletado com sucesso"),
 
+    RELATORIO_SUBMETIDO("Relatorio submetido."),
+
+    PLANO_FINALIZADO("Plano de trabalho finalizado com sucesso."),
+
+    PLANO_REABERTO("Plano de trabalho reaberto."),
+
     FAIL_DELETE("Dado não deletado"),
 
     SUCESS_IMAGE_SAVE("Imagem salva com sucesso"),

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import alveradkatsuro.com.br.meu_bolsista.annotation.CurrentUserToken;
 import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.KeycloakOidcUserInfo;
 import alveradkatsuro.com.br.meu_bolsista.config.oauth2.oidc_user.OidcUserInfoCustom;
 import alveradkatsuro.com.br.meu_bolsista.controller.arquivo.ArquivoController;
@@ -32,10 +33,13 @@ import alveradkatsuro.com.br.meu_bolsista.dto.objetivo.ObjetivoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.plano_trabalho.PlanoTrabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.recurso_material.RecursoMaterialDTO;
+import alveradkatsuro.com.br.meu_bolsista.dto.usuario.UsuarioBasicDTO;
 import alveradkatsuro.com.br.meu_bolsista.dto.usuario_plano_trabalho.UsuarioPlanoTrabalhoCreateDTO;
 import alveradkatsuro.com.br.meu_bolsista.enumeration.ResponseType;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
+import alveradkatsuro.com.br.meu_bolsista.exceptions.UnsubmittedReportException;
 import alveradkatsuro.com.br.meu_bolsista.model.plano_trabalho.PlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.service.keycloak.KeycloakService;
 import alveradkatsuro.com.br.meu_bolsista.service.plano_trabalho.PlanoTrabalhoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -49,6 +53,8 @@ import lombok.extern.log4j.Log4j2;
 public class PlanoTrabalhoController {
 
 	private final ModelMapper mapper;
+
+	private final KeycloakService keycloakService;
 
 	private final PlanoTrabalhoService planoTrabalhoService;
 
@@ -64,8 +70,14 @@ public class PlanoTrabalhoController {
 
 	@GetMapping(value = "/{id}")
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-	public PlanoTrabalhoDTO findByID(@PathVariable Integer id) {
+	public PlanoTrabalhoDTO findById(@PathVariable Integer id) {
 		return fromModel(planoTrabalhoService.findById(id));
+	}
+
+	@GetMapping(value = "/{planoTrabalhoId}/estouNele")
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public boolean isUsuarioNoPlano(@PathVariable Integer planoTrabalhoId, @CurrentUserToken String usuarioId) {
+		return planoTrabalhoService.isUsuarioNoPlano(planoTrabalhoId, usuarioId);
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -81,7 +93,7 @@ public class PlanoTrabalhoController {
 				planoTrabalhoCreateDTO, arquivo);
 
 		return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
+				PlanoTrabalhoController.class).findById(planoTrabalho.getId()))
 				.toUri()).body(ResponseType.SUCESS_SAVE);
 	}
 
@@ -96,15 +108,50 @@ public class PlanoTrabalhoController {
 		PlanoTrabalhoModel planoTrabalho = planoTrabalhoService.update(planoTrabalhoCreateDTO, arquivo);
 
 		return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-				PlanoTrabalhoController.class).findByID(planoTrabalho.getId()))
+				PlanoTrabalhoController.class).findById(planoTrabalho.getId()))
 				.toUri()).body(ResponseType.SUCESS_UPDATE);
+	}
+
+	@PutMapping(value = "/{planoTrabalhoId}/relatorio", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	@Operation(security = { @SecurityRequirement(name = "Bearer") })
+	public ResponseEntity<ResponseType> submeterRelatorio(@PathVariable Integer planoTrabalhoId,
+			@RequestPart(required = true) MultipartFile arquivo) throws IOException {
+
+		planoTrabalhoService.submeterRelatorio(planoTrabalhoId, arquivo);
+
+		return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+				PlanoTrabalhoController.class).findById(planoTrabalhoId))
+				.toUri()).body(ResponseType.RELATORIO_SUBMETIDO);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping(value = "/finalizar/{planoTrabalhoId}")
+	public ResponseEntity<ResponseType> finalizarPlanoTrabalho(@PathVariable Integer planoTrabalhoId)
+			throws UnsubmittedReportException {
+
+		planoTrabalhoService.updateFinalizar(true, planoTrabalhoId);
+
+		return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+				PlanoTrabalhoController.class).findById(planoTrabalhoId))
+				.toUri()).body(ResponseType.PLANO_FINALIZADO);
+	}
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@PutMapping(value = "/reabrir/{planoTrabalhoId}")
+	public ResponseEntity<ResponseType> reabrirPlanoTrabalho(@PathVariable Integer planoTrabalhoId)
+			throws UnsubmittedReportException {
+
+		planoTrabalhoService.updateFinalizar(false, planoTrabalhoId);
+
+		return ResponseEntity.created(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+				PlanoTrabalhoController.class).findById(planoTrabalhoId))
+				.toUri()).body(ResponseType.PLANO_REABERTO);
 	}
 
 	@DeleteMapping(value = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@Operation(security = { @SecurityRequirement(name = "Bearer") })
-
 	public void deleteByID(@PathVariable Integer id) {
 		planoTrabalhoService.deleteById(id);
 	}
@@ -115,8 +162,14 @@ public class PlanoTrabalhoController {
 					.areaTrabalho(planoTrabalhoModel.getAreaTrabalho())
 					.descricao(planoTrabalhoModel.getDescricao())
 					.id(planoTrabalhoModel.getId())
+					.finalizado(planoTrabalhoModel.getFinalizado())
 					.capaUrl(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
 							ArquivoController.class).recuperarArquivo(planoTrabalhoModel.getCapaResourceId()))
+							.toUri().toString())
+					.capaResourceId(planoTrabalhoModel.getCapaResourceId())
+					.relatorioResourceId(planoTrabalhoModel.getRelatorioResourceId())
+					.relatorioUrl(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
+							ArquivoController.class).recuperarArquivo(planoTrabalhoModel.getRelatorioResourceId()))
 							.toUri().toString())
 					.titulo(planoTrabalhoModel.getTitulo())
 					.objetivos(mapper.map(planoTrabalhoModel.getObjetivos(),
@@ -126,11 +179,27 @@ public class PlanoTrabalhoController {
 							new TypeToken<Set<RecursoMaterialDTO>>() {
 							}.getType()))
 					.pesquisadores(planoTrabalhoModel.getPesquisadores().stream()
-							.map(e -> UsuarioPlanoTrabalhoCreateDTO.builder()
-									.id(e.getId().getUsuarioId())
-									.planoTrabalhoId(e.getPlanoTrabalho().getId())
-									.cargaHoraria(e.getCargaHoraria())
-									.build())
+							.map(e -> {
+								try {
+									UsuarioBasicDTO usuarioBasicDTO;
+									usuarioBasicDTO = keycloakService.getUserBasicDTO(e.getId().getUsuarioId());
+									return UsuarioPlanoTrabalhoCreateDTO.builder()
+											.id(e.getId().getUsuarioId())
+											.nome(usuarioBasicDTO.getNome())
+											.planoTrabalhoId(e.getPlanoTrabalho().getId())
+											.cargaHoraria(e.getCargaHoraria())
+											.build();
+								} catch (NotFoundException e1) {
+									log.error("Usuário não encontrado: {}", e.getId().getUsuarioId());
+									return UsuarioPlanoTrabalhoCreateDTO.builder()
+											.id(e.getId().getUsuarioId())
+											.nome("Usuário não encontrado")
+											.planoTrabalhoId(e.getPlanoTrabalho().getId())
+											.cargaHoraria(e.getCargaHoraria())
+											.build();
+								}
+
+							})
 							.collect(java.util.stream.Collectors.toSet()))
 					.build();
 		} catch (IllegalArgumentException | SecurityException | IOException | NotFoundException e) {

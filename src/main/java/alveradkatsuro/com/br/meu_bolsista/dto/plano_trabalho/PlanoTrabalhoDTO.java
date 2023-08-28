@@ -25,9 +25,11 @@ public class PlanoTrabalhoDTO {
 
     private String descricao;
 
+    private Boolean finalizado;
+
     private String liderNomeId;
 
-    private Boolean finalizado;
+    private String relatorioUrl;
 
     private String areaTrabalho;
 
