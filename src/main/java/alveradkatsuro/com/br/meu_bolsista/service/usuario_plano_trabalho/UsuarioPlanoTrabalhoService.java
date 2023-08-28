@@ -13,27 +13,28 @@ import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPl
 
 public interface UsuarioPlanoTrabalhoService {
 
-        public UsuarioPlanoTrabalhoModel findById(String usuarioId, Integer usuarioPlanoTrabalhoId);
+	public UsuarioPlanoTrabalhoModel findById(String usuarioId, Integer usuarioPlanoTrabalhoId);
 
-        public UsuarioPlanoTrabalhoModel findById(UsuarioPlanoTrabalhoModelId id);
+	public UsuarioPlanoTrabalhoModel findById(UsuarioPlanoTrabalhoModelId id);
 
-        public List<UsuarioNovoPlanoDTO> findAllUsuariosInPlanoTrabalho(Integer usuarioPlanoTrabalhoId,
-                        String role);
+	public List<UsuarioNovoPlanoDTO> findAllUsuariosInPlanoTrabalho(Integer usuarioPlanoTrabalhoId,
+			String role);
 
-        public List<UsuarioPlanoDTO> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) throws NotFoundException;
+	public List<UsuarioPlanoDTO> findUsuarioPlanoInPlanoTrabalho(Integer planoTrabalhoId) throws NotFoundException;
 
-        public Page<UsuarioPlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction,
-                        String[] properties);
+	public Page<UsuarioPlanoTrabalhoModel> findAll(Integer page, Integer size, Direction direction,
+			String[] properties);
 
-        public <T> Page<T> findBy(Integer page, Integer size, Direction direction, String[] properties, Class<T> tipo);
+	public <T> Page<T> findBy(Integer page, Integer size, Direction direction, String[] properties, Class<T> tipo);
 
-        public UsuarioPlanoTrabalhoModel save(UsuarioPlanoTrabalhoModel usuarioPlanoTrabalho);
+	public UsuarioPlanoTrabalhoModel save(UsuarioPlanoTrabalhoModel usuarioPlanoTrabalho);
 
-        public UsuarioPlanoTrabalhoModel update(UsuarioPlanoTrabalhoModel usuarioPlanoTrabalho)
-                        throws NotFoundException;
+	public UsuarioPlanoTrabalhoModel update(UsuarioPlanoTrabalhoModel usuarioPlanoTrabalho)
+			throws NotFoundException;
 
-        public void deleteById(UsuarioPlanoTrabalhoModelId id);
+	public void deleteById(UsuarioPlanoTrabalhoModelId id);
 
-        public void deleteById(String usuarioId, Integer usuarioPlanoTrabalhoId);
+	public void deleteById(String usuarioId, Integer usuarioPlanoTrabalhoId);
 
+	public boolean existsByIdUsuarioIdAndIdPlanoTrabalhoId(String usuarioId, Integer planoTrabalhoId);
 }

@@ -7,7 +7,9 @@ import org.bson.types.ObjectId;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -42,6 +44,13 @@ public class UsuarioController {
         return keycloakService.getUser(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = "/{usuarioId}")
+    @Operation(security = { @SecurityRequirement(name = "Bearer") })
+    public UserDataKeycloak getUser(@PathVariable String usuarioId) throws NotFoundException {
+        return keycloakService.getUser(usuarioId);
+    }
+
     @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @Operation(security = { @SecurityRequirement(name = "Bearer") })
     public ResponseEntity<ResponseType> update(
@@ -59,7 +68,8 @@ public class UsuarioController {
             final String pictureIdString = "pictureId";
             if (usuario.getAttributes().containsKey(pictureIdString)) {
                 pictureId = arquivoService
-                        .salvarArquivo(new ObjectId((String) usuario.getAttributes().get(pictureIdString).get(0)), foto);
+                        .salvarArquivo(new ObjectId((String) usuario.getAttributes().get(pictureIdString).get(0)),
+                                foto);
             } else {
                 pictureId = arquivoService.salvarArquivo(foto);
                 usuario.getAttributes().put(pictureIdString, List.of(pictureId.toString()));

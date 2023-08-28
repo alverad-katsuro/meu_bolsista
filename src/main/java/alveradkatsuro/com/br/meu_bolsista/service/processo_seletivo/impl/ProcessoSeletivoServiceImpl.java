@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import alveradkatsuro.com.br.meu_bolsista.dto.processo_seletivo.ProcessoSeletivoPlanoTabalhoDTO;
 import alveradkatsuro.com.br.meu_bolsista.exceptions.NotFoundException;
 import alveradkatsuro.com.br.meu_bolsista.model.processo_seletivo.ProcessoSeletivoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModel;
+import alveradkatsuro.com.br.meu_bolsista.model.usuario_plano_trabalho.UsuarioPlanoTrabalhoModelId;
 import alveradkatsuro.com.br.meu_bolsista.repository.processo_seletivo.ProcessoSeletivoRepository;
 import alveradkatsuro.com.br.meu_bolsista.service.processo_seletivo.ProcessoSeletivoService;
+import alveradkatsuro.com.br.meu_bolsista.service.usuario_plano_trabalho.UsuarioPlanoTrabalhoService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +26,8 @@ public class ProcessoSeletivoServiceImpl implements ProcessoSeletivoService {
     private final ModelMapper mapper;
 
     private final ProcessoSeletivoRepository processoSeletivoRepository;
+
+    private final UsuarioPlanoTrabalhoService usuarioPlanoTrabalhoService;
 
     @Override
     public void deleteById(Integer id) {
@@ -55,6 +60,19 @@ public class ProcessoSeletivoServiceImpl implements ProcessoSeletivoService {
         if (!processoSeletivoRepository.existsById(processoSeletivo.getId())) {
             throw new NotFoundException();
         }
+        var planoTrabalho = processoSeletivo.getPlanoTrabalho();
+        processoSeletivo.getCandidatos().forEach(c -> {
+            if (!c.getAprovado().booleanValue()) {
+                usuarioPlanoTrabalhoService.deleteById(c.getId().getUsuarioId(), planoTrabalho.getId());
+            } else if (c.getAprovado().booleanValue()
+                    && !usuarioPlanoTrabalhoService.existsByIdUsuarioIdAndIdPlanoTrabalhoId(c.getId().getUsuarioId(),
+                            planoTrabalho.getId())) {
+                usuarioPlanoTrabalhoService.save(UsuarioPlanoTrabalhoModel.builder().cargaHoraria(0)
+                        .planoTrabalho(planoTrabalho).id(UsuarioPlanoTrabalhoModelId.builder()
+                                .usuarioId(c.getId().getUsuarioId()).planoTrabalhoId(planoTrabalho.getId()).build())
+                        .build());
+            }
+        });
         return this.save(processoSeletivo);
     }
 

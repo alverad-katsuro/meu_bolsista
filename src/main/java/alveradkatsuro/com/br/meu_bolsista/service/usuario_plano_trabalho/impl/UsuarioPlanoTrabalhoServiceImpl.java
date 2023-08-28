@@ -127,4 +127,9 @@ public class UsuarioPlanoTrabalhoServiceImpl implements UsuarioPlanoTrabalhoServ
 			throw e;
 		}
 	}
+
+	@Override
+	public boolean existsByIdUsuarioIdAndIdPlanoTrabalhoId(String usuarioId, Integer planoTrabalhoId) {
+		return usuarioPlanoTrabalhoRepository.existsByIdUsuarioIdAndIdPlanoTrabalhoId(usuarioId, planoTrabalhoId);
+	}
 }

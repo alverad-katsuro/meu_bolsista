@@ -41,4 +41,6 @@ public interface UsuarioPlanoTrabalhoRepository
 
 	List<UsuarioPlanoProjection> findByPlanoTrabalhoId(Integer planoTrabalhoId);
 
+	boolean existsByIdUsuarioIdAndIdPlanoTrabalhoId(String usuarioId, Integer planoTrabalhoId);
+
 }
