@@ -1,7 +1,7 @@
 package alveradkatsuro.com.br.meu_bolsista.model.tarefa;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -55,21 +55,12 @@ public class TarefaDocument {
 
     private List<Integer> resultadosObtidos;
 
+    @Builder.Default
     @DBRef(lazy = false)
-    private List<AtividadeDocument> atividades;
+    private List<AtividadeDocument> atividades = new ArrayList<>(0);
 
-    private List<ImpedimentoDocument> impedimentos;
+    @Builder.Default
+    @DBRef(lazy = false)
+    private List<ImpedimentoDocument> impedimentos = new ArrayList<>(0);
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class ImpedimentoDocument {
-
-        private String impedimento;
-
-        private LocalDate dataOcorrido;
-
-        private Integer index;
-
-    }
 }
