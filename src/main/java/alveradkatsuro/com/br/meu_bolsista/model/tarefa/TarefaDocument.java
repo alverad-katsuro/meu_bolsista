@@ -60,7 +60,7 @@ public class TarefaDocument {
     private List<AtividadeDocument> atividades = new ArrayList<>(0);
 
     @Builder.Default
-    @DBRef(lazy = false)
+    // @DBRef(lazy = false)
     private List<ImpedimentoDocument> impedimentos = new ArrayList<>(0);
 
 }

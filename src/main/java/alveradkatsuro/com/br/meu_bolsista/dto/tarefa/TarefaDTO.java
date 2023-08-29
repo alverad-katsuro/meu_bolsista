@@ -74,8 +74,12 @@ public class TarefaDTO {
     @AllArgsConstructor
     public static class ImpedimentoDTO {
 
+        private String id;
+
         private String impedimento;
 
         private LocalDate dataOcorrido;
+
+        private Integer index;
     }
 }
