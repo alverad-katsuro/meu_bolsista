@@ -168,9 +168,11 @@ public class PlanoTrabalhoController {
 							.toUri().toString())
 					.capaResourceId(planoTrabalhoModel.getCapaResourceId())
 					.relatorioResourceId(planoTrabalhoModel.getRelatorioResourceId())
-					.relatorioUrl(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(
-							ArquivoController.class).recuperarArquivo(planoTrabalhoModel.getRelatorioResourceId()))
-							.toUri().toString())
+					.relatorioUrl(planoTrabalhoModel.getRelatorioResourceId() != null ? WebMvcLinkBuilder
+							.linkTo(WebMvcLinkBuilder.methodOn(
+									ArquivoController.class)
+									.recuperarArquivo(planoTrabalhoModel.getRelatorioResourceId()))
+							.toUri().toString() : "")
 					.titulo(planoTrabalhoModel.getTitulo())
 					.objetivos(mapper.map(planoTrabalhoModel.getObjetivos(),
 							new TypeToken<Set<ObjetivoDTO>>() {
