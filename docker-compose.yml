@@ -40,7 +40,7 @@ services:
         - PROFILE=homol
     env_file:
       - .env
-    image: meu-bolsista-api:latest
+    image: alverad/meu-bolsista:api-latest
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: always
