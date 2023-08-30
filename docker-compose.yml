@@ -36,15 +36,14 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
+      args:
+        - PROFILE=homol
     env_file:
       - .env
     image: meu-bolsista-api:latest
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: always
-    depends_on:
-      - mongodb
-      - postgres
 
 volumes:
   mongo_report:
