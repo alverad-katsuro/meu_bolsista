@@ -49,7 +49,7 @@ public class TarefaDocument {
 
     private Integer cargaHoraria;
 
-    private List<String> etiquetas;
+    private List<EtiquetaDocument> etiquetas;
 
     private String responsavel;
 
@@ -62,5 +62,15 @@ public class TarefaDocument {
     @Builder.Default
     // @DBRef(lazy = false)
     private List<ImpedimentoDocument> impedimentos = new ArrayList<>(0);
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EtiquetaDocument {
+
+        private String color;
+
+        private String nome;
+    }
 
 }

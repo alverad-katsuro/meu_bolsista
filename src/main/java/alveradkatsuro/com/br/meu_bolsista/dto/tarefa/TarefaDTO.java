@@ -43,7 +43,7 @@ public class TarefaDTO {
 
     private Integer cargaHoraria;
 
-    private List<String> etiquetas;
+    private List<EtiquetaDTO> etiquetas;
 
     private UsuarioDTO responsavel;
 
@@ -67,6 +67,16 @@ public class TarefaDTO {
 
         private Integer index;
 
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EtiquetaDTO {
+
+        private String color;
+
+        private String nome;
     }
 
     @Data
