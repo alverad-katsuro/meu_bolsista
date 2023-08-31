@@ -50,7 +50,7 @@ public class PlanoTrabalhoModel extends Auditable implements Serializable {
     private String capaResourceId;
 
     @ColumnDefault(value = "false")
-    @Column(name = "finalizado_plano_trabalho", unique = false, nullable = true)
+    @Column(name = "finalizado_plano_trabalho", unique = false, nullable = false)
     private Boolean finalizado;
 
     @Column(name = "relatorio_resource_id_plano_trabalho", unique = false, nullable = true)

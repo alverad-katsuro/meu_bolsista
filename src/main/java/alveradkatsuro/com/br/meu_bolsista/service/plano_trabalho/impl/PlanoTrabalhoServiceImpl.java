@@ -97,6 +97,8 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
                     .add(usuarioPlanoTrabalhoModel);
         }
 
+        planoTrabalho.setFinalizado(false);
+
         planoTrabalho = planoTrabalhoRepository.save(planoTrabalho);
 
         List<TarefaDocument> tarefas = new ArrayList<>();
