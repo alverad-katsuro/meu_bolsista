@@ -6,7 +6,7 @@ VOLUME /tmp
 
 WORKDIR /var/application
 
-FROM base as builder
+FROM base AS builder
 
 VOLUME /tmp
 

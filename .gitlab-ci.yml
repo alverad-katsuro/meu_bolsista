@@ -1,0 +1,83 @@
+stages:
+  - test
+  - build
+  - deploy
+
+variables:
+  GIT_CLEAN_FLAGS: none
+
+after_script:
+  - docker compose ps meu_bolsista_api
+
+spring_check:
+  stage: test
+  environment: prod
+  only:
+    - main
+  tags:
+    - prod
+  script:
+    - export JAVA_HOME=$JAVA_HOME
+    - export PATH=$JAVA_HOME/bin:$PATH
+    - bash mvnw test
+
+docker_build:
+  stage: build
+  environment: prod
+  only:
+    - main
+  tags:
+    - prod
+  script:
+    # set env
+    - echo "PROFILE=$PROFILE"
+    - echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS" > .env
+    - echo "ANEXOS_STORE_API=$ANEXOS_STORE_API" >> .env
+    - echo "APP_PORT=$APP_PORT" >> .env
+    - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
+    - echo "EMAIL_USERNAME=$EMAIL_USERNAME" >> .env
+
+    # keycloak
+    - echo "KEYCLOACK_CLIENT_ID=$KEYCLOACK_CLIENT_ID" >> .env
+    - echo "KEYCLOACK_SECRET=$KEYCLOACK_SECRET" >> .env
+    - echo "KEYCLOACK_BASE=$KEYCLOACK_BASE" >> .env
+    - echo "KEYCLOACK_REALM=$KEYCLOACK_REALM" >> .env
+
+    # Postgres
+    - echo "POSTGRES_DB=$POSTGRES_DB" >> .env
+    - echo "POSTGRES_HOST=$POSTGRES_HOST" >> .env
+    - echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> .env
+    - echo "POSTGRES_PORT=$POSTGRES_PORT" >> .env
+    - echo "POSTGRES_USER=$POSTGRES_USER" >> .env
+
+    # Mongo
+    - echo "MONGO_DB=$MONGO_DB" >> .env
+    - echo "MONGO_HOST=$MONGO_HOST" >> .env
+    - echo "MONGO_PORT=$MONGO_PORT" >> .env
+    - echo "MONGO_USER=$MONGO_USER" >> .env
+    - echo "MONGO_PASSWORD=$MONGO_PASSWORD" >> .env
+
+    # perform login on docker registry
+    # - docker login -u $CI_REGISTER_USER -p $REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+    # build project images
+    - docker compose build
+
+    # push project images to registry
+    - docker compose push
+
+docker_up:
+  stage: deploy
+  environment: prod
+  only:
+    - main
+  tags:
+    - ssh
+    - intranet
+    - prod
+  script:
+    # perform login on docker registry
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # up docker containers
+    - docker compose up -d --remove-orphans
