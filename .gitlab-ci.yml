@@ -62,8 +62,6 @@ docker_up:
   only:
     - main
   tags:
-    - ssh
-    - intranet
     - prod
   script:
     # perform login on docker registry
