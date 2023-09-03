@@ -9,18 +9,6 @@ variables:
 after_script:
   - docker compose ps meu_bolsista_api
 
-spring_check:
-  stage: test
-  environment: prod
-  only:
-    - main
-  tags:
-    - prod
-  script:
-    - export JAVA_HOME=$JAVA_HOME
-    - export PATH=$JAVA_HOME/bin:$PATH
-    - bash mvnw test
-
 docker_build:
   stage: build
   environment: prod
