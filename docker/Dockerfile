@@ -22,8 +22,6 @@ WORKDIR /var/application
 
 COPY --from=builder /var/application/target/*.jar app.jar
 
-EXPOSE 9000
-
 ARG PROFILE=prod
 
 ENTRYPOINT java -jar -Dspring.profiles.active=${PROFILE} app.jar

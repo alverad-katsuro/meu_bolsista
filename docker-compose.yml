@@ -13,5 +13,5 @@ services:
       - .env
     image: registry.gitlab.com/meu-bolsista/meu_bolsista:latest
     ports:
-      - ${APP_PORT}:${APP_PORT}
+      - ${APP_PORT}:11000
     restart: always
