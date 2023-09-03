@@ -11,7 +11,7 @@ services:
         - PROFILE=prod
     env_file:
       - .env
-    image: registry.gitlab.com/meu-bolsista/meu_bolsista_api:latest
+    image: registry.gitlab.com/meu-bolsista/meu_bolsista:latest
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: always
