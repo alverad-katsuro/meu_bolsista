@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-      args:
-        - PROFILE=prod
     env_file:
       - .env
     image: registry.gitlab.com/meu-bolsista/meu_bolsista:latest

@@ -18,8 +18,8 @@ docker_build:
     - prod
   script:
     # set env
-    - echo "PROFILE=$PROFILE"
-    - echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS" > .env
+    - echo "PROFILE=$PROFILE" > .env
+    - echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS" >> .env
     - echo "ANEXOS_STORE_API=$ANEXOS_STORE_API" >> .env
     - echo "APP_PORT=$APP_PORT" >> .env
     - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
