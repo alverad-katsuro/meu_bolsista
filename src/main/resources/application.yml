@@ -21,9 +21,9 @@ spring:
       host: ${MONGO_HOST}
       database: ${MONGO_DB}
       port: ${MONGO_PORT}
-      username: ${MONGO_INITDB_ROOT_USERNAME}
-      password: ${MONGO_INITDB_ROOT_PASSWORD}
-      authentication-database: admin # habilitar autenticação
+      username: ${MONGO_USER}
+      password: ${MONGO_PASSWORD}
+      authentication-database: ${MONGO_AUTH_DB} # habilitar autenticação
       auto-index-creation: true # Atualizar indices quando autlaizar o model.
 
   security:
