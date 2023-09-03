@@ -1,6 +1,6 @@
 logging:
   level:
-    '[org.hibernate.stat]': debug
+    "[org.hibernate.stat]": debug
 
 spring:
   #DEVTOOLS
@@ -27,12 +27,10 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: create-drop
-      naming:
-        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
-      '[hibernate.format_sql]' : true
-      '[hibernate.generate_statistics]' : true
-      '[persistence.schema-generation.scripts.create-target]' : create.sql
+      "[hibernate.format_sql]": true
+      "[hibernate.generate_statistics]": true
+      "[persistence.schema-generation.scripts.create-target]": create.sql
 
 server:
   port: 15000
