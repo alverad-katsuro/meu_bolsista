@@ -1,17 +1,11 @@
 logging:
   level:
-    '[org.hibernate.stat]': debug
+    "[org.hibernate.stat]": debug
 
 spring:
   #DEVTOOLS
   devtools:
     add-properties: false
-  # Database
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
 
   # JPA properties
   jpa:
@@ -20,14 +14,11 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: false
     hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy : org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: validate
     show-sql: false
     properties:
-      '[hibernate.format_sql]' : true
-      '[hibernate.generate_statistics]' : true
-      '[persistence.schema-generation.scripts.create-target]' : create.sql
+      "[hibernate.format_sql]": true
+      "[hibernate.generate_statistics]": true
 
 server:
   error:
