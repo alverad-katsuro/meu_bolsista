@@ -16,7 +16,6 @@ docker_build:
     - main
   tags:
     - prod
-    - ssh
   script:
     # set env
     - echo "PROFILE=$PROFILE"
@@ -64,7 +63,6 @@ docker_up:
     - main
   tags:
     - prod
-    - ssh
   script:
     # perform login on docker registry
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
