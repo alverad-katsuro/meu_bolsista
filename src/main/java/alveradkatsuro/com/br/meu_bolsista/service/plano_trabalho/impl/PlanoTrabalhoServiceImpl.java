@@ -128,12 +128,14 @@ public class PlanoTrabalhoServiceImpl implements PlanoTrabalhoService {
 
         PlanoTrabalhoModel planoTrabalho = this.findById(planoTrabalhoCreateDTO.getId());
 
+        mapper.map(planoTrabalhoCreateDTO, planoTrabalho);
+
         if (arquivo != null) {
-            arquivoService.salvarArquivo(new ObjectId(planoTrabalhoCreateDTO.getCapaResourceId()),
+            ObjectId newResourceId = arquivoService.salvarArquivo(new ObjectId(planoTrabalhoCreateDTO.getCapaResourceId()),
                     arquivo);
+            planoTrabalho.setCapaResourceId(newResourceId.toString());
         }
 
-        mapper.map(planoTrabalhoCreateDTO, planoTrabalho);
 
         for (RecursoMaterialModel recursoMaterialModel : planoTrabalho.getRecursoMateriais()) {
             recursoMaterialModel.setPlanoTrabalho(planoTrabalho);
