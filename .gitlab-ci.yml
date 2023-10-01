@@ -12,7 +12,7 @@ docker_build:
   only:
     - main
   tags:
-    - ssh
+    - build
     - docker
   script:
     # set env
