@@ -64,10 +64,10 @@ docker_up:
     # set env
     - echo "PROFILE=$PROFILE" > .env
     - echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS" >> .env
-    - echo "ANEXOS_STORE_API=$ANEXOS_STORE_API" >> .env
     - echo "APP_PORT=$APP_PORT" >> .env
     - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
     - echo "EMAIL_USERNAME=$EMAIL_USERNAME" >> .env
+    - echo "DOMAIN_APPLICATION=$DOMAIN_APPLICATION" >> .env
 
     # keycloak
     - echo "KEYCLOACK_CLIENT_ID=$KEYCLOACK_CLIENT_ID" >> .env
@@ -91,7 +91,7 @@ docker_up:
     - echo "MONGO_AUTH_DB=$MONGO_AUTH_DB" >> .env
 
     # perform login on docker registry
-    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
     - docker compose pull
 
