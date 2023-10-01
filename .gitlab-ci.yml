@@ -92,12 +92,12 @@ docker_up:
     - echo "MONGO_USER=$MONGO_USER" >> .env
     - echo "MONGO_PASSWORD=$MONGO_PASSWORD" >> .env
     - echo "MONGO_AUTH_DB=$MONGO_AUTH_DB" >> .env
-    
+
     # perform login on docker registry
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
 
     - docker compose pull
 
-    - docker stack deploy -c <(docker compose -f docker-compose.yml config | tail -n +2) meu_bolsista
+    - docker stack deploy --with-registry-auth -c <(docker compose -f docker-compose.yml config | tail -n +2) meu_bolsista
 
     - docker system prune -f
