@@ -91,7 +91,7 @@ docker_up:
     - echo "MONGO_AUTH_DB=$MONGO_AUTH_DB" >> .env
 
     # perform login on docker registry
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker login $CI_REGISTRY
 
     - docker compose pull
 
