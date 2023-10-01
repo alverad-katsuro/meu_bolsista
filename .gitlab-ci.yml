@@ -6,16 +6,14 @@ stages:
 variables:
   GIT_CLEAN_FLAGS: none
 
-after_script:
-  - docker compose ps meu_bolsista_api
-
 docker_build:
   stage: build
   environment: prod
   only:
     - main
   tags:
-    - prod
+    - ssh
+    - docker
   script:
     # set env
     - echo "PROFILE=$PROFILE" > .env
@@ -62,9 +60,14 @@ docker_up:
   only:
     - main
   tags:
+    - ssh
     - prod
   script:
     # perform login on docker registry
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # up docker containers
-    - docker compose up -d --remove-orphans
+
+    - docker compose pull
+
+    - docker stack deploy -c <(docker compose -f docker-compose.yml config | tail -n +2) meu_bolsista
+
+    - docker system prune -f
