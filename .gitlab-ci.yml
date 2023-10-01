@@ -3,9 +3,6 @@ stages:
   - build
   - deploy
 
-variables:
-  GIT_CLEAN_FLAGS: none
-
 docker_build:
   stage: build
   environment: prod
@@ -98,6 +95,6 @@ docker_up:
 
     - docker compose pull
 
-    - docker stack deploy --with-registry-auth -c <(docker compose -f docker-compose.yml config | tail -n +2) meu_bolsista
+    - docker stack deploy -c <(docker compose -f docker-compose.yml config | tail -n +2) meu_bolsista --with-registry-auth
 
     - docker system prune -f
