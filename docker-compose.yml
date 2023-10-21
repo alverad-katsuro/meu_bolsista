@@ -23,12 +23,12 @@ services:
 
         - "traefik.http.routers.meu_bolsista_api.rule=Host(`${DOMAIN_APPLICATION}`)"
         - "traefik.http.routers.meu_bolsista_api.entrypoints=http"
-        - "traefik.http.routers.meu_bolsista_api.middlewares=https-redirect@file"
+        # - "traefik.http.routers.meu_bolsista_api.middlewares=https-redirect@file"
 
         - "traefik.http.routers.meu_bolsista_api_https.rule=Host(`${DOMAIN_APPLICATION}`)"
         - "traefik.http.routers.meu_bolsista_api_https.entrypoints=https"
         - "traefik.http.routers.meu_bolsista_api_https.tls=true"
-        - "traefik.http.routers.meu_bolsista_api_https.tls.certresolver=le"
+        # - "traefik.http.routers.meu_bolsista_api_https.tls.certresolver=le"
         - "traefik.http.routers.meu_bolsista_api_https.middlewares=default-headers@file"
         - "traefik.http.services.meu_bolsista_api_https.loadbalancer.server.port=${APP_PORT}"
 
