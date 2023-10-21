@@ -19,6 +19,7 @@ docker_build:
     - echo "APP_PORT=$APP_PORT" >> .env
     - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
     - echo "EMAIL_USERNAME=$EMAIL_USERNAME" >> .env
+    - echo "API_PREFIX=$API_PREFIX" >> .env
 
     # keycloak
     - echo "KEYCLOACK_CLIENT_ID=$KEYCLOACK_CLIENT_ID" >> .env
@@ -60,7 +61,6 @@ docker_up:
     - ssh
     - prod
   script:
-
     # set env
     - echo "PROFILE=$PROFILE" > .env
     - echo "ALLOWED_ORIGINS=$ALLOWED_ORIGINS" >> .env
@@ -68,6 +68,7 @@ docker_up:
     - echo "EMAIL_PASSWORD=$EMAIL_PASSWORD" >> .env
     - echo "EMAIL_USERNAME=$EMAIL_USERNAME" >> .env
     - echo "DOMAIN_APPLICATION=$DOMAIN_APPLICATION" >> .env
+    - echo "API_PREFIX=$API_PREFIX" >> .env
 
     # keycloak
     - echo "KEYCLOACK_CLIENT_ID=$KEYCLOACK_CLIENT_ID" >> .env
