@@ -9,7 +9,7 @@
 		<relativePath/>
 		<!-- lookup parent from repository -->
 	</parent>
-	<groupId>alveradkatsuro.com.br</groupId>
+	<groupId>br.com.alverad</groupId>
 	<artifactId>meu_bolsista</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>meu_bolsista</name>
@@ -145,6 +145,16 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.sentry</groupId>
+			<artifactId>sentry-spring-boot-starter-jakarta</artifactId>
+			<version>6.31.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.sentry</groupId>
+			<artifactId>sentry-logback</artifactId>
+			<version>6.31.0</version>
 		</dependency>
 	</dependencies>
 

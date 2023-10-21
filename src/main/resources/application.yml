@@ -102,3 +102,13 @@ keycloak:
   adminUrl: ${KEYCLOACK_BASE}/admin/realms/${KEYCLOACK_REALM}
   rolesUrl: ${KEYCLOACK_BASE}/admin/realms/${KEYCLOACK_REALM}/roles
   usersUrl: ${KEYCLOACK_BASE}/admin/realms/${KEYCLOACK_REALM}/users
+
+
+sentry:
+  dsn: ${SENTRY_DNS}
+  in-app-includes:
+    - br.com.alverad
+  traces-sample-rate: ${SENTRY_TRACE_RATE}
+  logging:
+    minimum-event-level: error
+    minimum-breadcrumb-level: debug
