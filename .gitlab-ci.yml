@@ -51,6 +51,8 @@ docker_build:
 
     # push project images to registry
     - docker compose push
+    - docker system prune -f
+
 
 docker_up:
   stage: deploy
