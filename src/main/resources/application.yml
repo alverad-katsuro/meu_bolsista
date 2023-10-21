@@ -107,7 +107,7 @@ keycloak:
 sentry:
   dsn: ${SENTRY_DNS}
   in-app-includes:
-    - br.com.alverad
+    - br.com.alverad.meu_bolsista
   traces-sample-rate: ${SENTRY_TRACE_RATE}
   logging:
     minimum-event-level: error
