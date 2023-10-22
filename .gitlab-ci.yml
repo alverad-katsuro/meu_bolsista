@@ -45,6 +45,7 @@ docker_up:
     - echo "EMAIL_USERNAME=$EMAIL_USERNAME" >> .env
     - echo "DOMAIN_APPLICATION=$DOMAIN_APPLICATION" >> .env
     - echo "API_PREFIX=$API_PREFIX" >> .env
+    - echo DATE_VERSION=$(date +%d-%m-%Y) >> .env
 
     # set sentry
     - echo "SENTRY_DEBUG=$SENTRY_DEBUG" >> .env
